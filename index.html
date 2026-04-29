@@ -515,9 +515,9 @@
                 let rawType = cols[cIdx+3] ? cols[cIdx+3].trim().toUpperCase() : '';
                 let type = 'ĐL/CTV'; 
                 
-                if (['HĐ', 'HD', 'HÓA ĐƠN', 'HOA DON'].includes(rawType)) type = 'HĐ';
-                else if (['CKS', 'CHỮ KÝ SỐ', 'CHU KY SO'].includes(rawType)) type = 'CKS';
-                else if (['BHXH', 'BẢO HIỂM', 'BAO HIEM'].includes(rawType)) type = 'BHXH';
+                if (['HĐ', 'HD', 'HÓA ĐƠN', 'HOA DON','hd','hđ'].includes(rawType)) type = 'HĐ';
+                else if (['CKS', 'CHỮ KÝ SỐ', 'CHU KY SO','cks'].includes(rawType)) type = 'CKS';
+                else if (['BHXH', 'BẢO HIỂM', 'BAO HIEM','bhxh'].includes(rawType)) type = 'BHXH';
                 else if (['ĐL/CTV', 'DL/CTV', 'ĐẠI LÝ', 'DAI LY', 'CTV', 'ĐL'].includes(rawType)) type = 'ĐL/CTV';
                 else if (rawType !== '') type = 'ĐL/CTV'; 
 
@@ -557,10 +557,7 @@
             }); return data;
         }
 
-        function saveTableForDate(dateStr) {
-            const data = collectTableData();
-            allData[dateStr] = data;
-            async function saveData() {
+        async function saveData() {
     const data = collectTableData();
 
     if(data.length === 0){
@@ -568,11 +565,15 @@
         return;
     }
 
-    showToast("Đang gửi dữ liệu lên Google Sheets...");
+    showToast("Đang gửi dữ liệu...");
 
     try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbzOp9ir-WS_KpUqrooPaB9aHWuhsHguLlF4wyUoPAssthJAZpPUwfhqqjvvAiBoo_edjw/exec", {
+        await fetch("https://script.google.com/macros/s/AKfycbzOp9ir-WS_KpUqrooPaB9aHWuhsHguLlF4wyUoPAssthJAZpPUwfhqqjvvAiBoo_edjw/exec", {
             method: "POST",
+            mode: "no-cors",   // 👈 QUAN TRỌNG
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify(
                 data.map(row => ({
                     date: currentSelectedDate,
@@ -581,19 +582,12 @@
             )
         });
 
-        const result = await response.json();
-
-        if(result.status === "success"){
-            showToast("Đã lưu vào Google Sheets!");
-        } else {
-            showToast("Lỗi khi lưu dữ liệu!");
-        }
+        showToast("Đã gửi dữ liệu thành công!");
 
     } catch (err) {
-        showToast("Lỗi kết nối: " + err.message);
+        showToast("Lỗi: " + err.message);
     }
-};
-        }
+}
 
         function saveData() {
             const data = collectTableData();
