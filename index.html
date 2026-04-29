@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hỗ Trợ Kỹ Thuật - Visnam</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -20,7 +19,9 @@
             --text-main: #2d3748;
             --text-muted: #718096;
             --border-radius: 12px;
-            --transition: all 0.25s ease-in-out;
+            /* Cải thiện Transition cực mượt */
+            --transition-fast: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-smooth: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
@@ -60,12 +61,12 @@
         .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
         .input-group input { 
             width: 100%; padding: 15px 15px 15px 45px; border: 2px solid #edf2f7; border-radius: 10px; 
-            font-size: 15px; outline: none; transition: var(--transition); background: #f8fafc; color: var(--text-main);
+            font-size: 15px; outline: none; transition: var(--transition-fast); background: #f8fafc; color: var(--text-main);
         }
         .input-group input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(26,86,166,0.1); }
         .btn-login { 
             width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary), #113c7a); color: white; border: none; 
-            border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: var(--transition); box-shadow: 0 5px 15px rgba(26,86,166,0.3);
+            border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: var(--transition-fast); box-shadow: 0 5px 15px rgba(26,86,166,0.3);
         }
         .btn-login:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(26,86,166,0.4); }
         #loginError { color: #e53e3e; font-size: 14px; margin-top: 15px; display: none; background: #fff5f5; padding: 10px; border-radius: 8px; }
@@ -81,10 +82,9 @@
         .header-titles { text-align: center; }
         header h1 { color: var(--primary); font-size: 24px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; justify-content: center; }
         header p { color: var(--text-muted); font-size: 13px; font-weight: 500; margin-top: 2px; }
-        .btn-logout { position: absolute; right: 20px; background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: var(--transition); font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        .btn-logout { position: absolute; right: 20px; background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: var(--transition-fast); font-size: 13px; display: flex; align-items: center; gap: 5px; }
         .btn-logout:hover { background: #e53e3e; color: white; transform: scale(1.05); }
 
-        /* TÌNH TRẠNG LƯU NGẦM */
         .save-status { position: absolute; left: 20px; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; font-weight: 500;}
         .save-status.saving { color: #d69e2e; }
         .save-status.saved { color: #38a169; }
@@ -94,29 +94,28 @@
         .controls-card { background: var(--card-bg); padding: 15px 20px; border-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 15px; flex-wrap: wrap;}
         .date-picker-container { display: flex; align-items: center;}
         .date-picker-container label { font-weight: 600; color: var(--primary); margin-right: 10px; font-size: 15px; }
-        input[type="date"] { padding: 8px 15px; border: 2px solid #e2e8f0; border-radius: 8px; color: var(--text-main); font-size: 14px; font-weight: 600; outline: none; background: #f8fafc; cursor: pointer; transition: var(--transition);}
+        input[type="date"] { padding: 8px 15px; border: 2px solid #e2e8f0; border-radius: 8px; color: var(--text-main); font-size: 14px; font-weight: 600; outline: none; background: #f8fafc; cursor: pointer; transition: var(--transition-fast);}
         input[type="date"]:hover, input[type="date"]:focus { border-color: var(--primary); background: white; }
         
         .tabs { display: flex; gap: 8px; background: #f1f5f9; padding: 5px; border-radius: 10px; }
-        .tab-btn { padding: 8px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition); }
+        .tab-btn { padding: 8px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition-fast); }
         .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .tab-content-wrapper { flex: 1; background: var(--card-bg); border-radius: var(--border-radius); box-shadow: 0 8px 30px rgba(0,0,0,0.04); padding: 25px; min-height: 500px; }
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* TABLE CSS */
+        /* TABLE CSS - HOVER MƯỢT MÀ */
         .table-responsive { overflow-x: auto; border-radius: 10px; border: 1px solid #edf2f7; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; min-width: 1050px; }
         th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; font-size: 13px; text-transform: uppercase; padding: 15px; text-align: left; border-bottom: 2px solid #edf2f7; white-space: nowrap; position: sticky; top: 0; z-index: 10;}
-        td { padding: 8px 15px; border-bottom: 1px solid #edf2f7; vertical-align: middle; transition: var(--transition); }
+        td { padding: 8px 15px; border-bottom: 1px solid #edf2f7; vertical-align: middle; transition: background-color var(--transition-fast); }
         
-        /* Hiệu ứng Hover dòng */
-        tr:hover td { background-color: #f1f7ff; }
+        tr:hover td { background-color: #eff5fc; }
         
-        table input[type="text"], table select { width: 100%; padding: 10px 5px; border: none; border-bottom: 2px solid transparent; background: transparent; outline: none; font-size: 14px; color: var(--text-main); font-weight: 500; transition: var(--transition); }
+        table input[type="text"], table select { width: 100%; padding: 10px 5px; border: none; border-bottom: 2px solid transparent; background: transparent; outline: none; font-size: 14px; color: var(--text-main); font-weight: 500; transition: all var(--transition-fast); }
         table input[type="text"]::placeholder { color: #cbd5e0; font-style: italic; }
-        table input[type="text"]:focus, table select:focus { border-bottom-color: var(--primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-radius: 4px;}
+        table input[type="text"]:focus, table select:focus { border-bottom-color: var(--primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 10px -2px rgba(26, 86, 166, 0.1); border-radius: 4px;}
         table select { cursor: pointer; color: var(--primary); font-weight: bold; }
         .stt-cell { text-align: center; font-weight: bold; color: var(--primary); font-size: 15px; }
         
@@ -125,19 +124,20 @@
         .btn-group-left { display: flex; gap: 10px; }
         .btn-group-right { display: flex; gap: 10px; }
         
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; transition: var(--transition); box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; transition: transform var(--transition-fast), box-shadow var(--transition-fast); box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .btn:active { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); } /* Hiệu ứng nhấn */
         
         .btn-add { background: #ebf4ff; color: var(--primary); border: 1px dashed var(--primary); box-shadow: none;}
-        .btn-add:hover { background: var(--primary); color: white; }
+        .btn-add:hover { background: var(--primary); color: white; box-shadow: 0 8px 20px rgba(26,86,166,0.2); }
         
         .btn-save { background: linear-gradient(135deg, var(--secondary), #d68910); color: white; }
         .btn-copy-all { background: #4a5568; color: white; }
         .btn-sync { background: #38a169; color: white; }
 
-        .action-btn { background: none; border: none; cursor: pointer; font-size: 16px; margin: 0 5px; padding: 5px; transition: var(--transition); border-radius: 4px;}
-        .copy-btn { color: #4a5568; } .copy-btn:hover { color: var(--primary); background: #ebf4ff; }
-        .del-btn { color: #e53e3e; } .del-btn:hover { color: #c53030; background: #fff5f5;}
+        .action-btn { background: none; border: none; cursor: pointer; font-size: 16px; margin: 0 5px; padding: 6px; transition: var(--transition-fast); border-radius: 6px;}
+        .copy-btn { color: #4a5568; } .copy-btn:hover { color: var(--primary); background: #ebf4ff; transform: scale(1.15); }
+        .del-btn { color: #e53e3e; } .del-btn:hover { color: #c53030; background: #fff5f5; transform: scale(1.15); }
 
         /* STATS */
         .stats-section { margin-bottom: 35px; }
@@ -150,10 +150,12 @@
         .stats-table td:first-child { text-align: left; font-weight: 600; color: var(--text-main); }
         .row-total { background: #fffaf0 !important; font-weight: bold; }
         .row-total td { color: var(--secondary) !important; font-size: 16px; border-top: 2px solid #fbd38d; }
+        
         .daily-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
-        .daily-card { background: #f8fafc; border: 1px solid #edf2f7; border-radius: 12px; padding: 15px; text-align: center; transition: var(--transition); }
-        .daily-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .daily-card { background: #f8fafc; border: 1px solid #edf2f7; border-radius: 12px; padding: 15px; text-align: center; transition: var(--transition-smooth); }
+        .daily-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.06); background: white; border-color: #e2e8f0; }
         .daily-card.total { background: #fffaf0; border-color: #fbd38d; }
+        .daily-card.total:hover { border-color: var(--secondary); }
         .daily-card h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
         .daily-card .num { font-size: 28px; font-weight: 800; color: var(--primary); }
         .daily-card.total .num { color: var(--secondary); }
@@ -322,7 +324,7 @@
 
         let allData = {}; 
         let currentSelectedDate = ''; 
-        let autoSaveTimer = null; // Timer lưu ngầm
+        let autoSaveTimer = null; 
         
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY';
         const TIMEOUT_LIMIT = 60 * 60 * 1000; 
@@ -425,7 +427,7 @@
                 allData = snapshot.val() || {};
                 initApp(); 
             }).catch(() => {
-                showToast("Dùng dữ liệu cục bộ.");
+                showToast("Đang dùng dữ liệu cục bộ.");
                 initApp(); 
             });
         }
@@ -445,7 +447,7 @@
                 if(document.getElementById('tab-thongke').classList.contains('active')) renderStatistics();
             });
 
-            // Gắn sự kiện Paste và Gõ phím
+            // Lắng nghe sự kiện để kích hoạt lưu ngầm
             document.getElementById('tableBody').addEventListener('paste', handlePaste);
             document.getElementById('tableBody').addEventListener('input', triggerAutoSave);
             document.getElementById('tableBody').addEventListener('change', triggerAutoSave);
@@ -518,19 +520,15 @@
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${allText.length} dòng!`));
         }
 
-        // CẢI TIẾN LOGIC DÁN (PASTE) ĐỂ KHÔNG BỊ NHẢY XUỐNG CUỐI
         function handlePaste(e) {
             e.preventDefault();
             const pasteData = (e.clipboardData || window.clipboardData).getData('text');
             const rows = pasteData.split('\n');
             const tbody = document.getElementById('tableBody');
             
-            // Xác định vị trí người dùng đang Focus
             let activeElement = document.activeElement;
             let startRow = activeElement ? activeElement.closest('tr') : null;
             let allTableRows = Array.from(tbody.querySelectorAll('tr'));
-            
-            // Nếu không chọn ô nào, dán từ dòng cuối cùng
             let startIndex = startRow ? allTableRows.indexOf(startRow) : allTableRows.length;
 
             rows.forEach(rowStr => {
@@ -539,7 +537,7 @@
                 
                 let cIdx = 0;
                 if (cols.length >= 7 || (/^\d+$/.test(cols[0].trim()) && cols[0].trim().length <= 4 && cols.length > 1)) {
-                    cIdx = 1; // Bỏ qua cột STT nếu copy thừa
+                    cIdx = 1; 
                 }
 
                 let rawType = cols[cIdx+3] ? cols[cIdx+3].trim().toUpperCase() : '';
@@ -547,19 +545,14 @@
                 if (['HĐ', 'HD', 'HÓA ĐƠN', 'HOA DON','hd','hđ'].includes(rawType)) type = 'HĐ';
                 else if (['CKS', 'CHỮ KÝ SỐ', 'CHU KY SO','cks'].includes(rawType)) type = 'CKS';
                 else if (['BHXH', 'BẢO HIỂM', 'BAO HIEM','bhxh'].includes(rawType)) type = 'BHXH';
-                else if (['ĐL/CTV', 'DL/CTV', 'ĐẠI LÝ', 'DAI LY', 'CTV', 'ĐL'].includes(rawType)) type = 'ĐL/CTV';
+                else if (['ĐL/CTV', 'DL/CTV', 'ĐẠI LÝ', 'DAI LY', 'CTV', 'ĐL','dl','ctv'].includes(rawType)) type = 'ĐL/CTV';
                 else if (rawType !== '') type = 'ĐL/CTV'; 
 
                 let dataObj = { 
-                    mst: cols[cIdx] || '', 
-                    sdt: cols[cIdx+1] || '', 
-                    company: cols[cIdx+2] || '', 
-                    type: type, 
-                    tech: cols[cIdx+4] || 'Hưng', 
-                    issue: cols[cIdx+5] || '' 
+                    mst: cols[cIdx] || '', sdt: cols[cIdx+1] || '', company: cols[cIdx+2] || '', 
+                    type: type, tech: cols[cIdx+4] || 'Hưng', issue: cols[cIdx+5] || '' 
                 };
 
-                // Nếu còn dòng trống bên dưới thì ghi đè vào, hết thì tạo mới
                 if (startIndex < allTableRows.length) {
                     let targetRow = allTableRows[startIndex];
                     targetRow.querySelector('.inp-mst').value = dataObj.mst;
@@ -597,12 +590,10 @@
                 const mst = row.querySelector('.inp-mst').value.trim();
                 const type = row.querySelector('.inp-type').value;
                 const company = row.querySelector('.inp-company').value.trim();
-                if(mst || type || company) { // Chỉ gom dòng có data
+                if(mst || type || company) { 
                     data.push({ 
-                        mst, 
-                        sdt: row.querySelector('.inp-sdt').value.trim(), 
-                        company, type, 
-                        tech: row.querySelector('.inp-tech').value.trim(), 
+                        mst, sdt: row.querySelector('.inp-sdt').value.trim(), 
+                        company, type, tech: row.querySelector('.inp-tech').value.trim(), 
                         issue: row.querySelector('.inp-issue').value.trim() 
                     });
                 }
@@ -617,22 +608,20 @@
             ind.innerHTML = `${icon} ${msg}`;
         }
 
-        // LƯU NGẦM DEBOUNCE (Ngừng gõ 2.5s thì lưu)
+        // LƯU NGẦM CHUẨN DEBOUNCE
         function triggerAutoSave() {
             updateStatusIndicator("Đang chờ lưu ngầm...", "saving");
             clearTimeout(autoSaveTimer);
             autoSaveTimer = setTimeout(() => {
                 saveDataToCloud(false);
-            }, 2500);
+            }, 2500); // Ngừng gõ 2.5 giây tự động lưu
         }
 
-        // BẤM NÚT LƯU CHỦ ĐỘNG
         function manualSave() {
             clearTimeout(autoSaveTimer);
             saveDataToCloud(true);
         }
 
-        // CORE LOGIC LƯU DB
         function saveDataToCloud(showToastMsg = false) {
             const data = collectTableData();
             allData[currentSelectedDate] = data;
@@ -641,27 +630,27 @@
 
             const firebasePromise = database.ref('visnam_data/' + currentSelectedDate).set(data);
             
+            // Fix lỗi chặn Fetch bằng cách đổi Content-Type sang text/plain
             const sheetPromise = fetch(GOOGLE_SHEETS_API, {
                 method: 'POST',
-                mode: 'no-cors', // Rất quan trọng để chặn lỗi mạng chéo trình duyệt
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ date: currentSelectedDate, data: data, sheetName: "data" })
             });
 
             Promise.all([firebasePromise, sheetPromise])
                 .then(() => {
                     updateStatusIndicator("Đã lưu an toàn", "saved");
-                    if(showToastMsg) showToast("Đã ghi đè & lưu dữ liệu thành công!");
+                    if(showToastMsg) showToast("Đã lưu & đồng bộ dữ liệu thành công!");
                     if(document.getElementById('tab-thongke').classList.contains('active')) renderStatistics();
                 })
                 .catch(err => {
-                    updateStatusIndicator("Lỗi kết nối mạng", "saving");
-                    if(showToastMsg) showToast("Có lỗi xảy ra khi lưu!");
+                    updateStatusIndicator("Lỗi đồng bộ", "saving");
+                    if(showToastMsg) showToast("Có lỗi xảy ra, vui lòng thử lại!");
                 });
         }
 
         // =========================================================
-        // NÚT KHÔI PHỤC TỪ GOOGLE SHEET VỀ WEB (BACKUP/SYNC)
+        // NÚT KHÔI PHỤC (ĐỒNG BỘ TỪ SHEET VỀ WEB)
         // =========================================================
         function syncFromSheet() {
             showToast("Đang tải dữ liệu từ Google Sheet...");
@@ -674,16 +663,19 @@
                 .then(data => {
                     if (data && data.length > 0) {
                         allData[currentSelectedDate] = data;
-                        loadDataForDate(currentSelectedDate);
-                        showToast(`Đã khôi phục ${data.length} dòng từ Sheet!`);
+                        loadDataForDate(currentSelectedDate); // Sẽ tự xóa bảng cũ và đổ data mới
+                        showToast(`Đã khôi phục ${data.length} dòng thành công!`);
                         updateStatusIndicator("Đồng bộ hoàn tất", "saved");
+                        
+                        // Kích hoạt lưu lên Firebase để 2 bên đồng nhất
+                        database.ref('visnam_data/' + currentSelectedDate).set(data);
                     } else {
                         showToast("Sheet chưa có dữ liệu của ngày này!");
                         updateStatusIndicator("Hệ thống sẵn sàng", "");
                     }
                 })
                 .catch(err => {
-                    showToast("Không thể tải từ Sheet. Vui lòng check link!");
+                    showToast("Không thể kết nối tải dữ liệu!");
                     updateStatusIndicator("Lỗi đồng bộ", "saving");
                     console.error(err);
                 });
