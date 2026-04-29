@@ -77,11 +77,25 @@
         input[type="date"]:hover, input[type="date"]:focus { border-color: var(--primary); background: white; }
         
         .tabs { display: flex; gap: 8px; background: #f1f5f9; padding: 5px; border-radius: 10px; flex-wrap: wrap;}
-        .tab-btn { padding: 8px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition-fast); }
+        .tab-btn { padding: 8px 25px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition-fast); }
         .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        
+        /* SUB-TABS DÀNH CHO BÁO CÁO */
+        .sub-tabs-container { display: none; flex-direction: column; }
+        .sub-tabs-container.active { display: flex; }
+        .sub-tabs { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; overflow-x: auto;}
+        .sub-tab-btn { background: none; border: none; font-size: 15px; font-weight: 600; color: var(--text-muted); cursor: pointer; padding: 5px 10px; position: relative; transition: color 0.2s;}
+        .sub-tab-btn:hover { color: var(--primary); }
+        .sub-tab-btn.active { color: var(--primary); }
+        .sub-tab-btn.active::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 3px 3px 0 0; }
+        
         .tab-content-wrapper { background: var(--card-bg); border-radius: var(--border-radius); box-shadow: 0 8px 30px rgba(0,0,0,0.04); padding: 25px; min-height: 500px; }
-        .tab-content { display: none; animation: fadeIn 0.4s ease; }
-        .tab-content.active { display: block; }
+        
+        .main-tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .main-tab-content.active { display: block; }
+        .sub-tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .sub-tab-content.active { display: block; }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* TABLE CSS */
@@ -90,12 +104,31 @@
         th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; font-size: 13px; text-transform: uppercase; padding: 15px; text-align: left; border-bottom: 2px solid #edf2f7; white-space: nowrap; position: sticky; top: 0; z-index: 10;}
         td { padding: 8px 15px; border-bottom: 1px solid #edf2f7; vertical-align: middle; transition: background-color var(--transition-fast); }
         tr:hover td { background-color: #eff5fc; }
-        
         table input[type="text"], table select { width: 100%; padding: 10px 5px; border: none; border-bottom: 2px solid transparent; background: transparent; outline: none; font-size: 14px; font-weight: 500; transition: all var(--transition-fast); }
         table input[type="text"]:focus, table select:focus { border-bottom-color: var(--primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 10px -2px rgba(26, 86, 166, 0.1); border-radius: 4px;}
         table select { cursor: pointer; color: var(--primary); font-weight: bold; }
         .stt-cell { text-align: center; font-weight: bold; color: var(--primary); font-size: 15px; }
         
+        /* STATS TABLE (THỐNG KÊ GIAO DIỆN) */
+        .stats-section { margin-bottom: 35px; }
+        .stats-title { font-size: 18px; color: var(--primary); border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        .stats-title span { color: var(--text-muted); font-size: 14px; font-weight: normal; margin-left: auto; background: #f1f5f9; padding: 2px 10px; border-radius: 20px; }
+        .stats-table { width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid #edf2f7; }
+        .stats-table th { background: #ebf4ff; color: var(--primary); text-align: center; font-size: 13px; padding: 12px; }
+        .stats-table th:first-child { text-align: left; background: #f8fafc; color: var(--text-muted); width: 22%; }
+        .stats-table td { text-align: center; font-size: 15px; font-weight: 500; color: #4a5568; padding: 12px; }
+        .stats-table td:first-child { text-align: left; font-weight: 600; color: var(--text-main); }
+        .row-total { background: #fffaf0 !important; font-weight: bold; }
+        .row-total td { color: var(--secondary) !important; font-size: 16px; border-top: 2px solid #fbd38d; }
+        .daily-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
+        .daily-card { background: #f8fafc; border: 1px solid #edf2f7; border-radius: 12px; padding: 15px; text-align: center; transition: var(--transition-smooth); }
+        .daily-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.06); background: white; border-color: #e2e8f0; }
+        .daily-card.total { background: #fffaf0; border-color: #fbd38d; }
+        .daily-card.total:hover { border-color: var(--secondary); }
+        .daily-card h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+        .daily-card .num { font-size: 28px; font-weight: 800; color: var(--primary); }
+        .daily-card.total .num { color: var(--secondary); }
+
         /* BUTTONS */
         .action-bars { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 20px;}
         .btn-group-left, .btn-group-right { display: flex; gap: 10px; }
@@ -108,26 +141,14 @@
         .btn-save { background: linear-gradient(135deg, var(--secondary), #d68910); color: white; }
         .btn-copy-all { background: #4a5568; color: white; }
         .btn-sync { background: #38a169; color: white; }
-        .btn-export { background: #1a56a6; color: white; }
+        .btn-export { background: #1a56a6; color: white; font-size: 15px; padding: 10px 25px;}
 
         .action-btn { background: none; border: none; cursor: pointer; font-size: 16px; margin: 0 5px; padding: 6px; transition: var(--transition-fast); border-radius: 6px;}
         .copy-btn { color: #4a5568; } .copy-btn:hover { color: var(--primary); background: #ebf4ff; transform: scale(1.15); }
         .del-btn { color: #e53e3e; } .del-btn:hover { color: #c53030; background: #fff5f5; transform: scale(1.15); }
 
-        /* BÁO CÁO PREVIEW */
-        .report-preview { background: white; padding: 40px; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; font-family: 'Times New Roman', Times, serif; color: black; line-height: 1.6;}
-        .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #1a56a6; padding-bottom: 10px;}
-        .report-logo { width: 150px; font-weight: 900; font-size: 26px; color: #1a56a6; letter-spacing: -1px; font-family: 'Arial', sans-serif;}
-        .report-logo span { color: #f39c12; }
-        .report-title { text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 20px; color: #1a56a6;}
-        .report-info { margin-bottom: 20px; font-size: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;}
-        .report-section { margin-bottom: 20px; }
-        .report-section h3 { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #333;}
-        .report-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 15px;}
-        .report-table th, .report-table td { border: 1px solid #333; padding: 10px; text-align: left; }
-        .report-table th { background: #f8fafc; text-align: center; font-weight: bold; }
-        .report-table .text-center { text-align: center; }
-        .report-table .fw-bold { font-weight: bold; }
+        /* BÁO CÁO PREVIEW (CHỈ HIỂN THỊ TRÊN WEB) */
+        .report-preview { background: white; padding: 40px; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px;}
         
         #toast {
             visibility: hidden; min-width: 280px; background: rgba(45, 55, 72, 0.95); color: #fff; text-align: center;
@@ -192,14 +213,13 @@
                     <input type="date" id="workDate">
                 </div>
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('nhaplieu')"><i class="fas fa-edit"></i> Nhập liệu</button>
-                    <button class="tab-btn" onclick="switchTab('bctuan')"><i class="fas fa-file-alt"></i> Báo cáo Tuần</button>
-                    <button class="tab-btn" onclick="switchTab('bcthang')"><i class="fas fa-file-signature"></i> Báo cáo Tháng</button>
+                    <button class="tab-btn active" onclick="switchMainTab('nhaplieu')"><i class="fas fa-edit"></i> Nhập liệu</button>
+                    <button class="tab-btn" onclick="switchMainTab('baocao')"><i class="fas fa-chart-pie"></i> Báo cáo & Thống kê</button>
                 </div>
             </div>
 
             <div class="tab-content-wrapper">
-                <div id="tab-nhaplieu" class="tab-content active">
+                <div id="tab-nhaplieu" class="main-tab-content active">
                     <div class="table-responsive">
                         <table id="dataTable">
                             <thead>
@@ -225,18 +245,55 @@
                     </div>
                 </div>
 
-                <div id="tab-bctuan" class="tab-content">
-                    <div class="action-bars" style="margin-top: 0; margin-bottom: 15px; justify-content: flex-end;">
-                        <button class="btn btn-export" onclick="exportHTMLToDoc('preview-tuan', 'Bao_Cao_Tuan')"><i class="fas fa-file-word"></i> Xuất file .DOCX</button>
+                <div id="tab-baocao" class="main-tab-content">
+                    <div class="sub-tabs">
+                        <button class="sub-tab-btn active" onclick="switchSubTab('thongke')"><i class="fas fa-chart-line"></i> Bảng Thống kê</button>
+                        <button class="sub-tab-btn" onclick="switchSubTab('bctuan')"><i class="fas fa-file-alt"></i> Mẫu Báo cáo Tuần</button>
+                        <button class="sub-tab-btn" onclick="switchSubTab('bcthang')"><i class="fas fa-file-signature"></i> Mẫu Báo cáo Tháng</button>
                     </div>
-                    <div class="report-preview" id="preview-tuan"></div>
-                </div>
 
-                <div id="tab-bcthang" class="tab-content">
-                    <div class="action-bars" style="margin-top: 0; margin-bottom: 15px; justify-content: flex-end;">
-                        <button class="btn btn-export" onclick="exportHTMLToDoc('preview-thang', 'Bao_Cao_Thang')"><i class="fas fa-file-word"></i> Xuất file .DOCX</button>
+                    <div id="sub-thongke" class="sub-tab-content active">
+                        <div class="stats-section">
+                            <div class="stats-title"><i class="fas fa-calendar-day"></i> Tổng kết Ngày <span id="lblDay"></span></div>
+                            <div class="daily-grid" id="dailyStatsGrid"></div>
+                        </div>
+                        <div class="stats-section">
+                            <div class="stats-title"><i class="fas fa-calendar-week"></i> Tổng kết Tuần (T2 - T7) <span id="lblWeek"></span></div>
+                            <div class="table-responsive" style="margin-bottom: 0;">
+                                <table class="stats-table">
+                                    <thead>
+                                        <tr><th>Thứ / Ngày</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr>
+                                    </thead>
+                                    <tbody id="weeklyTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="stats-section">
+                            <div class="stats-title"><i class="fas fa-calendar-alt"></i> Tổng kết Tháng <span id="lblMonth"></span></div>
+                            <div class="table-responsive" style="margin-bottom: 0;">
+                                <table class="stats-table">
+                                    <thead>
+                                        <tr><th>Tuần làm việc</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm Xã Hội (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr>
+                                    </thead>
+                                    <tbody id="monthlyTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="report-preview" id="preview-thang"></div>
+
+                    <div id="sub-bctuan" class="sub-tab-content">
+                        <div class="action-bars" style="margin-top: 0; margin-bottom: 15px; justify-content: flex-end;">
+                            <button class="btn btn-export" onclick="downloadWeeklyReport()"><i class="fas fa-file-word"></i> Xuất file .DOCX</button>
+                        </div>
+                        <div class="report-preview" id="preview-tuan"></div>
+                    </div>
+
+                    <div id="sub-bcthang" class="sub-tab-content">
+                        <div class="action-bars" style="margin-top: 0; margin-bottom: 15px; justify-content: flex-end;">
+                            <button class="btn btn-export" onclick="downloadMonthlyReport()"><i class="fas fa-file-word"></i> Xuất file .DOCX</button>
+                        </div>
+                        <div class="report-preview" id="preview-thang"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,13 +314,17 @@
         const database = firebase.database();
         const auth = firebase.auth(); 
 
-        const GOOGLE_SHEETS_API = "https://script.google.com/macros/s/AKfycbx8DSQqm7DwH_jIFNwH8_f9pcecoK4j4NUT7u226IHZPTpCBJ-b9--N2cH3WotvupEdbA/exec";
+        const GOOGLE_SHEETS_API = "https://script.google.com/macros/s/AKfycbzOp9ir-WS_KpUqrooPaB9aHWuhsHguLlF4wyUoPAssthJAZpPUwfhqqjvvAiBoo_edjw/exec";
 
         let allData = {}; 
         let currentSelectedDate = ''; 
         let autoSaveTimer = null; 
-        let isUserAction = false; // CỜ BẢO VỆ CHỐNG XÓA DỮ LIỆU SAI
+        let isUserAction = false; 
         
+        // Biến lưu thông tin xuất file
+        let exportWeekFilename = "";
+        let exportMonthFilename = "";
+
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY';
         const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
@@ -325,23 +386,36 @@
             dateInput.addEventListener('change', (e) => {
                 currentSelectedDate = e.target.value; 
                 loadDataForDate(currentSelectedDate); 
-                if(document.getElementById('tab-bctuan').classList.contains('active')) renderWeeklyReport();
-                if(document.getElementById('tab-bcthang').classList.contains('active')) renderMonthlyReport();
+                updateAllReports(); // Cập nhật lại toàn bộ báo cáo khi đổi ngày
             });
 
-            // Sự kiện kích hoạt CỜ LƯU NGẦM (Chỉ lưu khi người dùng thực sự thao tác)
             document.getElementById('tableBody').addEventListener('paste', handlePaste);
             document.getElementById('tableBody').addEventListener('input', () => { isUserAction = true; triggerAutoSave(); });
             document.getElementById('tableBody').addEventListener('change', () => { isUserAction = true; triggerAutoSave(); });
         }
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        // CHUYỂN TAB CHÍNH
+        function switchMainTab(tabId) {
+            document.querySelectorAll('.main-tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
             event.currentTarget.classList.add('active');
-            if(tabId === 'bctuan') renderWeeklyReport();
-            if(tabId === 'bcthang') renderMonthlyReport();
+            if(tabId === 'baocao') updateAllReports();
+        }
+
+        // CHUYỂN TAB PHỤ (BÁO CÁO)
+        function switchSubTab(subId) {
+            document.querySelectorAll('.sub-tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('sub-' + subId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            updateAllReports();
+        }
+
+        function updateAllReports() {
+            renderStatistics();
+            renderWeeklyReport();
+            renderMonthlyReport();
         }
 
         function updateSTT() { document.querySelectorAll('#tableBody tr').forEach((row, idx) => { let stt = row.querySelector('.stt-cell'); if(stt) stt.innerText = idx + 1; }); }
@@ -382,7 +456,6 @@
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${allText.length} dòng!`));
         }
 
-        // DÁN CHUẨN TẠI DÒNG ĐANG FOCUS
         function handlePaste(e) {
             e.preventDefault();
             const rows = (e.clipboardData || window.clipboardData).getData('text').split('\n');
@@ -420,13 +493,12 @@
         }
 
         function loadDataForDate(dateStr) {
-            isUserAction = false; // KHÓA LƯU NGẦM KHI HỆ THỐNG LOAD DATA ĐỂ KHÔNG BỊ XÓA BẢNG
+            isUserAction = false; 
             const tbody = document.getElementById('tableBody'); tbody.innerHTML = '';
             const dayData = allData[dateStr] || [];
             if(dayData.length === 0) { for(let i=0; i<3; i++) addRow(); } 
             else { dayData.forEach(d => tbody.insertAdjacentHTML('beforeend', createRowHTML(d))); }
-            updateSTT();
-            updateStatusIndicator("Hệ thống sẵn sàng", "");
+            updateSTT(); updateStatusIndicator("Hệ thống sẵn sàng", "");
         }
 
         function collectTableData() {
@@ -448,7 +520,7 @@
         }
 
         function triggerAutoSave() {
-            if(!isUserAction) return; // Bảo vệ chống mất dữ liệu
+            if(!isUserAction) return; 
             updateStatusIndicator("Đang chờ lưu ngầm...", "saving");
             clearTimeout(autoSaveTimer);
             autoSaveTimer = setTimeout(() => { saveDataToCloud(false); }, 2500);
@@ -470,6 +542,7 @@
             Promise.all([firebasePromise, sheetPromise]).then(() => {
                 updateStatusIndicator("Đã lưu an toàn", "saved");
                 if(showToastMsg) showToast("Đã lưu & đồng bộ dữ liệu thành công!");
+                updateAllReports(); // Cập nhật lại số liệu
             }).catch(err => { updateStatusIndicator("Lỗi đồng bộ", "saving"); });
         }
 
@@ -480,6 +553,7 @@
                     allData[currentSelectedDate] = data; loadDataForDate(currentSelectedDate);
                     showToast(`Đã khôi phục ${data.length} dòng thành công!`); updateStatusIndicator("Đồng bộ hoàn tất", "saved");
                     database.ref('visnam_data/' + currentSelectedDate).set(data);
+                    updateAllReports();
                 } else { showToast("Sheet chưa có dữ liệu ngày này!"); updateStatusIndicator("Hệ thống sẵn sàng", ""); }
             }).catch(() => { showToast("Lỗi kết nối tải dữ liệu!"); updateStatusIndicator("Lỗi đồng bộ", "saving"); });
         }
@@ -488,20 +562,19 @@
         function showToast(msg) { document.getElementById("toast-msg").innerText = msg; document.getElementById("toast").className = "show"; setTimeout(() => { document.getElementById("toast").className = ""; }, 3000); }
 
         // ==========================================
-        // 4. XUẤT WORD & TẠO BÁO CÁO (Template Mới)
+        // 4. XUẤT WORD & TẠO BÁO CÁO (Logic Form + Trình Bày Chuẩn)
         // ==========================================
         function exportHTMLToDoc(elementId, filename) {
             var preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
             <head><meta charset='utf-8'><title>Export HTML To Doc</title>
             <style>
-                body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; }
-                table { border-collapse: collapse; width: 100%; margin-top: 15px; margin-bottom: 20px;}
-                th, td { border: 1px solid black; padding: 8px; text-align: left; vertical-align: middle; }
-                th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
-                h3 { color: #1a56a6; font-size: 15pt; }
-                .text-center { text-align: center; } .fw-bold { font-weight: bold; }
-                .report-title { text-align: center; font-size: 18pt; font-weight: bold; color: #1a56a6; text-transform: uppercase; margin-bottom: 20px;}
-                .header-info td { border: none; padding: 4px; }
+                body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; }
+                table { border-collapse: collapse; width: 100%; margin-top: 10pt; margin-bottom: 15pt; border: 1px solid black;}
+                th, td { border: 1px solid black; padding: 6pt; text-align: left; vertical-align: middle; }
+                th { font-weight: bold; text-align: center; }
+                h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;}
+                p, ul { margin-top: 5pt; margin-bottom: 5pt; }
+                ul li { margin-bottom: 4pt; }
             </style></head><body>`;
             var postHtml = "</body></html>";
             var html = preHtml + document.getElementById(elementId).innerHTML + postHtml;
@@ -514,71 +587,28 @@
             document.body.removeChild(downloadLink);
         }
 
+        function downloadWeeklyReport() { exportHTMLToDoc('preview-tuan', exportWeekFilename); }
+        function downloadMonthlyReport() { exportHTMLToDoc('preview-thang', exportMonthFilename); }
+
         function calculateStatsForDates(dateArray) {
             let stats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
+            let tempAllData = JSON.parse(JSON.stringify(allData));
+            tempAllData[currentSelectedDate] = collectTableData(); // Lấy cả data chưa save
+            
             dateArray.forEach(date => {
-                let dayData = allData[date] || [];
+                let dayData = tempAllData[date] || [];
                 dayData.forEach(item => { if(stats[item.type] !== undefined) { stats[item.type]++; stats['Total']++; } });
             }); return stats;
         }
 
-        function renderWeeklyReport() {
-            let d = new Date(currentSelectedDate); let day = d.getDay(); 
+        function getWeekDays6(dateStr) {
+            let d = new Date(dateStr); let day = d.getDay(); 
             let diff = d.getDate() - day + (day === 0 ? -6 : 1);
-            let monday = new Date(d.setDate(diff)); let weekDays = [];
-            for(let i=0; i<6; i++) { let temp = new Date(monday); temp.setDate(monday.getDate() + i); weekDays.push(temp.toISOString().split('T')[0]); }
-            
-            let stats = calculateStatsForDates(weekDays);
-            let month = currentSelectedDate.substring(5,7);
-            
-            let html = `
-                <div class="report-header">
-                    <div class="report-logo">visnam<span>.</span><br><span style="font-size: 11px; font-weight: normal; color: #f39c12; letter-spacing: 0;">save time save money</span></div>
-                </div>
-                <div class="report-title">BÁO CÁO CÔNG VIỆC TUẦN THÁNG ${month}</div>
-                <table class="header-info" style="width: 100%; border: none; margin-bottom: 20px;">
-                    <tr><td style="border:none;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
-                    <tr><td style="border:none;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none;"><b>Thời gian:</b> Từ ${formatVN(weekDays[0])} đến ${formatVN(weekDays[5])}</td></tr>
-                </table>
-                <div class="report-section">
-                    <h3>1. Nội dung công việc đã thực hiện:</h3>
-                    <p>Trong tuần, tôi đã thực hiện các công việc sau:</p>
-                    <ul>
-                        <li>Hỗ trợ khách hàng xử lý các vấn đề liên quan đến <b>hóa đơn điện tử</b>.</li>
-                        <li>Cài đặt và cấu hình <b>chữ ký số</b> cho doanh nghiệp.</li>
-                        <li>Hỗ trợ khách hàng <b>BHXH điện tử</b> và các dịch vụ công liên quan.</li>
-                        <li>Xử lý lỗi phần mềm, hướng dẫn khách hàng sử dụng hệ thống từ xa.</li>
-                        <li>Tiếp nhận và hỗ trợ các yêu cầu kỹ thuật phát sinh từ khách hàng.</li>
-                    </ul>
-                </div>
-                <div class="report-section">
-                    <h3>2. Kết quả thực hiện:</h3>
-                    <p>Tổng số yêu cầu đã tiếp nhận và xử lý trong tuần: <b style="color:red; font-size:18px;">${stats['Total']} yêu cầu</b></p>
-                    <table class="report-table">
-                        <thead><tr><th>Nội dung hỗ trợ</th><th>Số lượng</th></tr></thead>
-                        <tbody>
-                            <tr><td>Hỗ trợ hóa đơn điện tử (HĐ)</td><td class="text-center">${stats['HĐ']}</td></tr>
-                            <tr><td>Hỗ trợ chữ ký số (CKS)</td><td class="text-center">${stats['CKS']}</td></tr>
-                            <tr><td>Hỗ trợ bảo hiểm xã hội điện tử (BHXH)</td><td class="text-center">${stats['BHXH']}</td></tr>
-                            <tr><td>Hỗ trợ đại lý/CTV</td><td class="text-center">${stats['ĐL/CTV']}</td></tr>
-                            <tr><td class="fw-bold text-center">TỔNG</td><td class="fw-bold text-center" style="color:red;">${stats['Total']}</td></tr>
-                        </tbody>
-                    </table>
-                    <p>Các yêu cầu của khách hàng đều được <b>tiếp nhận và xử lý kịp thời</b>, đảm bảo khách hàng sử dụng dịch vụ ổn định.</p>
-                </div>
-                <div class="report-section">
-                    <h3>3. Khó khăn / vướng mắc:</h3>
-                    <ul>
-                        <li>Một số trường hợp khách hàng cung cấp thông tin chưa đầy đủ nên cần trao đổi nhiều lần để hoàn tất.</li>
-                        <li>Một số hệ thống dịch vụ công (thuế, BHXH, hải quan) đôi khi phản hồi chậm, ảnh hưởng đến thời gian xử lý.</li>
-                    </ul>
-                </div>
-            `;
-            document.getElementById('preview-tuan').innerHTML = html;
+            let monday = new Date(d.setDate(diff)); let days = [];
+            for(let i=0; i<6; i++) { let temp = new Date(monday); temp.setDate(monday.getDate() + i); days.push(temp.toISOString().split('T')[0]); } return days;
         }
 
-        function renderMonthlyReport() {
-            let year = parseInt(currentSelectedDate.substring(0, 4)); let month = parseInt(currentSelectedDate.substring(5, 7));
+        function getMonthWeeks(year, month) {
             let weeks = []; let lastDay = new Date(year, month, 0).getDate(); let currentWeekDays = [];
             for (let d = 1; d <= lastDay; d++) {
                 let dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
@@ -588,59 +618,234 @@
                     if (currentWeekDays.length > 0) {
                         let start = currentWeekDays[0].substring(8,10) + '/' + currentWeekDays[0].substring(5,7);
                         let end = currentWeekDays[currentWeekDays.length-1].substring(8,10) + '/' + currentWeekDays[currentWeekDays.length-1].substring(5,7);
-                        weeks.push({ name: `Tuần ${weeks.length + 1} (${start} - ${end})`, days: [...currentWeekDays] });
-                        currentWeekDays = [];
+                        weeks.push({ name: `Tuần ${weeks.length + 1} (${start} - ${end})`, days: [...currentWeekDays] }); currentWeekDays = [];
                     }
                 }
-            }
+            } return weeks;
+        }
+
+        // RENDER BẢNG THỐNG KÊ (Như cũ)
+        function renderStatistics() {
+            const dateStr = document.getElementById('workDate').value;
+            const year = parseInt(dateStr.substring(0, 4)); const month = parseInt(dateStr.substring(5, 7));
+            document.getElementById('lblDay').innerText = `(${formatVN(dateStr)})`;
+            let dayStats = calculateStatsForDates([dateStr]);
+            document.getElementById('dailyStatsGrid').innerHTML = `
+                <div class="daily-card"><h4>Hóa Đơn</h4><div class="num">${dayStats['HĐ']}</div></div>
+                <div class="daily-card"><h4>Chữ Ký Số</h4><div class="num">${dayStats['CKS']}</div></div>
+                <div class="daily-card"><h4>BHXH</h4><div class="num">${dayStats['BHXH']}</div></div>
+                <div class="daily-card"><h4>Đại lý / CTV</h4><div class="num">${dayStats['ĐL/CTV']}</div></div>
+                <div class="daily-card total"><h4>Tổng Cộng</h4><div class="num">${dayStats['Total']}</div></div>
+            `;
+            let weekDays = getWeekDays6(dateStr);
+            document.getElementById('lblWeek').innerText = `(${formatVN(weekDays[0])} - ${formatVN(weekDays[5])})`;
+            let weekHtml = ''; let weekTotalStats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
+            const dayNames = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+            weekDays.forEach((d, index) => {
+                let s = calculateStatsForDates([d]);
+                weekHtml += `<tr><td>${dayNames[index]} (${d.substring(8,10)})</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
+                weekTotalStats['HĐ'] += s['HĐ']; weekTotalStats['CKS'] += s['CKS']; weekTotalStats['BHXH'] += s['BHXH']; weekTotalStats['ĐL/CTV'] += s['ĐL/CTV']; weekTotalStats['Total'] += s['Total'];
+            });
+            weekHtml += `<tr class="row-total"><td>TỔNG TUẦN</td><td>${weekTotalStats['HĐ']}</td><td>${weekTotalStats['CKS']}</td><td>${weekTotalStats['BHXH']}</td><td>${weekTotalStats['ĐL/CTV']}</td><td>${weekTotalStats['Total']}</td></tr>`;
+            document.getElementById('weeklyTableBody').innerHTML = weekHtml;
+
+            document.getElementById('lblMonth').innerText = `(Tháng ${month}/${year})`;
+            let monthWeeks = getMonthWeeks(year, month); let monthHtml = ''; let monthTotalStats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
+            monthWeeks.forEach(w => {
+                let s = calculateStatsForDates(w.days);
+                monthHtml += `<tr><td>${w.name}</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
+                monthTotalStats['HĐ'] += s['HĐ']; monthTotalStats['CKS'] += s['CKS']; monthTotalStats['BHXH'] += s['BHXH']; monthTotalStats['ĐL/CTV'] += s['ĐL/CTV']; monthTotalStats['Total'] += s['Total'];
+            });
+            monthHtml += `<tr class="row-total"><td>TỔNG THÁNG</td><td>${monthTotalStats['HĐ']}</td><td>${monthTotalStats['CKS']}</td><td>${monthTotalStats['BHXH']}</td><td>${monthTotalStats['ĐL/CTV']}</td><td>${monthTotalStats['Total']}</td></tr>`;
+            document.getElementById('monthlyTableBody').innerHTML = monthHtml;
+        }
+
+        // ==========================================
+        // RENDER BÁO CÁO TUẦN & THÁNG CHUẨN ĐẸP 
+        // ==========================================
+        function getFormattedDate(dateStr) { return dateStr.substring(8,10) + "." + dateStr.substring(5,7); }
+        
+        function renderWeeklyReport() {
+            let weekDays = getWeekDays6(currentSelectedDate);
+            let stats = calculateStatsForDates(weekDays);
+            let month = currentSelectedDate.substring(5,7);
+            
+            // Tìm xem đây là tuần thứ mấy trong tháng
+            let year = parseInt(currentSelectedDate.substring(0, 4)); let monthInt = parseInt(month);
+            let monthWeeksInfo = getMonthWeeks(year, monthInt);
+            let weekNumber = 1;
+            monthWeeksInfo.forEach((w, idx) => { if(w.days.includes(currentSelectedDate)) weekNumber = idx + 1; });
+
+            let startDDMM = getFormattedDate(weekDays[0]); let endDDMM = getFormattedDate(weekDays[5]);
+            
+            // Set Tên file tải về
+            exportWeekFilename = `BÁO CÁO CÔNG VIỆC TUẦN ${weekNumber} (${startDDMM}-${endDDMM}) - Phan Viết Hưng`;
+            
+            let html = `
+                <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black;">
+                    <table style="width: 100%; border: none; margin-bottom: 10pt;">
+                        <tr>
+                            <td style="border: none; text-align: left; width: 40%; vertical-align: top;">
+                                <div style="font-family: Arial, sans-serif; font-weight: 900; font-size: 26pt; color: #1a56a6; letter-spacing: -1px; line-height: 1;">visnam<span style="color: #f39c12;">.</span></div>
+                                <div style="font-family: Arial, sans-serif; font-size: 10pt; color: #f39c12; letter-spacing: 0.5px; margin-top: 2px;">save time save money</div>
+                            </td>
+                            <td style="border: none; text-align: right; width: 60%;"></td>
+                        </tr>
+                    </table>
+                    
+                    <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt;">BÁO CÁO CÔNG VIỆC TUẦN ${String(weekNumber).padStart(2, '0')} THÁNG ${month}</div>
+                    
+                    <table style="width: 100%; border: none; margin-bottom: 15pt;">
+                        <tr>
+                            <td style="border:none; padding: 3pt;"><b>Họ và tên:</b> Phan Viết Hưng</td>
+                            <td style="border:none; padding: 3pt;"><b>Bộ phận:</b> Kỹ thuật</td>
+                        </tr>
+                        <tr>
+                            <td style="border:none; padding: 3pt;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td>
+                            <td style="border:none; padding: 3pt;"><b>Thời gian báo cáo:</b> Từ ngày ${formatVN(weekDays[0])} đến ${formatVN(weekDays[5])}</td>
+                        </tr>
+                    </table>
+
+                    <div style="margin-bottom: 15pt;">
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">1. Nội dung công việc đã thực hiện:</h3>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tuần, tôi đã tiếp nhận và thực hiện các công việc kỹ thuật chuyên sâu sau:</p>
+                        <ul style="margin-top: 5pt; margin-bottom: 5pt;">
+                            <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng khắc phục sự cố, xử lý lỗi phần mềm liên quan đến <b>hóa đơn điện tử</b>.</li>
+                            <li style="margin-bottom: 4pt;">Triển khai cài đặt, cấu hình hệ thống và gia hạn <b>chữ ký số</b> cho các doanh nghiệp.</li>
+                            <li style="margin-bottom: 4pt;">Hướng dẫn và hỗ trợ khách hàng kê khai, nộp hồ sơ <b>bảo hiểm xã hội (BHXH) điện tử</b>.</li>
+                            <li style="margin-bottom: 4pt;">Kiểm tra, khắc phục lỗi hệ thống từ xa qua UltraViewer/TeamViewer đảm bảo tiến độ công việc của khách hàng.</li>
+                            <li style="margin-bottom: 4pt;">Phối hợp và hỗ trợ các yêu cầu kỹ thuật phát sinh từ Đại lý/CTV.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 15pt;">
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">2. Kết quả thực hiện:</h3>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Tổng số yêu cầu đã tiếp nhận và xử lý thành công trong tuần: <b>${stats['Total']} yêu cầu</b>.</p>
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-top: 10pt; margin-bottom: 10pt;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 70%;">Nội dung hỗ trợ</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 30%;">Số lượng (Yêu cầu)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="border: 1px solid black; padding: 6pt;">Hỗ trợ hóa đơn điện tử (HĐ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${stats['HĐ']}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt;">Hỗ trợ chữ ký số (CKS)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${stats['CKS']}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt;">Hỗ trợ bảo hiểm xã hội điện tử (BHXH)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${stats['BHXH']}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt;">Hỗ trợ đại lý / CTV</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${stats['ĐL/CTV']}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG CỘNG</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">${stats['Total']}</td></tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">100% các yêu cầu của khách hàng đều được <b>tiếp nhận và xử lý kịp thời</b>, hệ thống của khách hàng hoạt động ổn định sau quá trình hỗ trợ.</p>
+                    </div>
+
+                    <div style="margin-bottom: 15pt;">
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Khó khăn / Vướng mắc:</h3>
+                        <ul style="margin-top: 5pt; margin-bottom: 5pt;">
+                            <li style="margin-bottom: 4pt;">Một số trường hợp khách hàng cung cấp thông tin ban đầu chưa đầy đủ (thiếu MST, mô tả lỗi không rõ ràng) dẫn đến bộ phận kỹ thuật phải liên hệ xác minh lại nhiều lần.</li>
+                            <li style="margin-bottom: 4pt;">Hệ thống cổng dịch vụ công của nhà nước (Thuế, BHXH) đôi lúc quá tải hoặc phản hồi chậm trong giờ cao điểm, ảnh hưởng trực tiếp đến thời gian hoàn thành xử lý lỗi.</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            document.getElementById('preview-tuan').innerHTML = html;
+        }
+
+        function renderMonthlyReport() {
+            let year = parseInt(currentSelectedDate.substring(0, 4)); let month = parseInt(currentSelectedDate.substring(5, 7));
+            let monthWeeksInfo = getMonthWeeks(year, month);
+            let lastDay = new Date(year, month, 0).getDate();
+            
+            // Set Tên file tải về
+            let startDDMM = `01.${String(month).padStart(2,'0')}`;
+            let endDDMM = `${String(lastDay).padStart(2,'0')}.${String(month).padStart(2,'0')}`;
+            exportMonthFilename = `BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')} (${startDDMM}-${endDDMM}) - Phan Viết Hưng`;
 
             let htmlWeeks = ''; let tHD=0, tCKS=0, tBHXH=0, tDL=0, tTotal=0;
-            weeks.forEach(w => {
+            monthWeeksInfo.forEach(w => {
                 let s = calculateStatsForDates(w.days);
-                htmlWeeks += `<tr><td>${w.name}</td><td class="text-center">${s['HĐ']}</td><td class="text-center">${s['CKS']}</td><td class="text-center">${s['BHXH']}</td><td class="text-center">${s['ĐL/CTV']}</td><td class="text-center fw-bold">${s['Total']}</td></tr>`;
+                htmlWeeks += `<tr>
+                    <td style="border: 1px solid black; padding: 6pt;">${w.name}</td>
+                    <td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['HĐ']}</td>
+                    <td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['CKS']}</td>
+                    <td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['BHXH']}</td>
+                    <td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['ĐL/CTV']}</td>
+                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${s['Total']}</td>
+                </tr>`;
                 tHD += s['HĐ']; tCKS += s['CKS']; tBHXH += s['BHXH']; tDL += s['ĐL/CTV']; tTotal += s['Total'];
             });
 
             let html = `
-                <div class="report-header">
-                    <div class="report-logo">visnam<span>.</span><br><span style="font-size: 11px; font-weight: normal; color: #f39c12; letter-spacing: 0;">save time save money</span></div>
-                </div>
-                <div class="report-title">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
-                <table class="header-info" style="width: 100%; border: none; margin-bottom: 20px;">
-                    <tr><td style="border:none;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
-                    <tr><td style="border:none;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none;"><b>Thời gian:</b> Từ 01/${String(month).padStart(2,'0')}/${year} đến ${lastDay}/${String(month).padStart(2,'0')}/${year}</td></tr>
-                </table>
-                
-                <div class="report-section">
-                    <h3>1. Nội dung công việc đã thực hiện:</h3>
-                    <ul>
-                        <li>Hỗ trợ khách hàng xử lý các vấn đề liên quan đến hóa đơn điện tử (lập, điều chỉnh, xuất sai, lỗi hệ thống…).</li>
-                        <li>Hỗ trợ các thủ tục liên quan đến bảo hiểm (báo tăng/giảm, thai sản, các lỗi kê khai…).</li>
-                        <li>Cài đặt và xử lý sự cố liên quan đến chữ ký số.</li>
-                        <li>Hỗ trợ kê khai thuế, xử lý lỗi tờ khai và các vấn đề phát sinh trên hệ thống thuế.</li>
-                        <li>Hỗ trợ đăng ký, cập nhật CKS lên hải quan.</li>
-                    </ul>
-                </div>
-                <div class="report-section">
-                    <h3>2. Kết quả thực hiện:</h3>
-                    <table class="report-table">
-                        <thead><tr><th>Tuần làm việc</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr></thead>
-                        <tbody>
-                            ${htmlWeeks}
-                            <tr style="background:#fffaf0;"><td class="fw-bold text-center" style="color:#f39c12;">TỔNG THÁNG</td>
-                            <td class="text-center fw-bold" style="color:#f39c12;">${tHD}</td><td class="text-center fw-bold" style="color:#f39c12;">${tCKS}</td>
-                            <td class="text-center fw-bold" style="color:#f39c12;">${tBHXH}</td><td class="text-center fw-bold" style="color:#f39c12;">${tDL}</td>
-                            <td class="text-center fw-bold" style="color:red;">${tTotal}</td></tr>
-                        </tbody>
+                <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black;">
+                    <table style="width: 100%; border: none; margin-bottom: 10pt;">
+                        <tr>
+                            <td style="border: none; text-align: left; width: 40%; vertical-align: top;">
+                                <div style="font-family: Arial, sans-serif; font-weight: 900; font-size: 26pt; color: #1a56a6; letter-spacing: -1px; line-height: 1;">visnam<span style="color: #f39c12;">.</span></div>
+                                <div style="font-family: Arial, sans-serif; font-size: 10pt; color: #f39c12; letter-spacing: 0.5px; margin-top: 2px;">save time save money</div>
+                            </td>
+                            <td style="border: none; text-align: right; width: 60%;"></td>
+                        </tr>
                     </table>
-                </div>
-                <div class="report-section">
-                    <h3>3. Nhận xét:</h3>
-                    <ul>
-                        <li>Tiếp nhận và hoàn thành các yêu cầu hỗ trợ từ nhóm Support và Đại lý/CTV đảm bảo thời gian xử lý, hạn chế tình trạng khách hàng phàn nàn do chờ đợi.</li>
-                        <li>Một số yêu cầu từ bộ phận Sale gửi sang chưa ghi rõ nội dung khách hàng cần hỗ trợ, dẫn đến phải trao đổi lại với khách để xác nhận thông tin.</li>
-                        <li>Có trường hợp ghi sai nội dung cần hỗ trợ, ảnh hưởng đến thời gian xử lý.</li>
-                    </ul>
+                    
+                    <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt;">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
+                    
+                    <table style="width: 100%; border: none; margin-bottom: 15pt;">
+                        <tr>
+                            <td style="border:none; padding: 3pt;"><b>Họ và tên:</b> Phan Viết Hưng</td>
+                            <td style="border:none; padding: 3pt;"><b>Bộ phận:</b> Kỹ thuật</td>
+                        </tr>
+                        <tr>
+                            <td style="border:none; padding: 3pt;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td>
+                            <td style="border:none; padding: 3pt;"><b>Thời gian báo cáo:</b> Từ 01/${String(month).padStart(2,'0')}/${year} đến ${String(lastDay).padStart(2,'0')}/${String(month).padStart(2,'0')}/${year}</td>
+                        </tr>
+                    </table>
+
+                    <div style="margin-bottom: 15pt;">
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">1. Nội dung công việc đã thực hiện:</h3>
+                        <ul style="margin-top: 5pt; margin-bottom: 5pt;">
+                            <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng xử lý toàn diện các vấn đề liên quan đến <b>hóa đơn điện tử</b> (lập, điều chỉnh, thay thế, hủy hóa đơn xuất sai, xử lý lỗi hệ thống phần mềm).</li>
+                            <li style="margin-bottom: 4pt;">Hỗ trợ thủ tục liên quan đến <b>bảo hiểm xã hội</b> (báo tăng/giảm lao động, chế độ thai sản, ốm đau, xử lý lỗi kê khai trên phần mềm).</li>
+                            <li style="margin-bottom: 4pt;">Cài đặt phần mềm, gia hạn, thiết lập Token và xử lý sự cố liên quan đến <b>chữ ký số (CKS)</b>.</li>
+                            <li style="margin-bottom: 4pt;">Hỗ trợ kê khai thuế trực tuyến, xử lý lỗi nộp tờ khai và các vấn đề phát sinh trên hệ thống eTax của Tổng cục Thuế.</li>
+                            <li style="margin-bottom: 4pt;">Hỗ trợ doanh nghiệp đăng ký, cập nhật thông tin Chữ ký số lên hệ thống Hải quan điện tử.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 15pt;">
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">2. Bảng tổng hợp kết quả thực hiện:</h3>
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-top: 10pt; margin-bottom: 10pt;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Tuần làm việc</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Hóa Đơn (HĐ)</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Chữ Ký Số (CKS)</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Bảo Hiểm (BHXH)</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Đại lý / CTV</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Tổng Cộng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${htmlWeeks}
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold; text-transform: uppercase;">TỔNG THÁNG</td>
+                                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tHD}</td>
+                                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tCKS}</td>
+                                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tBHXH}</td>
+                                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tDL}</td>
+                                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tTotal}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-bottom: 15pt;">
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Đánh giá và nhận xét chung:</h3>
+                        <ul style="margin-top: 5pt; margin-bottom: 5pt;">
+                            <li style="margin-bottom: 4pt;"><b>Về tiến độ:</b> Tiếp nhận và hoàn thành 100% các yêu cầu hỗ trợ từ nhóm Support, phòng Kinh doanh và Đại lý/CTV. Đảm bảo đúng thời gian cam kết xử lý (SLA), hạn chế tối đa tình trạng khách hàng phàn nàn do phải chờ đợi lâu.</li>
+                            <li style="margin-bottom: 4pt;"><b>Vướng mắc trong quy trình phối hợp:</b> Một số yêu cầu từ bộ phận Kinh doanh (Sale) gửi sang chưa ghi chép rõ ràng tình trạng lỗi hoặc nội dung khách hàng cần hỗ trợ, dẫn đến bộ phận kỹ thuật phải mất thêm thời gian liên hệ trao đổi lại với khách hàng để xác nhận đúng vấn đề.</li>
+                            <li style="margin-bottom: 4pt;"><b>Chất lượng thông tin:</b> Vẫn còn một vài trường hợp ghi chú sai lệch nội dung cần hỗ trợ, làm ảnh hưởng đến thời gian phân loại và xử lý sự cố. Đề xuất các bộ phận liên quan chuẩn hóa form tiếp nhận thông tin ban đầu để quy trình hỗ trợ diễn ra nhanh chóng hơn.</li>
+                        </ul>
+                    </div>
                 </div>
             `;
             document.getElementById('preview-thang').innerHTML = html;
