@@ -515,9 +515,9 @@
                 let rawType = cols[cIdx+3] ? cols[cIdx+3].trim().toUpperCase() : '';
                 let type = 'ĐL/CTV'; 
                 
-                if (['HĐ', 'HD', 'HÓA ĐƠN', 'HOA DON','hd','hđ'].includes(rawType)) type = 'HĐ';
-                else if (['CKS', 'CHỮ KÝ SỐ', 'CHU KY SO','cks'].includes(rawType)) type = 'CKS';
-                else if (['BHXH', 'BẢO HIỂM', 'BAO HIEM','bhxh'].includes(rawType)) type = 'BHXH';
+                if (['HĐ', 'HD', 'HÓA ĐƠN', 'HOA DON'].includes(rawType)) type = 'HĐ';
+                else if (['CKS', 'CHỮ KÝ SỐ', 'CHU KY SO'].includes(rawType)) type = 'CKS';
+                else if (['BHXH', 'BẢO HIỂM', 'BAO HIEM'].includes(rawType)) type = 'BHXH';
                 else if (['ĐL/CTV', 'DL/CTV', 'ĐẠI LÝ', 'DAI LY', 'CTV', 'ĐL'].includes(rawType)) type = 'ĐL/CTV';
                 else if (rawType !== '') type = 'ĐL/CTV'; 
 
@@ -557,37 +557,11 @@
             }); return data;
         }
 
-        async function saveData() {
-    const data = collectTableData();
-
-    if(data.length === 0){
-        showToast("Không có dữ liệu để lưu!");
-        return;
-    }
-
-    showToast("Đang gửi dữ liệu...");
-
-    try {
-        await fetch("https://script.google.com/macros/s/AKfycbzOp9ir-WS_KpUqrooPaB9aHWuhsHguLlF4wyUoPAssthJAZpPUwfhqqjvvAiBoo_edjw/exec", {
-            method: "POST",
-            mode: "no-cors",   // 👈 QUAN TRỌNG
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(
-                data.map(row => ({
-                    date: currentSelectedDate,
-                    ...row
-                }))
-            )
-        });
-
-        showToast("Đã gửi dữ liệu thành công!");
-
-    } catch (err) {
-        showToast("Lỗi: " + err.message);
-    }
-}
+        function saveTableForDate(dateStr) {
+            const data = collectTableData();
+            allData[dateStr] = data;
+            database.ref('visnam_data/' + dateStr).set(data);
+        }
 
         function saveData() {
             const data = collectTableData();
