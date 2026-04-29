@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hỗ Trợ Kỹ Thuật - Visnam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        :root {
+            --primary: #1a56a6; 
+            --secondary: #f39c12; 
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; overflow-y: scroll; }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(113, 128, 150, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* LOADING SCREEN */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #1a56a6, #0e356e); z-index: 99999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; transition: opacity 0.5s ease;
+        }
+        .running-track { width: 300px; height: 60px; position: relative; border-bottom: 3px solid rgba(255,255,255,0.2); margin-bottom: 20px; }
+        .running-boy { position: absolute; bottom: 0; left: 0; font-size: 45px; color: var(--secondary); transition: left 0.1s linear; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
+        .running-boy i { animation: runBounce 0.4s infinite alternate; }
+        @keyframes runBounce { 0% { transform: translateY(0) rotate(5deg); } 100% { transform: translateY(-10px) rotate(-5deg); } }
+        .progress-container { width: 300px; background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; margin-bottom: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
+        .progress-bar { width: 0%; height: 100%; background: var(--secondary); border-radius: 10px; transition: width 0.1s linear; box-shadow: 0 0 10px rgba(243,156,18,0.8); }
+        #loading-text { font-size: 24px; font-weight: bold; font-family: monospace; letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+        /* LOGIN SCREEN */
+        #loginScreen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color);
+            display: flex; justify-content: center; align-items: center; z-index: 9000; display: none;
+        }
+        .login-box {
+            background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; border-top: 5px solid var(--primary);
+        }
+        .login-logo { font-size: 40px; color: var(--primary); margin-bottom: 10px; }
+        .login-box h2 { color: var(--text-main); margin-bottom: 30px; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .input-group input { 
+            width: 100%; padding: 15px 15px 15px 45px; border: 2px solid #edf2f7; border-radius: 10px; 
+            font-size: 15px; outline: none; transition: var(--transition); background: #f8fafc; color: var(--text-main);
+        }
+        .input-group input:focus { border-color: var(--primary); background: white; }
+        .btn-login { 
+            width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary), #113c7a); color: white; border: none; 
+            border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: var(--transition); box-shadow: 0 5px 15px rgba(26,86,166,0.3);
+        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,86,166,0.4); }
+        #loginError { color: #e53e3e; font-size: 14px; margin-top: 15px; display: none; background: #fff5f5; padding: 10px; border-radius: 8px; }
+
+        #mainApp { display: none; }
+
+        /* HEADER */
+        header {
+            background: var(--card-bg); height: 90px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-bottom: 4px solid var(--secondary); position: sticky; top: 0; z-index: 1000; width: 100%;
+        }
+        .header-content { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 1400px; padding: 0 20px; }
+        .header-titles { text-align: center; }
+        header h1 { color: var(--primary); font-size: 26px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; justify-content: center; }
+        header p { color: var(--text-muted); font-size: 14px; font-weight: 500; margin-top: 4px; }
+        .btn-logout { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: var(--transition); font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        .btn-logout:hover { background: #e53e3e; color: white; }
+
+        /* CONTAINER & TABS */
+        .container { max-width: 1400px; margin: 25px auto; padding: 0 20px; display: flex; flex-direction: column; min-height: 80vh; }
+        .controls-card { background: var(--card-bg); padding: 15px 25px; border-radius: var(--border-radius); box-shadow: 0 2px 10px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .date-picker-container label { font-weight: 600; color: var(--primary); margin-right: 10px; font-size: 15px; }
+        input[type="date"] { padding: 8px 15px; border: 2px solid #e2e8f0; border-radius: 8px; color: var(--text-main); font-size: 15px; font-weight: 600; outline: none; background: #f8fafc; cursor: pointer; }
+        input[type="date"]:focus { border-color: var(--primary); background: white; }
+        .tabs { display: flex; gap: 10px; background: #f1f5f9; padding: 5px; border-radius: 10px; }
+        .tab-btn { padding: 8px 20px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition); }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .tab-content-wrapper { flex: 1; background: var(--card-bg); border-radius: var(--border-radius); box-shadow: 0 5px 20px rgba(0,0,0,0.03); padding: 25px; min-height: 500px; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* TABLE CSS */
+        .table-responsive { overflow-x: auto; border-radius: 10px; border: 1px solid #edf2f7; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1050px; }
+        th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; font-size: 13px; text-transform: uppercase; padding: 15px; text-align: left; border-bottom: 2px solid #edf2f7; white-space: nowrap; }
+        td { padding: 10px 15px; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
+        tr:hover td { background-color: #fbfdff; }
+        
+        table input[type="text"], table select { width: 100%; padding: 8px 5px; border: none; border-bottom: 2px solid transparent; background: transparent; outline: none; font-size: 14px; color: var(--text-main); font-weight: 500; transition: 0.2s; }
+        table input[type="text"]::placeholder { color: #cbd5e0; font-style: italic; }
+        table input[type="text"]:focus, table select:focus { border-bottom-color: var(--primary); background: #fff; }
+        table select { cursor: pointer; color: var(--primary); font-weight: bold; }
+        .stt-cell { text-align: center; font-weight: bold; color: var(--primary); font-size: 15px; }
+        
+        /* BUTTONS */
+        .btn { padding: 10px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; transition: var(--transition); }
+        .btn-add { background: #ebf4ff; color: var(--primary); border: 1px dashed var(--primary); }
+        .btn-add:hover { background: var(--primary); color: white; }
+        .btn-save { background: linear-gradient(135deg, var(--secondary), #d68910); color: white; float: right; padding: 12px 35px; box-shadow: 0 4px 10px rgba(243,156,18,0.2); }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(243,156,18,0.3); }
+        
+        /* Style riêng cho nút Copy All */
+        .btn-copy-all { background: #4a5568; color: white; float: right; margin-right: 15px; padding: 12px 25px; box-shadow: 0 4px 10px rgba(74,85,104,0.2); }
+        .btn-copy-all:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(74,85,104,0.3); background: #2d3748; }
+
+        .action-btn { background: none; border: none; cursor: pointer; font-size: 16px; margin: 0 5px; padding: 5px; }
+        .copy-btn { color: #4a5568; } .copy-btn:hover { color: var(--primary); }
+        .del-btn { color: #e53e3e; } .del-btn:hover { color: #c53030; }
+
+        /* STATS */
+        .stats-section { margin-bottom: 35px; }
+        .stats-title { font-size: 18px; color: var(--primary); border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        .stats-title span { color: var(--text-muted); font-size: 14px; font-weight: normal; margin-left: auto; background: #f1f5f9; padding: 2px 10px; border-radius: 20px; }
+        .stats-table { width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid #edf2f7; }
+        .stats-table th { background: #ebf4ff; color: var(--primary); text-align: center; font-size: 13px; padding: 12px; }
+        .stats-table th:first-child { text-align: left; background: #f8fafc; color: var(--text-muted); width: 22%; }
+        .stats-table td { text-align: center; font-size: 15px; font-weight: 500; color: #4a5568; padding: 12px; }
+        .stats-table td:first-child { text-align: left; font-weight: 600; color: var(--text-main); }
+        .row-total { background: #fffaf0 !important; font-weight: bold; }
+        .row-total td { color: var(--secondary) !important; font-size: 16px; border-top: 2px solid #fbd38d; }
+        .daily-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
+        .daily-card { background: #f8fafc; border: 1px solid #edf2f7; border-radius: 8px; padding: 15px; text-align: center; }
+        .daily-card.total { background: #fffaf0; border-color: #fbd38d; }
+        .daily-card h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+        .daily-card .num { font-size: 26px; font-weight: 800; color: var(--primary); }
+        .daily-card.total .num { color: var(--secondary); }
+
+        #toast {
+            visibility: hidden; min-width: 280px; background: rgba(45, 55, 72, 0.95); color: #fff; text-align: center;
+            border-radius: 8px; padding: 15px; position: fixed; z-index: 2000; left: 50%; bottom: 30px;
+            transform: translate(-50%, 20px); opacity: 0; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        #toast.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="running-track">
+            <div class="running-boy" id="runner"><i class="fas fa-person-running"></i></div>
+        </div>
+        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+        <div id="loading-text">0%</div>
+    </div>
+
+    <div id="loginScreen">
+        <div class="login-box">
+            <div class="login-logo"><i class="fas fa-user-shield"></i></div>
+            <h2>XÁC THỰC BẢO MẬT</h2>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email đăng nhập">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Mật khẩu">
+            </div>
+            <button class="btn-login" onclick="verifyLogin()">ĐĂNG NHẬP HỆ THỐNG</button>
+            <p id="loginError"><i class="fas fa-exclamation-triangle"></i> Lỗi đăng nhập!</p>
+        </div>
+    </div>
+
+    <div id="mainApp">
+        <header>
+            <div class="header-content">
+                <div class="header-titles">
+                    <h1><i class="fas fa-headset"></i> HỖ TRỢ KỸ THUẬT</h1>
+                    <p>Công ty Cổ phần thương mại Visnam</p>
+                </div>
+                <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="controls-card">
+                <div class="date-picker-container">
+                    <label for="workDate"><i class="far fa-calendar-alt"></i> Ngày làm việc:</label>
+                    <input type="date" id="workDate">
+                </div>
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('nhaplieu')"><i class="fas fa-edit"></i> Nhập liệu</button>
+                    <button class="tab-btn" onclick="switchTab('thongke')"><i class="fas fa-chart-line"></i> Thống kê báo cáo</button>
+                </div>
+            </div>
+
+            <div class="tab-content-wrapper">
+                <div id="tab-nhaplieu" class="tab-content active">
+                    <div class="table-responsive">
+                        <table id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th width="4%" style="text-align:center;">STT</th>
+                                    <th width="12%">MST</th>
+                                    <th width="12%">SĐT</th>
+                                    <th width="29%">Tên Công Ty / HKD</th> 
+                                    <th width="10%">Loại HT</th>
+                                    <th width="9%">Tên KT</th>
+                                    <th width="16%">Vấn đề hỗ trợ</th>
+                                    <th width="8%" style="text-align:center;">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-add" onclick="addRow()"><i class="fas fa-plus-circle"></i> Thêm dòng mới</button>
+                    
+                    <button class="btn btn-save" onclick="saveData()"><i class="fas fa-save"></i> Lưu Dữ Liệu</button>
+                    <button class="btn btn-copy-all" onclick="copyAllData()"><i class="fas fa-copy"></i> Copy Toàn Bộ</button>
+                    
+                    <div style="clear:both;"></div>
+                </div>
+
+                <div id="tab-thongke" class="tab-content">
+                    <div class="stats-section">
+                        <div class="stats-title"><i class="fas fa-calendar-day"></i> Tổng kết Ngày <span id="lblDay"></span></div>
+                        <div class="daily-grid" id="dailyStatsGrid"></div>
+                    </div>
+                    <div class="stats-section">
+                        <div class="stats-title"><i class="fas fa-calendar-week"></i> Tổng kết Tuần (T2 - T7) <span id="lblWeek"></span></div>
+                        <div class="table-responsive" style="margin-bottom: 0;">
+                            <table class="stats-table">
+                                <thead>
+                                    <tr><th>Thứ / Ngày</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr>
+                                </thead>
+                                <tbody id="weeklyTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="stats-section">
+                        <div class="stats-title"><i class="fas fa-calendar-alt"></i> Tổng kết Tháng <span id="lblMonth"></span></div>
+                        <div class="table-responsive" style="margin-bottom: 0;">
+                            <table class="stats-table">
+                                <thead>
+                                    <tr><th>Tuần làm việc</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm Xã Hội (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr>
+                                </thead>
+                                <tbody id="monthlyTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"><i class="fas fa-check-circle" style="color:#48bb78;"></i> <span id="toast-msg"></span></div>
+
+    <script>
+        // ==========================================
+        // 1. CẤU HÌNH FIREBASE KẾT NỐI DATABASE & AUTH
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHFTbNY8ycl4NsfIqgu7v5lGEVwsO0LB4",
+            authDomain: "phanviethung-hotrokythuat.firebaseapp.com",
+            projectId: "phanviethung-hotrokythuat",
+            storageBucket: "phanviethung-hotrokythuat.firebasestorage.app",
+            messagingSenderId: "142402735822",
+            appId: "1:142402735822:web:ff86f84f53dda983eb0a9f",
+            measurementId: "G-7KWCTTFKRT"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth(); 
+
+        let allData = {}; 
+        let currentSelectedDate = ''; 
+        
+        const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY';
+        const TIMEOUT_LIMIT = 60 * 60 * 1000; 
+
+        // Hiệu ứng Loading
+        document.addEventListener("DOMContentLoaded", () => {
+            let percent = 0;
+            const loader = document.getElementById('loader');
+            const loadText = document.getElementById('loading-text');
+            const progressBar = document.getElementById('progressBar');
+            const runner = document.getElementById('runner');
+
+            let loadingInterval = setInterval(() => {
+                percent += Math.floor(Math.random() * 5) + 2; 
+                if(percent > 100) percent = 100;
+                loadText.innerText = percent + "%";
+                progressBar.style.width = percent + "%";
+                let runDistance = (percent / 100) * 250; 
+                runner.style.left = runDistance + "px";
+
+                if(percent >= 100) {
+                    clearInterval(loadingInterval);
+                    setTimeout(() => {
+                        loader.style.opacity = '0';
+                        setTimeout(() => { 
+                            loader.style.display = 'none'; 
+                        }, 500);
+                    }, 400);
+                }
+            }, 30);
+        });
+
+        // LẮNG NGHE TRẠNG THÁI ĐĂNG NHẬP
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                const lastActive = localStorage.getItem(ACTIVITY_KEY);
+                if (lastActive && (Date.now() - parseInt(lastActive)) > TIMEOUT_LIMIT) {
+                    logout(); 
+                } else {
+                    localStorage.setItem(ACTIVITY_KEY, Date.now().toString());
+                    showMainApp();
+                }
+            } else {
+                forceLogout();
+            }
+        });
+
+        function verifyLogin() {
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errorText = document.getElementById('loginError');
+
+            if (!email || !pass) {
+                errorText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Vui lòng nhập Email và Mật khẩu!';
+                errorText.style.display = 'block';
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, pass)
+                .then((userCredential) => {
+                    errorText.style.display = 'none';
+                    document.getElementById('password').value = ''; 
+                    showToast("Đăng nhập thành công!");
+                })
+                .catch((error) => {
+                    console.error(error);
+                    errorText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Thông tin đăng nhập không chính xác!';
+                    errorText.style.display = 'block';
+                });
+        }
+
+        document.getElementById('password').addEventListener('keypress', function(e) { 
+            if (e.key === 'Enter') verifyLogin(); 
+        });
+
+        function forceLogout() {
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+        }
+
+        function logout() { 
+            auth.signOut().then(() => showToast("Đã đăng xuất an toàn!"));
+        }
+
+        function updateActivity() { 
+            if (auth.currentUser) localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); 
+        }
+        ['click', 'mousemove', 'keypress', 'scroll'].forEach(evt => document.addEventListener(evt, updateActivity));
+        
+        setInterval(() => {
+            if (auth.currentUser) {
+                const lastActive = localStorage.getItem(ACTIVITY_KEY);
+                if (lastActive && (Date.now() - parseInt(lastActive)) > TIMEOUT_LIMIT) { 
+                    logout(); 
+                    alert("Hết phiên đăng nhập do không thao tác trong 1 giờ. Vui lòng đăng nhập lại!"); 
+                }
+            }
+        }, 60000); 
+
+        // ==========================================
+        // 3. LOGIC APP VÀ ĐỒNG BỘ CLOUD FIREBASE
+        // ==========================================
+        function showMainApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            showToast("Đang tải dữ liệu từ Đám mây...");
+            
+            database.ref('visnam_data').once('value').then((snapshot) => {
+                allData = snapshot.val() || {};
+                initApp(); 
+            }).catch(error => {
+                showToast("Lỗi mạng, chưa lấy được dữ liệu!");
+                initApp(); 
+            });
+        }
+
+        function initApp() {
+            if(currentSelectedDate !== '') return; 
+            const dateInput = document.getElementById('workDate');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+            currentSelectedDate = today; 
+            
+            loadDataForDate(today);
+
+            dateInput.addEventListener('change', (e) => {
+                saveTableForDate(currentSelectedDate); 
+                currentSelectedDate = e.target.value; 
+                loadDataForDate(currentSelectedDate); 
+                if(document.getElementById('tab-thongke').classList.contains('active')) renderStatistics();
+            });
+            document.getElementById('tableBody').addEventListener('paste', handlePaste);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            if(tabId === 'thongke') { saveTableForDate(currentSelectedDate); renderStatistics(); }
+        }
+
+        function updateSTT() {
+            const rows = document.querySelectorAll('#tableBody tr');
+            rows.forEach((row, index) => {
+                const sttCell = row.querySelector('.stt-cell');
+                if(sttCell) sttCell.innerText = index + 1;
+            });
+        }
+
+        function createRowHTML(data = {}) {
+            const types = ['HĐ', 'CKS', 'BHXH', 'ĐL/CTV'];
+            let options = types.map(t => `<option value="${t}" ${data.type === t ? 'selected' : ''}>${t}</option>`).join('');
+            return `
+                <tr>
+                    <td class="stt-cell"></td>
+                    <td><input type="text" class="inp-mst" value="${data.mst || ''}" placeholder="Nhập MST....."></td>
+                    <td><input type="text" class="inp-sdt" value="${data.sdt || ''}" placeholder="Nhập SĐT....."></td>
+                    <td><input type="text" class="inp-company" value="${data.company || ''}" placeholder="Công ty / Hộ KD....."></td>
+                    <td><select class="inp-type"><option value="">- Chọn -</option>${options}</select></td>
+                    <td><input type="text" class="inp-tech" value="${data.tech || 'Hưng'}" placeholder="Tên KT....."></td>
+                    <td><input type="text" class="inp-issue" value="${data.issue || ''}" placeholder="Nội dung hỗ trợ....."></td>
+                    <td style="text-align:center;">
+                        <button class="action-btn copy-btn" onclick="copyRowToClipboard(this)" title="Copy dòng này"><i class="far fa-copy"></i></button>
+                        <button class="action-btn del-btn" onclick="deleteRow(this)" title="Xóa dòng này"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`;
+        }
+
+        function addRow() { 
+            document.getElementById('tableBody').insertAdjacentHTML('beforeend', createRowHTML()); 
+            updateSTT();
+        }
+        
+        function deleteRow(btn) { 
+            btn.closest('tr').remove(); 
+            updateSTT();
+        }
+
+        // TÍNH NĂNG COPY DÒNG ĐÃ CẬP NHẬT (KHÔNG LẤY STT)
+        function copyRowToClipboard(btn) {
+            const row = btn.closest('tr');
+            // Chỉ lấy các thẻ input và select (Bỏ qua cột đầu tiên chứa thẻ td.stt-cell)
+            const dataStr = Array.from(row.querySelectorAll('input, select')).map(el => el.value.trim()).join('\t');
+            navigator.clipboard.writeText(dataStr).then(() => showToast("Đã copy dữ liệu dòng!"));
+        }
+
+        // TÍNH NĂNG COPY TOÀN BỘ BẢNG (KHÔNG LẤY STT)
+        function copyAllData() {
+            const rows = document.querySelectorAll('#tableBody tr');
+            let allText = [];
+            
+            rows.forEach(row => {
+                const mst = row.querySelector('.inp-mst').value.trim();
+                const type = row.querySelector('.inp-type').value;
+                const company = row.querySelector('.inp-company').value.trim();
+                
+                // Chỉ copy những dòng có chứa dữ liệu thực tế (bỏ qua dòng trống)
+                if(mst || type || company) {
+                    const dataStr = Array.from(row.querySelectorAll('input, select')).map(el => el.value.trim()).join('\t');
+                    allText.push(dataStr);
+                }
+            });
+            
+            if(allText.length === 0) {
+                showToast("Bảng trống, không có dữ liệu để copy!");
+                return;
+            }
+
+            // Nối các dòng bằng dấu Enter (\n) để dán vào Excel/Sheet ra nhiều dòng tương ứng
+            navigator.clipboard.writeText(allText.join('\n')).then(() => {
+                showToast(`Đã copy toàn bộ ${allText.length} dòng thành công!`);
+            });
+        }
+
+        function handlePaste(e) {
+            e.preventDefault();
+            const rows = (e.clipboardData || window.clipboardData).getData('text').split('\n');
+            const tbody = document.getElementById('tableBody');
+            if (collectTableData().length === 0) tbody.innerHTML = '';
+
+            rows.forEach(rowStr => {
+                if(rowStr.trim() === '') return;
+                const cols = rowStr.split('\t'); 
+                
+                let cIdx = 0;
+                if (cols.length >= 7 || (/^\d+$/.test(cols[0].trim()) && cols[0].trim().length <= 4 && cols.length > 1)) {
+                    cIdx = 1;
+                }
+
+                let rawType = cols[cIdx+3] ? cols[cIdx+3].trim().toUpperCase() : '';
+                let type = 'ĐL/CTV'; 
+                
+                if (['HĐ', 'HD', 'HÓA ĐƠN', 'HOA DON'].includes(rawType)) type = 'HĐ';
+                else if (['CKS', 'CHỮ KÝ SỐ', 'CHU KY SO'].includes(rawType)) type = 'CKS';
+                else if (['BHXH', 'BẢO HIỂM', 'BAO HIEM'].includes(rawType)) type = 'BHXH';
+                else if (['ĐL/CTV', 'DL/CTV', 'ĐẠI LÝ', 'DAI LY', 'CTV', 'ĐL'].includes(rawType)) type = 'ĐL/CTV';
+                else if (rawType !== '') type = 'ĐL/CTV'; 
+
+                tbody.insertAdjacentHTML('beforeend', createRowHTML({ 
+                    mst: cols[cIdx], 
+                    sdt: cols[cIdx+1], 
+                    company: cols[cIdx+2], 
+                    type: type, 
+                    tech: cols[cIdx+4] || 'Hưng', 
+                    issue: cols[cIdx+5] 
+                }));
+            });
+            updateSTT(); 
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            showToast("Đã dán và tự động phân loại!");
+        }
+
+        function loadDataForDate(dateStr) {
+            const tbody = document.getElementById('tableBody'); tbody.innerHTML = '';
+            const dayData = allData[dateStr] || [];
+            if(dayData.length === 0) { for(let i=0; i<3; i++) addRow(); } 
+            else { 
+                dayData.forEach(d => tbody.insertAdjacentHTML('beforeend', createRowHTML(d))); 
+                updateSTT();
+            }
+        }
+
+        function collectTableData() {
+            const data = [];
+            document.querySelectorAll('#tableBody tr').forEach(row => {
+                const mst = row.querySelector('.inp-mst').value.trim();
+                const type = row.querySelector('.inp-type').value;
+                const company = row.querySelector('.inp-company').value.trim();
+                if(mst || type || company) {
+                    data.push({ mst, sdt: row.querySelector('.inp-sdt').value.trim(), company, type, tech: row.querySelector('.inp-tech').value.trim(), issue: row.querySelector('.inp-issue').value.trim() });
+                }
+            }); return data;
+        }
+
+        function saveTableForDate(dateStr) {
+            const data = collectTableData();
+            allData[dateStr] = data;
+            async function saveData() {
+    const data = collectTableData();
+
+    if(data.length === 0){
+        showToast("Không có dữ liệu để lưu!");
+        return;
+    }
+
+    showToast("Đang gửi dữ liệu lên Google Sheets...");
+
+    try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbzOp9ir-WS_KpUqrooPaB9aHWuhsHguLlF4wyUoPAssthJAZpPUwfhqqjvvAiBoo_edjw/exec", {
+            method: "POST",
+            body: JSON.stringify(
+                data.map(row => ({
+                    date: currentSelectedDate,
+                    ...row
+                }))
+            )
+        });
+
+        const result = await response.json();
+
+        if(result.status === "success"){
+            showToast("Đã lưu vào Google Sheets!");
+        } else {
+            showToast("Lỗi khi lưu dữ liệu!");
+        }
+
+    } catch (err) {
+        showToast("Lỗi kết nối: " + err.message);
+    }
+};
+        }
+
+        function saveData() {
+            const data = collectTableData();
+            allData[currentSelectedDate] = data;
+            showToast("Đang đồng bộ lên Cloud...");
+            database.ref('visnam_data/' + currentSelectedDate).set(data).then(() => {
+                showToast("Đã lưu dữ liệu lên hệ thống!");
+                if(document.getElementById('tab-thongke').classList.contains('active')) renderStatistics();
+            }).catch(err => showToast("Lỗi: " + err.message));
+        }
+
+        function formatVN(dateStr) { return dateStr.split('-').reverse().join('/'); }
+        function showToast(msg) {
+            document.getElementById("toast-msg").innerText = msg;
+            document.getElementById("toast").className = "show";
+            setTimeout(() => { document.getElementById("toast").className = ""; }, 3000);
+        }
+
+        function getWeekDays6(dateStr) {
+            let d = new Date(dateStr); let day = d.getDay(); 
+            let diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            let monday = new Date(d.setDate(diff)); let days = [];
+            for(let i=0; i<6; i++) { 
+                let temp = new Date(monday); temp.setDate(monday.getDate() + i);
+                days.push(temp.toISOString().split('T')[0]);
+            }
+            return days;
+        }
+
+        function getMonthWeeks(year, month) {
+            let weeks = []; let lastDay = new Date(year, month, 0).getDate(); let currentWeekDays = [];
+            for (let d = 1; d <= lastDay; d++) {
+                let dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                let dateObj = new Date(year, month - 1, d);
+                if (dateObj.getDay() !== 0) currentWeekDays.push(dateStr);
+                if (dateObj.getDay() === 6 || d === lastDay) {
+                    if (currentWeekDays.length > 0) {
+                        let start = currentWeekDays[0].substring(8,10) + '/' + currentWeekDays[0].substring(5,7);
+                        let end = currentWeekDays[currentWeekDays.length-1].substring(8,10) + '/' + currentWeekDays[currentWeekDays.length-1].substring(5,7);
+                        weeks.push({ name: `Tuần ${weeks.length + 1} (${start} - ${end})`, days: [...currentWeekDays] });
+                        currentWeekDays = [];
+                    }
+                }
+            } return weeks;
+        }
+
+        function calculateStatsForDates(dateArray, sourceData) {
+            let stats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
+            dateArray.forEach(date => {
+                let dayData = sourceData[date] || [];
+                dayData.forEach(item => {
+                    if(stats[item.type] !== undefined) { stats[item.type]++; stats['Total']++; }
+                });
+            }); return stats;
+        }
+
+        function renderStatistics() {
+            const dateStr = document.getElementById('workDate').value;
+            const year = parseInt(dateStr.substring(0, 4)); const month = parseInt(dateStr.substring(5, 7));
+            let tempAllData = JSON.parse(JSON.stringify(allData));
+            tempAllData[dateStr] = collectTableData(); 
+
+            document.getElementById('lblDay').innerText = `(${formatVN(dateStr)})`;
+            let dayStats = calculateStatsForDates([dateStr], tempAllData);
+            document.getElementById('dailyStatsGrid').innerHTML = `
+                <div class="daily-card"><h4>Hóa Đơn</h4><div class="num">${dayStats['HĐ']}</div></div>
+                <div class="daily-card"><h4>Chữ Ký Số</h4><div class="num">${dayStats['CKS']}</div></div>
+                <div class="daily-card"><h4>Bảo Hiểm Xã Hội</h4><div class="num">${dayStats['BHXH']}</div></div>
+                <div class="daily-card"><h4>Đại lý / CTV</h4><div class="num">${dayStats['ĐL/CTV']}</div></div>
+                <div class="daily-card total"><h4>Tổng Cộng</h4><div class="num">${dayStats['Total']}</div></div>
+            `;
+
+            let weekDays = getWeekDays6(dateStr);
+            document.getElementById('lblWeek').innerText = `(${formatVN(weekDays[0])} - ${formatVN(weekDays[5])})`;
+            let weekHtml = ''; let weekTotalStats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
+            const dayNames = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+            weekDays.forEach((d, index) => {
+                let s = calculateStatsForDates([d], tempAllData);
+                weekHtml += `<tr><td>${dayNames[index]} (${d.substring(8,10)})</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
+                weekTotalStats['HĐ'] += s['HĐ']; weekTotalStats['CKS'] += s['CKS']; weekTotalStats['BHXH'] += s['BHXH']; weekTotalStats['ĐL/CTV'] += s['ĐL/CTV']; weekTotalStats['Total'] += s['Total'];
+            });
+            weekHtml += `<tr class="row-total"><td>TỔNG TUẦN</td><td>${weekTotalStats['HĐ']}</td><td>${weekTotalStats['CKS']}</td><td>${weekTotalStats['BHXH']}</td><td>${weekTotalStats['ĐL/CTV']}</td><td>${weekTotalStats['Total']}</td></tr>`;
+            document.getElementById('weeklyTableBody').innerHTML = weekHtml;
+
+            document.getElementById('lblMonth').innerText = `(Tháng ${month}/${year})`;
+            let monthWeeks = getMonthWeeks(year, month);
+            let monthHtml = ''; let monthTotalStats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
+            monthWeeks.forEach(w => {
+                let s = calculateStatsForDates(w.days, tempAllData);
+                monthHtml += `<tr><td>${w.name}</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
+                monthTotalStats['HĐ'] += s['HĐ']; monthTotalStats['CKS'] += s['CKS']; monthTotalStats['BHXH'] += s['BHXH']; monthTotalStats['ĐL/CTV'] += s['ĐL/CTV']; monthTotalStats['Total'] += s['Total'];
+            });
+            monthHtml += `<tr class="row-total"><td>TỔNG THÁNG</td><td>${monthTotalStats['HĐ']}</td><td>${monthTotalStats['CKS']}</td><td>${monthTotalStats['BHXH']}</td><td>${monthTotalStats['ĐL/CTV']}</td><td>${monthTotalStats['Total']}</td></tr>`;
+            document.getElementById('monthlyTableBody').innerHTML = monthHtml;
+        }
+    </script>
+</body>
+</html>
