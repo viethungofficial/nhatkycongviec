@@ -410,8 +410,12 @@
         // ==========================================
         async function searchMST(btn) {
             const row = btn.closest('tr');
-            const mstInput = row.querySelector('.inp-mst').value.trim();
+            let mstInput = row.querySelector('.inp-mst').value;
             const companyInput = row.querySelector('.inp-company');
+            
+            // Xóa mọi khoảng trắng và ký tự thừa (chỉ giữ lại số và dấu gạch ngang)
+            mstInput = mstInput.replace(/[^0-9-]/g, '');
+            row.querySelector('.inp-mst').value = mstInput; // Cập nhật lại ô nhập liệu cho chuẩn
             
             if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!");
 
@@ -419,34 +423,61 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
 
             try {
-                // 1. Dùng VietQR API (Rất nhanh cho Cty)
-                let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
-                let data = await res.json();
-                
-                if (data.code === "00" && data.data && data.data.name) {
-                    companyInput.value = data.data.name; showToast("Tra cứu thành công!");
-                } else {
-                    // 2. Dùng Proxy bóc tách title từ masothue.com (Bao phủ cả cá nhân, hộ kinh doanh)
-                    let proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
-                    let proxyRes = await fetch(proxyUrl);
-                    let proxyData = await proxyRes.json();
-                    
-                    if (proxyData.contents) {
-                        let match = proxyData.contents.match(/<title>(.*?)<\/title>/);
-                        if (match && match[1] && match[1].includes('Mã số thuế')) {
-                            let parts = match[1].split('-');
-                            if (parts.length > 1) {
-                                parts.shift(); // Cắt bỏ chữ "Mã số thuế xxxx"
-                                companyInput.value = parts.join('-').trim(); // Gắn phần tên còn lại
-                                showToast("Tra cứu thành công!");
-                            } else showToast("Không tìm thấy Tên từ MST này!");
-                        } else showToast("Không có dữ liệu trên hệ thống thuế!");
-                    } else showToast("Không tìm thấy dữ liệu!");
+                let foundName = "";
+
+                // BƯỚC 1: API VIETQR (Nhanh nhất, chuyên Doanh nghiệp, ít bị chặn mạng)
+                try {
+                    let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
+                    let data = await res.json();
+                    if (data.code === "00" && data.data && data.data.name) {
+                        foundName = data.data.name;
+                    }
+                } catch (err) { console.warn("Lỗi API VietQR:", err); }
+
+                // BƯỚC 2: NẾU KHÔNG CÓ, TÌM QUA MASOTHUE.COM BẰNG PROXY 1 (Dành cho cá nhân, HKD)
+                if (!foundName) {
+                    try {
+                        let proxyUrl1 = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
+                        let res1 = await fetch(proxyUrl1);
+                        let data1 = await res1.json();
+                        if (data1.contents) {
+                            let match = data1.contents.match(/<title>(.*?)<\/title>/);
+                            if (match && match[1] && match[1].includes('Mã số thuế')) {
+                                let parts = match[1].split('-');
+                                if (parts.length > 1) { parts.shift(); foundName = parts.join('-').trim(); }
+                            }
+                        }
+                    } catch (err) { console.warn("Lỗi Proxy 1:", err); }
                 }
-            } catch (error) { showToast("Lỗi mạng khi tra cứu!"); } 
-            finally {
+
+                // BƯỚC 3: NẾU VẪN KHÔNG CÓ, TÌM QUA PROXY 2 (Tránh bị Cloudflare chặn)
+                if (!foundName) {
+                    try {
+                        let proxyUrl2 = 'https://corsproxy.io/?' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
+                        let res2 = await fetch(proxyUrl2);
+                        let html2 = await res2.text();
+                        let match2 = html2.match(/<title>(.*?)<\/title>/);
+                        if (match2 && match2[1] && match2[1].includes('Mã số thuế')) {
+                            let parts = match2[1].split('-');
+                            if (parts.length > 1) { parts.shift(); foundName = parts.join('-').trim(); }
+                        }
+                    } catch (err) { console.warn("Lỗi Proxy 2:", err); }
+                }
+
+                // KẾT LUẬN & XUẤT KẾT QUẢ
+                if (foundName) {
+                    companyInput.value = foundName;
+                    showToast("Tra cứu thành công!");
+                } else {
+                    showToast("Không tìm thấy (Sai MST hoặc Hệ thống bị chặn)!");
+                }
+
+            } catch (error) { 
+                console.error(error);
+                showToast("Lỗi kết nối mạng, vui lòng kiểm tra lại đường truyền!"); 
+            } finally {
                 btn.innerHTML = originalIcon; btn.disabled = false;
-                isUserAction = true; triggerAutoSave(); 
+                isUserAction = true; triggerAutoSave(); // Tự động lưu sau khi tra cứu xong
             }
         }
 
