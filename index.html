@@ -45,9 +45,7 @@
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color);
             display: flex; justify-content: center; align-items: center; z-index: 9000; display: none; padding: 20px;
         }
-        .login-box {
-            background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--primary);
-        }
+        .login-box { background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--primary); }
         .login-logo { font-size: 45px; color: var(--primary); margin-bottom: 15px; }
         .login-box h2 { margin-bottom: 30px; font-size: 22px; }
         .input-group { position: relative; margin-bottom: 20px; }
@@ -90,7 +88,6 @@
         .sub-tab-btn.active::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 3px 3px 0 0; }
         
         .tab-content-wrapper { background: var(--card-bg); border-radius: var(--border-radius); box-shadow: 0 8px 30px rgba(0,0,0,0.04); padding: 25px; min-height: 500px; }
-        
         .main-tab-content { display: none; animation: fadeIn 0.4s ease; }
         .main-tab-content.active { display: block; }
         .sub-tab-content { display: none; animation: fadeIn 0.4s ease; }
@@ -98,18 +95,34 @@
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* TABLE CSS */
+        /* TABLE CSS & MST SEARCH INPUT */
         .table-responsive { overflow-x: auto; border-radius: 10px; border: 1px solid #edf2f7; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; min-width: 1050px; }
         th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; font-size: 13px; text-transform: uppercase; padding: 15px; text-align: left; border-bottom: 2px solid #edf2f7; white-space: nowrap; position: sticky; top: 0; z-index: 10;}
         td { padding: 8px 15px; border-bottom: 1px solid #edf2f7; vertical-align: middle; transition: background-color var(--transition-fast); }
         tr:hover td { background-color: #eff5fc; }
+        
         table input[type="text"], table select { width: 100%; padding: 10px 5px; border: none; border-bottom: 2px solid transparent; background: transparent; outline: none; font-size: 14px; font-weight: 500; transition: all var(--transition-fast); }
         table input[type="text"]:focus, table select:focus { border-bottom-color: var(--primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 10px -2px rgba(26, 86, 166, 0.1); border-radius: 4px;}
         table select { cursor: pointer; color: var(--primary); font-weight: bold; }
         .stt-cell { text-align: center; font-weight: bold; color: var(--primary); font-size: 15px; }
-        
-        /* STATS TABLE (THỐNG KÊ GIAO DIỆN) */
+
+        /* Input MST kèm nút Search */
+        .input-with-btn { display: flex; align-items: center; border-bottom: 2px solid transparent; transition: all var(--transition-fast); width: 100%; }
+        .input-with-btn:focus-within { border-bottom-color: var(--primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 10px -2px rgba(26, 86, 166, 0.1); border-radius: 4px; }
+        .input-with-btn input { flex: 1; border: none !important; outline: none; background: transparent; padding: 10px 5px; font-size: 14px; font-weight: 500; color: var(--text-main); width: 100%; min-width: 0; }
+        .input-with-btn input:focus { box-shadow: none !important; transform: none !important; background: transparent !important; }
+        .search-btn { background: none; border: none; color: #718096; padding: 0 8px; cursor: pointer; transition: color 0.2s; font-size: 14px; display: flex; align-items: center;}
+        .search-btn:hover { color: var(--primary); }
+        .search-btn:disabled { color: #cbd5e0; cursor: not-allowed; }
+
+        /* NÚT THAO TÁC NGANG (COPY / DELETE) */
+        .action-cell { display: flex; justify-content: center; gap: 8px; }
+        .action-btn-sm { background: #f1f5f9; border: 1px solid #e2e8f0; cursor: pointer; padding: 6px 10px; transition: var(--transition-fast); border-radius: 6px; font-size: 14px; display: flex; align-items: center; justify-content: center;}
+        .copy-btn { color: #4a5568; } .copy-btn:hover { color: var(--primary); background: #ebf4ff; border-color: #bee3f8; transform: translateY(-2px);}
+        .del-btn { color: #e53e3e; } .del-btn:hover { color: #c53030; background: #fff5f5; border-color: #fed7d7; transform: translateY(-2px);}
+
+        /* STATS TABLE */
         .stats-section { margin-bottom: 35px; }
         .stats-title { font-size: 18px; color: var(--primary); border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; }
         .stats-title span { color: var(--text-muted); font-size: 14px; font-weight: normal; margin-left: auto; background: #f1f5f9; padding: 2px 10px; border-radius: 20px; }
@@ -129,7 +142,7 @@
         .daily-card .num { font-size: 28px; font-weight: 800; color: var(--primary); }
         .daily-card.total .num { color: var(--secondary); }
 
-        /* BUTTONS */
+        /* BUTTONS LỚN BÊN DƯỚI */
         .action-bars { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 20px;}
         .btn-group-left, .btn-group-right { display: flex; gap: 10px; }
         .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; transition: transform var(--transition-fast), box-shadow var(--transition-fast); box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
@@ -143,11 +156,7 @@
         .btn-sync { background: #38a169; color: white; }
         .btn-export { background: #1a56a6; color: white; font-size: 15px; padding: 10px 25px;}
 
-        .action-btn { background: none; border: none; cursor: pointer; font-size: 16px; margin: 0 5px; padding: 6px; transition: var(--transition-fast); border-radius: 6px;}
-        .copy-btn { color: #4a5568; } .copy-btn:hover { color: var(--primary); background: #ebf4ff; transform: scale(1.15); }
-        .del-btn { color: #e53e3e; } .del-btn:hover { color: #c53030; background: #fff5f5; transform: scale(1.15); }
-
-        /* BÁO CÁO PREVIEW (CHỈ HIỂN THỊ TRÊN WEB) */
+        /* BÁO CÁO PREVIEW */
         .report-preview { background: white; padding: 40px; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px;}
         
         #toast {
@@ -225,9 +234,9 @@
                             <thead>
                                 <tr>
                                     <th width="4%" style="text-align:center;">STT</th>
-                                    <th width="13%">MST</th><th width="12%">SĐT</th><th width="28%">Tên Công Ty / HKD</th> 
-                                    <th width="10%">Loại HT</th><th width="10%">Tên KT</th><th width="16%">Vấn đề hỗ trợ</th>
-                                    <th width="7%" style="text-align:center;">Action</th>
+                                    <th width="14%">MST</th><th width="11%">SĐT</th><th width="28%">Tên Công Ty / HKD</th> 
+                                    <th width="10%">Loại HT</th><th width="10%">Tên KT</th><th width="15%">Vấn đề hỗ trợ</th>
+                                    <th width="8%" style="text-align:center;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody"></tbody>
@@ -261,9 +270,7 @@
                             <div class="stats-title"><i class="fas fa-calendar-week"></i> Tổng kết Tuần (T2 - T7) <span id="lblWeek"></span></div>
                             <div class="table-responsive" style="margin-bottom: 0;">
                                 <table class="stats-table">
-                                    <thead>
-                                        <tr><th>Thứ / Ngày</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr>
-                                    </thead>
+                                    <thead><tr><th>Thứ / Ngày</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr></thead>
                                     <tbody id="weeklyTableBody"></tbody>
                                 </table>
                             </div>
@@ -272,9 +279,7 @@
                             <div class="stats-title"><i class="fas fa-calendar-alt"></i> Tổng kết Tháng <span id="lblMonth"></span></div>
                             <div class="table-responsive" style="margin-bottom: 0;">
                                 <table class="stats-table">
-                                    <thead>
-                                        <tr><th>Tuần làm việc</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm Xã Hội (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr>
-                                    </thead>
+                                    <thead><tr><th>Tuần làm việc</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm Xã Hội (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr></thead>
                                     <tbody id="monthlyTableBody"></tbody>
                                 </table>
                             </div>
@@ -321,12 +326,9 @@
         let autoSaveTimer = null; 
         let isUserAction = false; 
         
-        // Biến lưu thông tin xuất file
-        let exportWeekFilename = "";
-        let exportMonthFilename = "";
+        let exportWeekFilename = ""; let exportMonthFilename = "";
 
-        const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY';
-        const TIMEOUT_LIMIT = 60 * 60 * 1000; 
+        const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
         // Hiệu ứng Loading
         document.addEventListener("DOMContentLoaded", () => {
@@ -337,16 +339,10 @@
                 percent += Math.floor(Math.random() * 5) + 2; if(percent > 100) percent = 100;
                 loadText.innerText = percent + "%"; progressBar.style.width = percent + "%";
                 runner.style.left = ((percent / 100) * 250) + "px";
-                if(percent >= 100) {
-                    clearInterval(loadingInterval);
-                    setTimeout(() => { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); }, 400);
-                }
+                if(percent >= 100) { clearInterval(loadingInterval); setTimeout(() => { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); }, 400); }
             }, 30);
         });
 
-        // ==========================================
-        // 2. AUTHENTICATION & LOGIN LOGIC
-        // ==========================================
         auth.onAuthStateChanged((user) => {
             if (user) {
                 const lastActive = localStorage.getItem(ACTIVITY_KEY);
@@ -367,9 +363,6 @@
         function updateActivity() { if (auth.currentUser) localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); }
         ['click', 'mousemove', 'keypress', 'scroll'].forEach(evt => document.addEventListener(evt, updateActivity));
 
-        // ==========================================
-        // 3. LOGIC APP CHÍNH & LƯU TỰ ĐỘNG
-        // ==========================================
         function showMainApp() {
             document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
             database.ref('visnam_data').once('value').then((snapshot) => { allData = snapshot.val() || {}; initApp(); }).catch(() => { initApp(); });
@@ -377,63 +370,107 @@
 
         function initApp() {
             if(currentSelectedDate !== '') return; 
-            const dateInput = document.getElementById('workDate');
-            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('workDate'); const today = new Date().toISOString().split('T')[0];
             dateInput.value = today; currentSelectedDate = today; 
             
             loadDataForDate(today);
 
             dateInput.addEventListener('change', (e) => {
-                currentSelectedDate = e.target.value; 
-                loadDataForDate(currentSelectedDate); 
-                updateAllReports(); // Cập nhật lại toàn bộ báo cáo khi đổi ngày
+                currentSelectedDate = e.target.value; loadDataForDate(currentSelectedDate); updateAllReports(); 
             });
 
             document.getElementById('tableBody').addEventListener('paste', handlePaste);
-            document.getElementById('tableBody').addEventListener('input', () => { isUserAction = true; triggerAutoSave(); });
+            document.getElementById('tableBody').addEventListener('input', (e) => { 
+                // Không trigger AutoSave nếu đang gõ MST để chuẩn bị tra cứu
+                if(!e.target.classList.contains('inp-mst')){ isUserAction = true; triggerAutoSave(); }
+            });
             document.getElementById('tableBody').addEventListener('change', () => { isUserAction = true; triggerAutoSave(); });
         }
 
-        // CHUYỂN TAB CHÍNH
         function switchMainTab(tabId) {
             document.querySelectorAll('.main-tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active'); event.currentTarget.classList.add('active');
             if(tabId === 'baocao') updateAllReports();
         }
 
-        // CHUYỂN TAB PHỤ (BÁO CÁO)
         function switchSubTab(subId) {
             document.querySelectorAll('.sub-tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('sub-' + subId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            document.getElementById('sub-' + subId).classList.add('active'); event.currentTarget.classList.add('active');
             updateAllReports();
         }
 
-        function updateAllReports() {
-            renderStatistics();
-            renderWeeklyReport();
-            renderMonthlyReport();
-        }
+        function updateAllReports() { renderStatistics(); renderWeeklyReport(); renderMonthlyReport(); }
 
         function updateSTT() { document.querySelectorAll('#tableBody tr').forEach((row, idx) => { let stt = row.querySelector('.stt-cell'); if(stt) stt.innerText = idx + 1; }); }
+
+        // ==========================================
+        // TRA CỨU MÃ SỐ THUẾ THÔNG MINH
+        // ==========================================
+        async function searchMST(btn) {
+            const row = btn.closest('tr');
+            const mstInput = row.querySelector('.inp-mst').value.trim();
+            const companyInput = row.querySelector('.inp-company');
+            
+            if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!");
+
+            const originalIcon = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+
+            try {
+                // 1. Dùng VietQR API (Rất nhanh cho Cty)
+                let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
+                let data = await res.json();
+                
+                if (data.code === "00" && data.data && data.data.name) {
+                    companyInput.value = data.data.name; showToast("Tra cứu thành công!");
+                } else {
+                    // 2. Dùng Proxy bóc tách title từ masothue.com (Bao phủ cả cá nhân, hộ kinh doanh)
+                    let proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
+                    let proxyRes = await fetch(proxyUrl);
+                    let proxyData = await proxyRes.json();
+                    
+                    if (proxyData.contents) {
+                        let match = proxyData.contents.match(/<title>(.*?)<\/title>/);
+                        if (match && match[1] && match[1].includes('Mã số thuế')) {
+                            let parts = match[1].split('-');
+                            if (parts.length > 1) {
+                                parts.shift(); // Cắt bỏ chữ "Mã số thuế xxxx"
+                                companyInput.value = parts.join('-').trim(); // Gắn phần tên còn lại
+                                showToast("Tra cứu thành công!");
+                            } else showToast("Không tìm thấy Tên từ MST này!");
+                        } else showToast("Không có dữ liệu trên hệ thống thuế!");
+                    } else showToast("Không tìm thấy dữ liệu!");
+                }
+            } catch (error) { showToast("Lỗi mạng khi tra cứu!"); } 
+            finally {
+                btn.innerHTML = originalIcon; btn.disabled = false;
+                isUserAction = true; triggerAutoSave(); 
+            }
+        }
 
         function createRowHTML(data = {}) {
             const types = ['HĐ', 'CKS', 'BHXH', 'ĐL/CTV'];
             let options = types.map(t => `<option value="${t}" ${data.type === t ? 'selected' : ''}>${t}</option>`).join('');
             return `<tr>
                 <td class="stt-cell"></td>
-                <td><input type="text" class="inp-mst" value="${data.mst || ''}"></td>
+                <td>
+                    <div class="input-with-btn">
+                        <input type="text" class="inp-mst" value="${data.mst || ''}" placeholder="Nhập MST...">
+                        <button class="search-btn" onclick="searchMST(this)" title="Bấm để tra cứu Tên"><i class="fas fa-search"></i></button>
+                    </div>
+                </td>
                 <td><input type="text" class="inp-sdt" value="${data.sdt || ''}"></td>
                 <td><input type="text" class="inp-company" value="${data.company || ''}"></td>
                 <td><select class="inp-type"><option value="">- Chọn -</option>${options}</select></td>
                 <td><input type="text" class="inp-tech" value="${data.tech || 'Hưng'}"></td>
                 <td><input type="text" class="inp-issue" value="${data.issue || ''}"></td>
                 <td style="text-align:center;">
-                    <button class="action-btn copy-btn" onclick="copyRowToClipboard(this)"><i class="far fa-copy"></i></button>
-                    <button class="action-btn del-btn" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
+                    <div class="action-cell">
+                        <button class="action-btn-sm copy-btn" onclick="copyRowToClipboard(this)" title="Copy"><i class="far fa-copy"></i></button>
+                        <button class="action-btn-sm del-btn" onclick="deleteRow(this)" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                    </div>
                 </td></tr>`;
         }
 
@@ -442,14 +479,14 @@
 
         function copyRowToClipboard(btn) {
             const row = btn.closest('tr');
-            navigator.clipboard.writeText(Array.from(row.querySelectorAll('input, select')).map(el => el.value.trim()).join('\t')).then(() => showToast("Đã copy dữ liệu dòng!"));
+            navigator.clipboard.writeText(Array.from(row.querySelectorAll('input:not(.search-btn), select')).map(el => el.value.trim()).join('\t')).then(() => showToast("Đã copy dòng!"));
         }
 
         function copyAllData() {
             let allText = [];
             document.querySelectorAll('#tableBody tr').forEach(row => {
                 if(row.querySelector('.inp-mst').value.trim() || row.querySelector('.inp-company').value.trim()) {
-                    allText.push(Array.from(row.querySelectorAll('input, select')).map(el => el.value.trim()).join('\t'));
+                    allText.push(Array.from(row.querySelectorAll('input:not(.search-btn), select')).map(el => el.value.trim()).join('\t'));
                 }
             });
             if(allText.length === 0) return showToast("Bảng trống!");
@@ -521,7 +558,7 @@
 
         function triggerAutoSave() {
             if(!isUserAction) return; 
-            updateStatusIndicator("Đang chờ lưu ngầm...", "saving");
+            updateStatusIndicator("Đang đợi lưu ngầm...", "saving");
             clearTimeout(autoSaveTimer);
             autoSaveTimer = setTimeout(() => { saveDataToCloud(false); }, 2500);
         }
@@ -529,8 +566,7 @@
         function manualSave() { clearTimeout(autoSaveTimer); saveDataToCloud(true); }
 
         function saveDataToCloud(showToastMsg = false) {
-            const data = collectTableData();
-            allData[currentSelectedDate] = data;
+            const data = collectTableData(); allData[currentSelectedDate] = data;
             updateStatusIndicator("Đồng bộ Đám mây...", "saving");
 
             const firebasePromise = database.ref('visnam_data/' + currentSelectedDate).set(data);
@@ -542,7 +578,7 @@
             Promise.all([firebasePromise, sheetPromise]).then(() => {
                 updateStatusIndicator("Đã lưu an toàn", "saved");
                 if(showToastMsg) showToast("Đã lưu & đồng bộ dữ liệu thành công!");
-                updateAllReports(); // Cập nhật lại số liệu
+                updateAllReports();
             }).catch(err => { updateStatusIndicator("Lỗi đồng bộ", "saving"); });
         }
 
@@ -552,8 +588,7 @@
                 if (data && data.length > 0) {
                     allData[currentSelectedDate] = data; loadDataForDate(currentSelectedDate);
                     showToast(`Đã khôi phục ${data.length} dòng thành công!`); updateStatusIndicator("Đồng bộ hoàn tất", "saved");
-                    database.ref('visnam_data/' + currentSelectedDate).set(data);
-                    updateAllReports();
+                    database.ref('visnam_data/' + currentSelectedDate).set(data); updateAllReports();
                 } else { showToast("Sheet chưa có dữ liệu ngày này!"); updateStatusIndicator("Hệ thống sẵn sàng", ""); }
             }).catch(() => { showToast("Lỗi kết nối tải dữ liệu!"); updateStatusIndicator("Lỗi đồng bộ", "saving"); });
         }
@@ -562,7 +597,7 @@
         function showToast(msg) { document.getElementById("toast-msg").innerText = msg; document.getElementById("toast").className = "show"; setTimeout(() => { document.getElementById("toast").className = ""; }, 3000); }
 
         // ==========================================
-        // 4. XUẤT WORD & TẠO BÁO CÁO (Logic Form + Trình Bày Chuẩn)
+        // 4. XUẤT WORD & TẠO BÁO CÁO
         // ==========================================
         function exportHTMLToDoc(elementId, filename) {
             var preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
@@ -573,15 +608,13 @@
                 th, td { border: 1px solid black; padding: 6pt; text-align: left; vertical-align: middle; }
                 th { font-weight: bold; text-align: center; }
                 h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;}
-                p, ul { margin-top: 5pt; margin-bottom: 5pt; }
-                ul li { margin-bottom: 4pt; }
+                p, ul { margin-top: 5pt; margin-bottom: 5pt; } ul li { margin-bottom: 4pt; }
             </style></head><body>`;
             var postHtml = "</body></html>";
             var html = preHtml + document.getElementById(elementId).innerHTML + postHtml;
             var blob = new Blob(['\ufeff', html], { type: 'application/msword' });
             var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
-            var downloadLink = document.createElement("a");
-            document.body.appendChild(downloadLink);
+            var downloadLink = document.createElement("a"); document.body.appendChild(downloadLink);
             if(navigator.msSaveOrOpenBlob ){ navigator.msSaveOrOpenBlob(blob, filename + '.doc'); }
             else { downloadLink.href = url; downloadLink.download = filename + '.doc'; downloadLink.click(); }
             document.body.removeChild(downloadLink);
@@ -593,7 +626,7 @@
         function calculateStatsForDates(dateArray) {
             let stats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
             let tempAllData = JSON.parse(JSON.stringify(allData));
-            tempAllData[currentSelectedDate] = collectTableData(); // Lấy cả data chưa save
+            tempAllData[currentSelectedDate] = collectTableData(); 
             
             dateArray.forEach(date => {
                 let dayData = tempAllData[date] || [];
@@ -624,7 +657,6 @@
             } return weeks;
         }
 
-        // RENDER BẢNG THỐNG KÊ (Như cũ)
         function renderStatistics() {
             const dateStr = document.getElementById('workDate').value;
             const year = parseInt(dateStr.substring(0, 4)); const month = parseInt(dateStr.substring(5, 7));
@@ -637,8 +669,7 @@
                 <div class="daily-card"><h4>Đại lý / CTV</h4><div class="num">${dayStats['ĐL/CTV']}</div></div>
                 <div class="daily-card total"><h4>Tổng Cộng</h4><div class="num">${dayStats['Total']}</div></div>
             `;
-            let weekDays = getWeekDays6(dateStr);
-            document.getElementById('lblWeek').innerText = `(${formatVN(weekDays[0])} - ${formatVN(weekDays[5])})`;
+            let weekDays = getWeekDays6(dateStr); document.getElementById('lblWeek').innerText = `(${formatVN(weekDays[0])} - ${formatVN(weekDays[5])})`;
             let weekHtml = ''; let weekTotalStats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
             const dayNames = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
             weekDays.forEach((d, index) => {
@@ -660,26 +691,16 @@
             document.getElementById('monthlyTableBody').innerHTML = monthHtml;
         }
 
-        // ==========================================
-        // RENDER BÁO CÁO TUẦN & THÁNG CHUẨN ĐẸP 
-        // ==========================================
         function getFormattedDate(dateStr) { return dateStr.substring(8,10) + "." + dateStr.substring(5,7); }
         
         function renderWeeklyReport() {
-            let weekDays = getWeekDays6(currentSelectedDate);
-            let stats = calculateStatsForDates(weekDays);
-            let month = currentSelectedDate.substring(5,7);
-            
-            // Tìm xem đây là tuần thứ mấy trong tháng
-            let year = parseInt(currentSelectedDate.substring(0, 4)); let monthInt = parseInt(month);
-            let monthWeeksInfo = getMonthWeeks(year, monthInt);
-            let weekNumber = 1;
+            let weekDays = getWeekDays6(currentSelectedDate); let stats = calculateStatsForDates(weekDays);
+            let month = currentSelectedDate.substring(5,7); let year = parseInt(currentSelectedDate.substring(0, 4));
+            let monthWeeksInfo = getMonthWeeks(year, parseInt(month)); let weekNumber = 1;
             monthWeeksInfo.forEach((w, idx) => { if(w.days.includes(currentSelectedDate)) weekNumber = idx + 1; });
 
             let startDDMM = getFormattedDate(weekDays[0]); let endDDMM = getFormattedDate(weekDays[5]);
-            
-            // Set Tên file tải về
-            exportWeekFilename = `BÁO CÁO CÔNG VIỆC TUẦN ${weekNumber} (${startDDMM}-${endDDMM}) - Phan Viết Hưng`;
+            exportWeekFilename = `BÁO CÁO CÔNG VIỆC TUẦN ${String(weekNumber).padStart(2, '0')} (${startDDMM}-${endDDMM}) - Phan Viết Hưng`;
             
             let html = `
                 <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black;">
@@ -693,17 +714,11 @@
                         </tr>
                     </table>
                     
-                    <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt;">BÁO CÁO CÔNG VIỆC TUẦN ${String(weekNumber).padStart(2, '0')} THÁNG ${month}</div>
+                    <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC TUẦN ${String(weekNumber).padStart(2, '0')} THÁNG ${month}</div>
                     
                     <table style="width: 100%; border: none; margin-bottom: 15pt;">
-                        <tr>
-                            <td style="border:none; padding: 3pt;"><b>Họ và tên:</b> Phan Viết Hưng</td>
-                            <td style="border:none; padding: 3pt;"><b>Bộ phận:</b> Kỹ thuật</td>
-                        </tr>
-                        <tr>
-                            <td style="border:none; padding: 3pt;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td>
-                            <td style="border:none; padding: 3pt;"><b>Thời gian báo cáo:</b> Từ ngày ${formatVN(weekDays[0])} đến ${formatVN(weekDays[5])}</td>
-                        </tr>
+                        <tr><td style="border:none; padding: 3pt; width: 50%;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 3pt;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
+                        <tr><td style="border:none; padding: 3pt;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none; padding: 3pt;"><b>Thời gian:</b> Từ ngày ${formatVN(weekDays[0])} đến ${formatVN(weekDays[5])}</td></tr>
                     </table>
 
                     <div style="margin-bottom: 15pt;">
@@ -720,23 +735,20 @@
 
                     <div style="margin-bottom: 15pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">2. Kết quả thực hiện:</h3>
-                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Tổng số yêu cầu đã tiếp nhận và xử lý thành công trong tuần: <b>${stats['Total']} yêu cầu</b>.</p>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Tổng số yêu cầu đã tiếp nhận và xử lý thành công trong tuần: <b style="color:red; font-size:14pt;">${stats['Total']} yêu cầu</b>.</p>
                         <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-top: 10pt; margin-bottom: 10pt;">
                             <thead>
-                                <tr>
-                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 70%;">Nội dung hỗ trợ</th>
-                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 30%;">Số lượng (Yêu cầu)</th>
-                                </tr>
+                                <tr><th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 70%;">Nội dung hỗ trợ</th><th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 30%;">Số lượng (Yêu cầu)</th></tr>
                             </thead>
                             <tbody>
                                 <tr><td style="border: 1px solid black; padding: 6pt;">Hỗ trợ hóa đơn điện tử (HĐ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${stats['HĐ']}</td></tr>
                                 <tr><td style="border: 1px solid black; padding: 6pt;">Hỗ trợ chữ ký số (CKS)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${stats['CKS']}</td></tr>
                                 <tr><td style="border: 1px solid black; padding: 6pt;">Hỗ trợ bảo hiểm xã hội điện tử (BHXH)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${stats['BHXH']}</td></tr>
                                 <tr><td style="border: 1px solid black; padding: 6pt;">Hỗ trợ đại lý / CTV</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${stats['ĐL/CTV']}</td></tr>
-                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG CỘNG</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">${stats['Total']}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG CỘNG</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; color: red;">${stats['Total']}</td></tr>
                             </tbody>
                         </table>
-                        <p style="margin-top: 5pt; margin-bottom: 5pt;">100% các yêu cầu của khách hàng đều được <b>tiếp nhận và xử lý kịp thời</b>, hệ thống của khách hàng hoạt động ổn định sau quá trình hỗ trợ.</p>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Các yêu cầu của khách hàng đều được <b>tiếp nhận và xử lý kịp thời</b>, hệ thống của khách hàng hoạt động ổn định sau quá trình hỗ trợ.</p>
                     </div>
 
                     <div style="margin-bottom: 15pt;">
@@ -753,25 +765,15 @@
 
         function renderMonthlyReport() {
             let year = parseInt(currentSelectedDate.substring(0, 4)); let month = parseInt(currentSelectedDate.substring(5, 7));
-            let monthWeeksInfo = getMonthWeeks(year, month);
-            let lastDay = new Date(year, month, 0).getDate();
+            let monthWeeksInfo = getMonthWeeks(year, month); let lastDay = new Date(year, month, 0).getDate();
             
-            // Set Tên file tải về
-            let startDDMM = `01.${String(month).padStart(2,'0')}`;
-            let endDDMM = `${String(lastDay).padStart(2,'0')}.${String(month).padStart(2,'0')}`;
+            let startDDMM = `01.${String(month).padStart(2,'0')}`; let endDDMM = `${String(lastDay).padStart(2,'0')}.${String(month).padStart(2,'0')}`;
             exportMonthFilename = `BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')} (${startDDMM}-${endDDMM}) - Phan Viết Hưng`;
 
             let htmlWeeks = ''; let tHD=0, tCKS=0, tBHXH=0, tDL=0, tTotal=0;
             monthWeeksInfo.forEach(w => {
                 let s = calculateStatsForDates(w.days);
-                htmlWeeks += `<tr>
-                    <td style="border: 1px solid black; padding: 6pt;">${w.name}</td>
-                    <td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['HĐ']}</td>
-                    <td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['CKS']}</td>
-                    <td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['BHXH']}</td>
-                    <td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['ĐL/CTV']}</td>
-                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${s['Total']}</td>
-                </tr>`;
+                htmlWeeks += `<tr><td style="border: 1px solid black; padding: 6pt; text-align: center;">${w.name}</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['HĐ']}</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['CKS']}</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['BHXH']}</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${s['ĐL/CTV']}</td><td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${s['Total']}</td></tr>`;
                 tHD += s['HĐ']; tCKS += s['CKS']; tBHXH += s['BHXH']; tDL += s['ĐL/CTV']; tTotal += s['Total'];
             });
 
@@ -787,26 +789,20 @@
                         </tr>
                     </table>
                     
-                    <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt;">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
+                    <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
                     
                     <table style="width: 100%; border: none; margin-bottom: 15pt;">
-                        <tr>
-                            <td style="border:none; padding: 3pt;"><b>Họ và tên:</b> Phan Viết Hưng</td>
-                            <td style="border:none; padding: 3pt;"><b>Bộ phận:</b> Kỹ thuật</td>
-                        </tr>
-                        <tr>
-                            <td style="border:none; padding: 3pt;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td>
-                            <td style="border:none; padding: 3pt;"><b>Thời gian báo cáo:</b> Từ 01/${String(month).padStart(2,'0')}/${year} đến ${String(lastDay).padStart(2,'0')}/${String(month).padStart(2,'0')}/${year}</td>
-                        </tr>
+                        <tr><td style="border:none; padding: 3pt; width: 50%;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 3pt;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
+                        <tr><td style="border:none; padding: 3pt;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none; padding: 3pt;"><b>Thời gian báo cáo:</b> Từ 01/${String(month).padStart(2,'0')}/${year} đến ${String(lastDay).padStart(2,'0')}/${String(month).padStart(2,'0')}/${year}</td></tr>
                     </table>
 
                     <div style="margin-bottom: 15pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">1. Nội dung công việc đã thực hiện:</h3>
                         <ul style="margin-top: 5pt; margin-bottom: 5pt;">
-                            <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng xử lý toàn diện các vấn đề liên quan đến <b>hóa đơn điện tử</b> (lập, điều chỉnh, thay thế, hủy hóa đơn xuất sai, xử lý lỗi hệ thống phần mềm).</li>
-                            <li style="margin-bottom: 4pt;">Hỗ trợ thủ tục liên quan đến <b>bảo hiểm xã hội</b> (báo tăng/giảm lao động, chế độ thai sản, ốm đau, xử lý lỗi kê khai trên phần mềm).</li>
+                            <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng xử lý toàn diện các vấn đề liên quan đến <b>hóa đơn điện tử</b> (lập, điều chỉnh, thay thế, hủy hóa đơn xuất sai, xử lý lỗi hệ thống).</li>
+                            <li style="margin-bottom: 4pt;">Hỗ trợ thủ tục liên quan đến <b>bảo hiểm xã hội</b> (báo tăng/giảm lao động, thai sản, xử lý lỗi kê khai trên phần mềm).</li>
                             <li style="margin-bottom: 4pt;">Cài đặt phần mềm, gia hạn, thiết lập Token và xử lý sự cố liên quan đến <b>chữ ký số (CKS)</b>.</li>
-                            <li style="margin-bottom: 4pt;">Hỗ trợ kê khai thuế trực tuyến, xử lý lỗi nộp tờ khai và các vấn đề phát sinh trên hệ thống eTax của Tổng cục Thuế.</li>
+                            <li style="margin-bottom: 4pt;">Hỗ trợ kê khai thuế trực tuyến, xử lý lỗi nộp tờ khai và các vấn đề phát sinh trên hệ thống eTax.</li>
                             <li style="margin-bottom: 4pt;">Hỗ trợ doanh nghiệp đăng ký, cập nhật thông tin Chữ ký số lên hệ thống Hải quan điện tử.</li>
                         </ul>
                     </div>
@@ -818,8 +814,8 @@
                                 <tr>
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Tuần làm việc</th>
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Hóa Đơn (HĐ)</th>
-                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Chữ Ký Số (CKS)</th>
-                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Bảo Hiểm (BHXH)</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">CKS</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">BHXH</th>
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Đại lý / CTV</th>
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Tổng Cộng</th>
                                 </tr>
@@ -832,7 +828,7 @@
                                     <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tCKS}</td>
                                     <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tBHXH}</td>
                                     <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tDL}</td>
-                                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold;">${tTotal}</td>
+                                    <td style="border: 1px solid black; padding: 6pt; text-align: center; font-weight: bold; color: red;">${tTotal}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -841,9 +837,9 @@
                     <div style="margin-bottom: 15pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Đánh giá và nhận xét chung:</h3>
                         <ul style="margin-top: 5pt; margin-bottom: 5pt;">
-                            <li style="margin-bottom: 4pt;"><b>Về tiến độ:</b> Tiếp nhận và hoàn thành 100% các yêu cầu hỗ trợ từ nhóm Support, phòng Kinh doanh và Đại lý/CTV. Đảm bảo đúng thời gian cam kết xử lý (SLA), hạn chế tối đa tình trạng khách hàng phàn nàn do phải chờ đợi lâu.</li>
-                            <li style="margin-bottom: 4pt;"><b>Vướng mắc trong quy trình phối hợp:</b> Một số yêu cầu từ bộ phận Kinh doanh (Sale) gửi sang chưa ghi chép rõ ràng tình trạng lỗi hoặc nội dung khách hàng cần hỗ trợ, dẫn đến bộ phận kỹ thuật phải mất thêm thời gian liên hệ trao đổi lại với khách hàng để xác nhận đúng vấn đề.</li>
-                            <li style="margin-bottom: 4pt;"><b>Chất lượng thông tin:</b> Vẫn còn một vài trường hợp ghi chú sai lệch nội dung cần hỗ trợ, làm ảnh hưởng đến thời gian phân loại và xử lý sự cố. Đề xuất các bộ phận liên quan chuẩn hóa form tiếp nhận thông tin ban đầu để quy trình hỗ trợ diễn ra nhanh chóng hơn.</li>
+                            <li style="margin-bottom: 4pt;"><b>Về tiến độ:</b> Tiếp nhận và hoàn thành 100% các yêu cầu hỗ trợ. Đảm bảo đúng thời gian cam kết xử lý (SLA), hạn chế tối đa tình trạng khách hàng phàn nàn do phải chờ đợi lâu.</li>
+                            <li style="margin-bottom: 4pt;"><b>Vướng mắc quy trình:</b> Một số yêu cầu từ bộ phận Kinh doanh (Sale) gửi sang chưa ghi chép rõ ràng tình trạng lỗi hoặc nội dung cần hỗ trợ, dẫn đến bộ phận kỹ thuật phải mất thêm thời gian liên hệ khách hàng để xác minh.</li>
+                            <li style="margin-bottom: 4pt;"><b>Đề xuất:</b> Các bộ phận liên quan cần chuẩn hóa việc thu thập thông tin lỗi cơ bản trước khi chuyển giao cho bộ phận kỹ thuật nhằm tối ưu hóa quy trình xử lý sự cố.</li>
                         </ul>
                     </div>
                 </div>
