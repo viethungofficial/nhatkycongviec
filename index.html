@@ -287,7 +287,7 @@
         const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
         // Các biến cho Google Sheets
-        const GOOGLE_SHEETS_API = "https://script.google.com/macros/s/AKfycbzOp9ir-WS_KpUqrooPaB9aHWuhsHguLlF4wyUoPAssthJAZpPUwfhqqjvvAiBoo_edjw/exec";
+        const GOOGLE_SHEETS_API = "https://script.google.com/macros/s/AKfycbx8DSQqm7DwH_jIFNwH8_f9pcecoK4j4NUT7u226IHZPTpCBJ-b9--N2cH3WotvupEdbA/exec";
 
         // Hiệu ứng Loading
         document.addEventListener("DOMContentLoaded", () => {
@@ -572,11 +572,12 @@
             showToast("Đang đồng bộ lên Firebase & Google Sheets...");
 
             // 1. Lưu lên Firebase
-            const firebasePromise = database.ref('visnam_data/' + currentSelectedDate).set(data);
+            const firebasePromise = database.ref('VISNAM_DATA/' + currentSelectedDate).set(data);
 
             // 2. Lưu lên Google Sheets qua Apps Script
             const sheetPromise = fetch(GOOGLE_SHEETS_API, {
                 method: 'POST',
+                mode: 'no-cors',
                 // Dùng text/plain để vượt qua bài toán CORS của Google Scripts preflight
                 headers: {
                     'Content-Type': 'text/plain;charset=utf-8',
