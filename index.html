@@ -107,7 +107,6 @@
         table select { cursor: pointer; color: var(--primary); font-weight: bold; }
         .stt-cell { text-align: center; font-weight: bold; color: var(--primary); font-size: 15px; }
 
-        /* Input MST kèm nút Search */
         .input-with-btn { display: flex; align-items: center; border-bottom: 2px solid transparent; transition: all var(--transition-fast); width: 100%; }
         .input-with-btn:focus-within { border-bottom-color: var(--primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 10px -2px rgba(26, 86, 166, 0.1); border-radius: 4px; }
         .input-with-btn input { flex: 1; border: none !important; outline: none; background: transparent; padding: 10px 5px; font-size: 14px; font-weight: 500; color: var(--text-main); width: 100%; min-width: 0; }
@@ -116,7 +115,6 @@
         .search-btn:hover { color: var(--primary); }
         .search-btn:disabled { color: #cbd5e0; cursor: not-allowed; }
 
-        /* NÚT THAO TÁC NGANG (COPY / DELETE) */
         .action-cell { display: flex; justify-content: center; gap: 8px; }
         .action-btn-sm { background: #f1f5f9; border: 1px solid #e2e8f0; cursor: pointer; padding: 6px 10px; transition: var(--transition-fast); border-radius: 6px; font-size: 14px; display: flex; align-items: center; justify-content: center;}
         .copy-btn { color: #4a5568; } .copy-btn:hover { color: var(--primary); background: #ebf4ff; border-color: #bee3f8; transform: translateY(-2px);}
@@ -142,7 +140,7 @@
         .daily-card .num { font-size: 28px; font-weight: 800; color: var(--primary); }
         .daily-card.total .num { color: var(--secondary); }
 
-        /* BUTTONS LỚN BÊN DƯỚI */
+        /* BUTTONS */
         .action-bars { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 20px;}
         .btn-group-left, .btn-group-right { display: flex; gap: 10px; }
         .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; transition: transform var(--transition-fast), box-shadow var(--transition-fast); box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
@@ -307,9 +305,6 @@
     <div id="toast"><i class="fas fa-check-circle" style="color:#48bb78;"></i> <span id="toast-msg"></span></div>
 
     <script>
-        // ==========================================
-        // 1. CẤU HÌNH API VÀ FIREBASE
-        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyDHFTbNY8ycl4NsfIqgu7v5lGEVwsO0LB4", authDomain: "phanviethung-hotrokythuat.firebaseapp.com",
             projectId: "phanviethung-hotrokythuat", storageBucket: "phanviethung-hotrokythuat.firebasestorage.app",
@@ -330,7 +325,6 @@
 
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
-        // Hiệu ứng Loading
         document.addEventListener("DOMContentLoaded", () => {
             let percent = 0; const loader = document.getElementById('loader');
             const loadText = document.getElementById('loading-text'); const progressBar = document.getElementById('progressBar');
@@ -381,7 +375,6 @@
 
             document.getElementById('tableBody').addEventListener('paste', handlePaste);
             document.getElementById('tableBody').addEventListener('input', (e) => { 
-                // Không trigger AutoSave nếu đang gõ MST để chuẩn bị tra cứu
                 if(!e.target.classList.contains('inp-mst')){ isUserAction = true; triggerAutoSave(); }
             });
             document.getElementById('tableBody').addEventListener('change', () => { isUserAction = true; triggerAutoSave(); });
@@ -405,17 +398,12 @@
 
         function updateSTT() { document.querySelectorAll('#tableBody tr').forEach((row, idx) => { let stt = row.querySelector('.stt-cell'); if(stt) stt.innerText = idx + 1; }); }
 
-        // ==========================================
-        // TRA CỨU MÃ SỐ THUẾ THÔNG MINH
-        // ==========================================
         async function searchMST(btn) {
             const row = btn.closest('tr');
             let mstInput = row.querySelector('.inp-mst').value;
             const companyInput = row.querySelector('.inp-company');
-            
-            // Xóa mọi khoảng trắng và ký tự thừa (chỉ giữ lại số và dấu gạch ngang)
             mstInput = mstInput.replace(/[^0-9-]/g, '');
-            row.querySelector('.inp-mst').value = mstInput; // Cập nhật lại ô nhập liệu cho chuẩn
+            row.querySelector('.inp-mst').value = mstInput;
             
             if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!");
 
@@ -424,17 +412,12 @@
 
             try {
                 let foundName = "";
-
-                // BƯỚC 1: API VIETQR (Nhanh nhất, chuyên Doanh nghiệp, ít bị chặn mạng)
                 try {
                     let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
                     let data = await res.json();
-                    if (data.code === "00" && data.data && data.data.name) {
-                        foundName = data.data.name;
-                    }
+                    if (data.code === "00" && data.data && data.data.name) foundName = data.data.name;
                 } catch (err) { console.warn("Lỗi API VietQR:", err); }
 
-                // BƯỚC 2: NẾU KHÔNG CÓ, TÌM QUA MASOTHUE.COM BẰNG PROXY 1 (Dành cho cá nhân, HKD)
                 if (!foundName) {
                     try {
                         let proxyUrl1 = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
@@ -450,7 +433,6 @@
                     } catch (err) { console.warn("Lỗi Proxy 1:", err); }
                 }
 
-                // BƯỚC 3: NẾU VẪN KHÔNG CÓ, TÌM QUA PROXY 2 (Tránh bị Cloudflare chặn)
                 if (!foundName) {
                     try {
                         let proxyUrl2 = 'https://corsproxy.io/?' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
@@ -464,20 +446,14 @@
                     } catch (err) { console.warn("Lỗi Proxy 2:", err); }
                 }
 
-                // KẾT LUẬN & XUẤT KẾT QUẢ
-                if (foundName) {
-                    companyInput.value = foundName;
-                    showToast("Tra cứu thành công!");
-                } else {
-                    showToast("Không tìm thấy (Sai MST hoặc Hệ thống bị chặn)!");
-                }
+                if (foundName) { companyInput.value = foundName; showToast("Tra cứu thành công!"); } 
+                else { showToast("Không tìm thấy (Sai MST hoặc Hệ thống bị chặn)!"); }
 
             } catch (error) { 
-                console.error(error);
-                showToast("Lỗi kết nối mạng, vui lòng kiểm tra lại đường truyền!"); 
+                console.error(error); showToast("Lỗi kết nối mạng, vui lòng kiểm tra lại!"); 
             } finally {
                 btn.innerHTML = originalIcon; btn.disabled = false;
-                isUserAction = true; triggerAutoSave(); // Tự động lưu sau khi tra cứu xong
+                isUserAction = true; triggerAutoSave(); 
             }
         }
 
@@ -489,7 +465,7 @@
                 <td>
                     <div class="input-with-btn">
                         <input type="text" class="inp-mst" value="${data.mst || ''}" placeholder="Nhập MST...">
-                        <button class="search-btn" onclick="searchMST(this)" title="Bấm để tra cứu Tên"><i class="fas fa-search"></i></button>
+                        <button class="search-btn" onclick="searchMST(this)" title="Bấm tra cứu Tên"><i class="fas fa-search"></i></button>
                     </div>
                 </td>
                 <td><input type="text" class="inp-sdt" value="${data.sdt || ''}"></td>
@@ -524,40 +500,68 @@
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${allText.length} dòng!`));
         }
 
+        // ==========================================
+        // DÁN (PASTE) LINH HOẠT - CHUẨN EXCEL
+        // ==========================================
         function handlePaste(e) {
+            let activeEl = document.activeElement;
+            let isTableInput = activeEl && activeEl.closest('#tableBody');
+            
+            // Nếu không focus vào bảng, bỏ qua để trình duyệt tự xử lý
+            if (!isTableInput) return;
+
             e.preventDefault();
-            const rows = (e.clipboardData || window.clipboardData).getData('text').split('\n');
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+            const rows = pasteData.split('\n');
             const tbody = document.getElementById('tableBody');
             
-            let activeElement = document.activeElement;
-            let startRow = activeElement ? activeElement.closest('tr') : null;
+            let startRow = activeEl.closest('tr');
             let allTableRows = Array.from(tbody.querySelectorAll('tr'));
-            let startIndex = startRow ? allTableRows.indexOf(startRow) : allTableRows.length;
+            let startRowIndex = startRow ? allTableRows.indexOf(startRow) : allTableRows.length;
 
-            rows.forEach(rowStr => {
+            // Xác định cột đang trỏ chuột
+            let inputsInStartRow = startRow ? Array.from(startRow.querySelectorAll('input:not(.search-btn), select')) : [];
+            let startColIndex = inputsInStartRow.indexOf(activeEl);
+            if (startColIndex === -1) startColIndex = 0; 
+
+            rows.forEach((rowStr, rOffset) => {
                 if (rowStr.trim() === '') return;
                 const cols = rowStr.split('\t');
-                let cIdx = (cols.length >= 7 || (/^\d+$/.test(cols[0].trim()) && cols[0].trim().length <= 4)) ? 1 : 0; 
-                let rawType = cols[cIdx+3] ? cols[cIdx+3].trim().toUpperCase() : '';
-                let type = 'ĐL/CTV'; 
-                if (['HĐ', 'HD', 'HÓA ĐƠN'].includes(rawType)) type = 'HĐ';
-                else if (['CKS', 'CHỮ KÝ SỐ'].includes(rawType)) type = 'CKS';
-                else if (['BHXH', 'BẢO HIỂM'].includes(rawType)) type = 'BHXH';
-                
-                let dataObj = { mst: cols[cIdx]||'', sdt: cols[cIdx+1]||'', company: cols[cIdx+2]||'', type: type, tech: cols[cIdx+4]||'Hưng', issue: cols[cIdx+5]||'' };
+                let targetRowIndex = startRowIndex + rOffset;
 
-                if (startIndex < allTableRows.length) {
-                    let r = allTableRows[startIndex];
-                    r.querySelector('.inp-mst').value = dataObj.mst; r.querySelector('.inp-sdt').value = dataObj.sdt;
-                    r.querySelector('.inp-company').value = dataObj.company; r.querySelector('.inp-type').value = dataObj.type;
-                    r.querySelector('.inp-tech').value = dataObj.tech; r.querySelector('.inp-issue').value = dataObj.issue;
-                    startIndex++;
-                } else {
-                    tbody.insertAdjacentHTML('beforeend', createRowHTML(dataObj));
-                    allTableRows = Array.from(tbody.querySelectorAll('tr')); startIndex++;
+                // Tự động tạo thêm dòng nếu dán tràn xuống dưới
+                while (targetRowIndex >= allTableRows.length) {
+                    tbody.insertAdjacentHTML('beforeend', createRowHTML({}));
+                    allTableRows = Array.from(tbody.querySelectorAll('tr'));
                 }
+
+                let targetRow = allTableRows[targetRowIndex];
+                let inputsInTargetRow = Array.from(targetRow.querySelectorAll('input:not(.search-btn), select'));
+
+                cols.forEach((colVal, cOffset) => {
+                    let targetColIndex = startColIndex + cOffset;
+                    if (targetColIndex < inputsInTargetRow.length) {
+                        let targetInput = inputsInTargetRow[targetColIndex];
+                        let val = colVal.trim();
+                        
+                        // Tự động phân loại nếu trúng cột Loại Hỗ Trợ
+                        if (targetInput.classList.contains('inp-type')) {
+                            let rawType = val.toUpperCase();
+                            let type = val;
+                            if (['HĐ', 'HD', 'HÓA ĐƠN', 'HOA DON'].includes(rawType)) type = 'HĐ';
+                            else if (['CKS', 'CHỮ KÝ SỐ', 'CHU KY SO'].includes(rawType)) type = 'CKS';
+                            else if (['BHXH', 'BẢO HIỂM', 'BAO HIEM'].includes(rawType)) type = 'BHXH';
+                            else if (['ĐL/CTV', 'DL/CTV', 'ĐẠI LÝ', 'DAI LY', 'CTV', 'ĐL'].includes(rawType)) type = 'ĐL/CTV';
+                            else if (rawType !== '') type = 'ĐL/CTV';
+                            targetInput.value = type;
+                        } else {
+                            targetInput.value = val;
+                        }
+                    }
+                });
             });
             updateSTT(); isUserAction = true; triggerAutoSave();
+            showToast("Đã dán dữ liệu thành công!");
         }
 
         function loadDataForDate(dateStr) {
@@ -587,11 +591,14 @@
             ind.innerHTML = `${typeClass === 'saving' ? '<i class="fas fa-spinner fa-spin"></i>' : typeClass === 'saved' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-cloud"></i>'} ${msg}`;
         }
 
+        // ==========================================
+        // AUTO SAVE 3 PHÚT
+        // ==========================================
         function triggerAutoSave() {
             if(!isUserAction) return; 
-            updateStatusIndicator("Đang đợi lưu ngầm...", "saving");
+            updateStatusIndicator("Đang đợi lưu ngầm (3 phút)...", "saving");
             clearTimeout(autoSaveTimer);
-            autoSaveTimer = setTimeout(() => { saveDataToCloud(false); }, 2500);
+            autoSaveTimer = setTimeout(() => { saveDataToCloud(false); }, 180000); 
         }
 
         function manualSave() { clearTimeout(autoSaveTimer); saveDataToCloud(true); }
@@ -628,7 +635,7 @@
         function showToast(msg) { document.getElementById("toast-msg").innerText = msg; document.getElementById("toast").className = "show"; setTimeout(() => { document.getElementById("toast").className = ""; }, 3000); }
 
         // ==========================================
-        // 4. XUẤT WORD & TẠO BÁO CÁO
+        // BÁO CÁO TUẦN / THÁNG / THỐNG KÊ
         // ==========================================
         function exportHTMLToDoc(elementId, filename) {
             var preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
