@@ -12,26 +12,48 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 
     <style>
+        /* Biến màu mặc định (Sáng) */
         :root {
             --primary: #1a56a6; --secondary: #f39c12; --bg-color: #f4f7fb;
             --card-bg: #ffffff; --text-main: #2d3748; --text-muted: #718096;
+            --border-color: #e2e8f0; --input-bg: #f8fafc;
             --border-radius: 12px;
             --transition-fast: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             --transition-smooth: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             --terminal-bg: #0f172a; --terminal-text: #10b981;
         }
 
+        /* Biến màu chế độ Tối (Dark Mode) */
+        :root[data-theme="dark"] {
+            --bg-color: #0f172a; --card-bg: #1e293b; --text-main: #f1f5f9;
+            --text-muted: #94a3b8; --border-color: #334155; --input-bg: #334155;
+            --terminal-bg: #020617;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         html { scroll-behavior: smooth; }
-        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; overflow-y: scroll; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; overflow-y: scroll; transition: background-color 0.3s, color 0.3s; }
         
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(113, 128, 150, 0.4); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
+        /* Animation Gradient */
+        .bg-gradient-animate {
+            background: linear-gradient(-45deg, #1a56a6, #0e356e, #1e3a8a, #1e40af);
+            background-size: 400% 400%;
+            animation: gradientBG 8s ease infinite;
+        }
+        .btn-gradient-animate {
+            background: linear-gradient(-45deg, #f39c12, #d68910, #e67e22, #b9770e);
+            background-size: 300% 300%;
+            animation: gradientBG 4s ease infinite;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
         /* Loader & Login */
-        #loader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #1a56a6, #0e356e); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; transition: opacity 0.5s ease; }
+        #loader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; transition: opacity 0.5s ease; }
         .running-track { width: 300px; height: 60px; position: relative; border-bottom: 3px solid rgba(255,255,255,0.2); margin-bottom: 20px; }
         .running-boy { position: absolute; bottom: 0; left: 0; font-size: 45px; color: var(--secondary); transition: left 0.1s linear; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
         .running-boy i { animation: runBounce 0.4s infinite alternate; }
@@ -41,42 +63,55 @@
         #loading-text { font-size: 24px; font-weight: bold; font-family: monospace; letter-spacing: 2px; }
 
         #loginScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color); display: none; justify-content: center; align-items: center; z-index: 9000; padding: 20px; }
-        .login-box { background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--primary); }
+        .login-box { background: var(--card-bg); padding: 40px 30px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--primary); color: var(--text-main); }
         .login-logo { font-size: 45px; color: var(--primary); margin-bottom: 15px; }
         .login-box h2 { margin-bottom: 30px; font-size: 22px; }
         .input-group { position: relative; margin-bottom: 20px; }
         .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        .input-group input { width: 100%; padding: 15px 15px 15px 45px; border: 2px solid #edf2f7; border-radius: 10px; outline: none; background: #f8fafc; transition: var(--transition-fast);}
-        .input-group input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(26,86,166,0.1); }
-        .btn-login { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary), #113c7a); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: var(--transition-fast); }
+        .input-group input { width: 100%; padding: 15px 15px 15px 45px; border: 2px solid var(--border-color); border-radius: 10px; outline: none; background: var(--input-bg); color: var(--text-main); transition: var(--transition-fast);}
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,166,0.1); }
+        .btn-login { width: 100%; padding: 15px; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: var(--transition-fast); }
         .btn-login:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(26,86,166,0.4); }
         #loginError { color: #e53e3e; font-size: 14px; margin-top: 15px; display: none; background: #fff5f5; padding: 10px; border-radius: 8px; }
 
         #mainApp { display: none; }
         
         /* Header Fix cố định */
-        header { background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.04); border-bottom: 4px solid var(--secondary); position: sticky; top: 0; z-index: 1000; padding: 10px 0; }
+        header { background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.04); border-bottom: 4px solid var(--secondary); position: sticky; top: 0; z-index: 1000; padding: 10px 0; transition: 0.3s; }
         .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1500px; margin: 0 auto; padding: 0 20px; }
         .save-status { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; font-weight: 600; width: 200px;}
         .save-status.saving { color: #d69e2e; } .save-status.saved { color: #38a169; }
-        .header-titles { text-align: center; flex: 1; }
+        .header-titles { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center;}
         header h1 { color: var(--primary); font-size: 20px; text-transform: uppercase; gap: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 2px;}
         header p { color: var(--text-muted); font-size: 12px; font-weight: 500; }
-        .btn-logout { background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: var(--transition-fast); font-size: 13px; display: flex; align-items: center; gap: 5px; width: 120px; justify-content: center;}
+        .header-right { display: flex; align-items: center; gap: 12px; justify-content: flex-end;}
+        
+        /* Xin chào & Time */
+        .user-greeting { font-weight: bold; color: var(--primary); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        .time-box { background: var(--input-bg); border-color: var(--border-color); padding: 5px 10px; border-radius: 6px; border: 1px solid; font-size: 0.9rem; font-weight: bold; color: var(--secondary); white-space: nowrap;}
+        
+        .btn-theme { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;}
+        .btn-theme:hover { background: var(--input-bg); }
+        .btn-logout { background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: var(--transition-fast); font-size: 12px; display: flex; align-items: center; gap: 5px; white-space: nowrap;}
         .btn-logout:hover { background: #e53e3e; color: white; transform: scale(1.05); }
 
         .container { max-width: 1500px; margin: 20px auto; padding: 0 15px; min-height: 80vh; }
-        .controls-card { background: var(--card-bg); padding: 15px 20px; border-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;}
-        .date-picker-container { display: flex; align-items: center; background: #f8fafc; padding: 8px 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .controls-card { background: var(--card-bg); padding: 15px 20px; border-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;}
+        
+        .controls-left-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .date-picker-container { display: flex; align-items: center; background: var(--input-bg); padding: 8px 15px; border-radius: 8px; border: 1px solid var(--border-color); }
         .date-picker-container label { font-weight: 600; color: var(--primary); margin-right: 10px; font-size: 14px; }
-        input[type="date"], select { padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; background: white; outline: none; transition: var(--transition-fast); font-size: 14px; cursor: pointer;}
-        input[type="date"]:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,86,166,0.1); }
+        input[type="date"], select, input[type="month"] { padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 6px; font-weight: 600; background: var(--card-bg); color: var(--text-main); outline: none; transition: var(--transition-fast); font-size: 14px; cursor: pointer;}
+        input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,86,166,0.1); }
         
-        .tabs { display: flex; gap: 8px; background: #f1f5f9; padding: 5px; border-radius: 10px; flex-wrap: wrap;}
+        .btn-import-excel { background: #38a169; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn-import-excel:hover { background: #2f855a; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(56,161,105,0.3);}
+
+        .tabs { display: flex; gap: 8px; background: var(--input-bg); padding: 5px; border-radius: 10px; flex-wrap: wrap; border: 1px solid var(--border-color);}
         .tab-btn { padding: 8px 25px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition-fast); }
-        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: var(--card-bg); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         
-        .sub-tabs { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; align-items: center;}
+        .sub-tabs { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; align-items: center;}
         .sub-tab-btn { background: none; border: none; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; padding: 5px 10px; position: relative; transition: color 0.2s; white-space: nowrap;}
         .sub-tab-btn:hover, .sub-tab-btn.active { color: var(--primary); }
         .sub-tab-btn.active::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 3px 3px 0 0; }
@@ -89,28 +124,29 @@
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* SPLIT LAYOUT (Tab Nhập Liệu) đồng bộ chiều cao */
+        /* SPLIT LAYOUT (Tab Nhập Liệu) */
         .split-layout { display: flex; gap: 20px; align-items: stretch; }
         
-        /* Form Trái - Mở rộng lên 500px để chứa tên cty dài */
-        .form-panel { flex: 0 0 500px; background: var(--card-bg); border-radius: var(--border-radius); padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.04); border: 1px solid #edf2f7; }
-        .form-header { font-size: 16px; font-weight: bold; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
-        .form-group { margin-bottom: 12px; }
+        .form-panel { flex: 0 0 500px; background: var(--card-bg); border-radius: var(--border-radius); padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.04); border: 1px solid var(--border-color); height: fit-content; }
+        .form-header { font-size: 16px; font-weight: bold; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
+        .form-row { display: flex; gap: 15px; margin-bottom: 12px; }
+        .form-group { flex: 1; }
         .form-group label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: var(--text-main); }
-        .frm-input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; background: #f8fafc; transition: 0.2s; outline: none;}
-        .frm-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(26,86,166,0.1); }
+        
+        .frm-input, .frm-textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: var(--input-bg); color: var(--text-main); transition: 0.2s; outline: none;}
+        .frm-input:focus, .frm-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,166,0.1); }
         .input-with-btn { display: flex; gap: 8px; }
         .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; transition: 0.2s; }
         .btn-lookup:hover { background: #113c7a; }
-        .btn-submit { background: linear-gradient(135deg, var(--secondary), #d68910); color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;}
+        .btn-submit { color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;}
         .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(243,156,18,0.4); }
 
-        /* Terminal Phải nằm gọn trong Wrapper để bằng chiều cao Form */
+        /* Terminal Phải */
         .terminal-wrapper { flex: 1; position: relative; min-width: 0; }
         .terminal-panel { 
             position: absolute; inset: 0;
             background: var(--terminal-bg); border-radius: var(--border-radius); padding: 15px; display: flex; flex-direction: column; 
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); border: 1px solid #2d3748; 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); border: 1px solid #1e293b; 
         }
         .terminal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
         .terminal-title { color: #fff; font-family: 'Courier New', monospace; font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 8px;}
@@ -141,40 +177,49 @@
         .empty-terminal { text-align: center; color: #475569; margin-top: 50px; font-style: italic; }
 
         /* UI Thống Kê & Báo Cáo */
-        .report-wrapper { background: var(--card-bg); border-radius: var(--border-radius); padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
-        .filter-bar { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;}
-        
+        .report-wrapper { background: var(--card-bg); border-radius: var(--border-radius); padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid var(--border-color);}
         .stats-section { margin-bottom: 35px; }
-        .stats-title { font-size: 16px; color: var(--primary); border-bottom: 2px solid #edf2f7; padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; }
-        .stats-title span { color: var(--text-muted); font-size: 13px; font-weight: normal; margin-left: auto; background: #f1f5f9; padding: 4px 12px; border-radius: 20px; }
+        .stats-title { font-size: 16px; color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        .stats-title span { color: var(--text-muted); font-size: 13px; font-weight: normal; margin-left: auto; background: var(--input-bg); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-color);}
         
-        .table-responsive { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid #edf2f7; }
+        .table-responsive { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); }
         .stats-table { width: 100%; min-width: 600px; border-collapse: collapse;}
-        .stats-table th { background: #ebf4ff; color: var(--primary); text-align: center; font-size: 13px; padding: 10px; border-bottom: 1px solid #e2e8f0;}
-        .stats-table th:first-child { text-align: left; background: #f8fafc; color: var(--text-muted); width: 22%; }
-        .stats-table td { text-align: center; font-size: 14px; font-weight: 500; color: #4a5568; padding: 10px; border-bottom: 1px solid #e2e8f0;}
-        .stats-table td:first-child { text-align: left; font-weight: 600; color: var(--text-main); }
-        .row-total { background: #fffaf0 !important; font-weight: bold; }
-        .row-total td { color: var(--secondary) !important; font-size: 15px; border-top: 2px solid #fbd38d; }
+        .stats-table th { background: var(--input-bg); color: var(--primary); text-align: center; font-size: 13px; padding: 10px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color);}
+        .stats-table th:first-child { text-align: left; color: var(--text-muted); width: 22%; }
+        .stats-table td { text-align: center; font-size: 14px; font-weight: 500; color: var(--text-main); padding: 10px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color);}
+        .stats-table td:first-child { text-align: left; font-weight: 600; }
+        .row-total td { font-weight: bold; font-size: 15px; border-top: 2px solid var(--secondary) !important; color: var(--secondary) !important;}
         
+        /* Dark mode overrides for table specifically */
+        :root[data-theme="dark"] .stats-table th:first-child { background: #1e293b; }
+        :root[data-theme="dark"] .row-total { background: #0f172a !important; }
+        :root[data-theme="dark"] .daily-card { background: #334155; border-color: #475569; }
+        :root[data-theme="dark"] .daily-card.total { background: #0f172a; border-color: var(--secondary); }
+
         .daily-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
-        .daily-card { background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 15px; text-align: center; transition: var(--transition-smooth); }
-        .daily-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); background: white; }
+        .daily-card { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; text-align: center; transition: var(--transition-smooth); }
+        .daily-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .daily-card.total { background: #fffaf0; border-color: #fbd38d; }
         .daily-card.total:hover { border-color: var(--secondary); }
         .daily-card h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
         .daily-card .num { font-size: 24px; font-weight: 800; color: var(--primary); }
         .daily-card.total .num { color: var(--secondary); }
 
-        .btn-export { background: #1a56a6; color: white; font-size: 14px; padding: 8px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s;}
+        /* Split Layout Báo Cáo */
+        .report-split-layout { display: flex; gap: 20px; align-items: flex-start;}
+        .filter-col { flex: 0 0 250px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; }
+        .filter-col label { font-weight: bold; color: var(--text-main); font-size: 13px; display: block; margin-bottom: 5px;}
+        .filter-col select { width: 100%; margin-bottom: 15px;}
+        .btn-export { background: #1a56a6; color: white; width: 100%; font-size: 14px; padding: 10px 15px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;}
         .btn-export:hover { background: #113c7a; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(26,86,166,0.3);}
+        
         .btn-export-excel { background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 6px; transition: 0.2s;}
         .btn-export-excel:hover { background: #059669; }
 
-        .report-preview-container { width: 100%; overflow-x: auto; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; justify-content: center; }
+        .report-preview-container { flex: 1; overflow-x: auto; background: var(--input-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: center; }
         .report-preview { 
             background: white; padding: 35px; border: 1px solid #cbd5e1; border-radius: 4px; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08); color: black;
             zoom: 0.75; 
             -moz-transform: scale(0.75); -moz-transform-origin: top center; 
             width: 850px; 
@@ -188,20 +233,22 @@
             .split-layout { flex-direction: column; }
             .form-panel { flex: none; width: 100%; }
             .terminal-wrapper { height: 500px; width: 100%; }
+            .report-split-layout { flex-direction: column; }
+            .filter-col { width: 100%; flex: none; }
             .header-content { flex-wrap: wrap; gap: 10px; justify-content: center;}
-            .btn-logout { width: auto;}
+            .header-titles { order: -1; width: 100%; }
             .controls-card { flex-direction: column; align-items: flex-start;}
+            .controls-left-group { width: 100%; flex-direction: column; align-items: flex-start;}
             .tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 5px;}
             .tab-btn { flex: 1; white-space: nowrap; padding: 10px; }
-            .filter-bar { flex-direction: column; align-items: stretch; }
-            .filter-bar .btn-export { margin-left: 0 !important; justify-content: center;}
             .report-preview { zoom: 0.55; -moz-transform: scale(0.55); width: 100%; min-width: 600px;}
+            .user-greeting { display: none; } /* Ẩn lời chào trên mobile */
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">
+    <div id="loader" class="bg-gradient-animate">
         <div class="running-track">
             <div class="running-boy" id="runner"><i class="fas fa-person-running"></i></div>
         </div>
@@ -219,7 +266,7 @@
             <div class="input-group">
                 <i class="fas fa-lock"></i><input type="password" id="password" placeholder="Mật khẩu">
             </div>
-            <button class="btn-login" onclick="verifyLogin()">ĐĂNG NHẬP</button>
+            <button class="btn-login bg-gradient-animate" onclick="verifyLogin()">ĐĂNG NHẬP</button>
             <p id="loginError"><i class="fas fa-exclamation-triangle"></i> Lỗi đăng nhập!</p>
         </div>
     </div>
@@ -232,16 +279,29 @@
                     <h1><i class="fas fa-headset"></i> HỖ TRỢ KỸ THUẬT</h1>
                     <p>Công ty Cổ phần thương mại Visnam</p>
                 </div>
-                <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                <div class="header-right">
+                    <span class="user-greeting"><i class="fas fa-user-check"></i> Xin chào Phan Viết Hưng</span>
+                    <div class="time-box" id="current-time">00:00:00</div>
+                    <button class="btn-theme" id="btn-theme" onclick="toggleTheme()" title="Đổi chế độ Sáng/Tối"><i class="fas fa-moon"></i></button>
+                    <button class="btn-logout" onclick="logout()" title="Đăng xuất"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
             </div>
         </header>
 
         <div class="container">
             <div class="controls-card">
-                <div class="date-picker-container">
-                    <label for="workDate">Ngày làm việc:</label>
-                    <input type="date" id="workDate">
+                <div class="controls-left-group">
+                    <div class="date-picker-container">
+                        <label for="workDate">Ngày làm việc:</label>
+                        <input type="date" id="workDate">
+                    </div>
+                    <!-- Tính năng Import Excel -->
+                    <input type="file" id="importExcelFile" accept=".xlsx, .xls, .csv" style="display: none;" onchange="importExcelData(event)">
+                    <button class="btn-import-excel" onclick="document.getElementById('importExcelFile').click()">
+                        <i class="fas fa-file-import"></i> Import File Excel
+                    </button>
                 </div>
+                
                 <div class="tabs">
                     <button class="tab-btn active" onclick="switchMainTab('nhaplieu')"><i class="fas fa-edit"></i> Form Nhập Liệu</button>
                     <button class="tab-btn" onclick="switchMainTab('baocao')"><i class="fas fa-chart-pie"></i> Báo cáo & Thống kê</button>
@@ -249,11 +309,10 @@
             </div>
 
             <div class="tab-content-wrapper">
-                
                 <!-- TAB NHẬP LIỆU -->
                 <div id="tab-nhaplieu" class="main-tab-content active">
                     <div class="split-layout">
-                        <!-- Cột Trái: Form -->
+                        <!-- Form Trái -->
                         <div class="form-panel">
                             <div class="form-header">
                                 <span><i class="fas fa-plus-circle"></i> THÔNG TIN HỖ TRỢ</span>
@@ -261,20 +320,22 @@
                             </div>
                             <form id="inputForm">
                                 <input type="hidden" id="frm-idx" value="-1">
-                                <div class="form-group">
-                                    <label>Mã số thuế</label>
-                                    <div class="input-with-btn">
-                                        <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập MST..." autocomplete="off">
-                                        <button type="button" class="btn-lookup" onclick="searchMSTForm()" id="btnSearchMST" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
+                                <div class="form-row">
+                                    <div class="form-group" style="flex: 1.2;">
+                                        <label>Mã số thuế</label>
+                                        <div class="input-with-btn">
+                                            <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập MST..." autocomplete="off">
+                                            <button type="button" class="btn-lookup" onclick="searchMSTForm()" id="btnSearchMST" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="flex: 1;">
+                                        <label>Số điện thoại</label>
+                                        <input type="text" id="frm-sdt" class="frm-input" placeholder="Nhập SĐT..." autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Tên công ty</label>
                                     <input type="text" id="frm-company" class="frm-input" placeholder="Tự động hoặc nhập tay..." autocomplete="off">
-                                </div>
-                                <div class="form-group">
-                                    <label>Số điện thoại</label>
-                                    <input type="text" id="frm-sdt" class="frm-input" placeholder="Nhập SĐT..." autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label>Loại hỗ trợ</label>
@@ -286,15 +347,13 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Tên Kỹ Thuật</label>
-                                    <input type="text" id="frm-tech" class="frm-input" value="Hưng">
-                                </div>
-                                <div class="form-group">
                                     <label>Vấn đề hỗ trợ xử lý</label>
                                     <textarea id="frm-issue" class="frm-input" rows="2" placeholder="Ghi chú chi tiết..."></textarea>
                                 </div>
+                                <input type="hidden" id="frm-tech" value="Hưng">
+
                                 <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                    <button type="button" class="btn-submit" id="btnSubmitForm" onclick="submitForm()">
+                                    <button type="button" class="btn-submit btn-gradient-animate" id="btnSubmitForm" onclick="submitForm()">
                                         <i class="fas fa-save"></i> LƯU DỮ LIỆU
                                     </button>
                                     <button type="button" class="btn-submit" id="btnCancelEdit" onclick="cancelEdit()" style="display: none; background: #64748b; flex: 0.5;">
@@ -304,7 +363,7 @@
                             </form>
                         </div>
 
-                        <!-- Cột Phải: Terminal -->
+                        <!-- Terminal Phải -->
                         <div class="terminal-wrapper">
                             <div class="terminal-panel">
                                 <div class="terminal-header">
@@ -341,8 +400,11 @@
                         <button class="sub-tab-btn" onclick="switchSubTab('bctuan')"><i class="fas fa-file-alt"></i> Báo cáo Tuần</button>
                         <button class="sub-tab-btn" onclick="switchSubTab('bcthang')"><i class="fas fa-file-signature"></i> Báo cáo Tháng</button>
                         
-                        <!-- Nút Xuất Excel nằm trên hàng Tab -->
-                        <button class="btn-export-excel" onclick="exportDataToExcel()" style="margin-left: auto;"><i class="fas fa-file-excel"></i> Xuất Excel Data Tháng</button>
+                        <!-- Cụm chức năng xuất Excel được nhóm lại -->
+                        <div style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
+                            <input type="month" id="exportMonthSelect" title="Chọn tháng xuất Excel">
+                            <button class="btn-export-excel" onclick="exportDataToExcel()"><i class="fas fa-file-excel"></i> Xuất Excel</button>
+                        </div>
                     </div>
 
                     <div class="report-wrapper">
@@ -374,33 +436,37 @@
 
                         <!-- Báo cáo Tuần -->
                         <div id="sub-bctuan" class="sub-tab-content">
-                            <div class="filter-bar">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <label style="font-weight: bold; color: var(--primary); font-size: 14px;">Chọn Tháng:</label>
-                                    <select id="filterWeekMonth" onchange="updateWeekSelect()"></select>
+                            <div class="report-split-layout">
+                                <div class="filter-col">
+                                    <div style="margin-bottom: 15px;">
+                                        <label>Tháng báo cáo:</label>
+                                        <select id="filterWeekMonth" onchange="updateWeekSelect()"></select>
+                                    </div>
+                                    <div style="margin-bottom: 25px;">
+                                        <label>Tuần báo cáo:</label>
+                                        <select id="filterWeekSelect" onchange="renderWeeklyReport()"></select>
+                                    </div>
+                                    <button class="btn-export" onclick="downloadWeeklyReport()"><i class="fas fa-file-word"></i> Xuất file Word</button>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <label style="font-weight: bold; color: var(--primary); font-size: 14px;">Chọn Tuần:</label>
-                                    <select id="filterWeekSelect" onchange="renderWeeklyReport()"></select>
+                                <div class="report-preview-container">
+                                    <div class="report-preview" id="preview-tuan"></div>
                                 </div>
-                                <button class="btn-export" onclick="downloadWeeklyReport()" style="margin-left: auto;"><i class="fas fa-file-word"></i> Xuất file Word</button>
-                            </div>
-                            <div class="report-preview-container">
-                                <div class="report-preview" id="preview-tuan"></div>
                             </div>
                         </div>
 
                         <!-- Báo cáo Tháng -->
                         <div id="sub-bcthang" class="sub-tab-content">
-                            <div class="filter-bar">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <label style="font-weight: bold; color: var(--primary); font-size: 14px;">Chọn Tháng báo cáo:</label>
-                                    <select id="filterMonthSelect" onchange="renderMonthlyReport()"></select>
+                            <div class="report-split-layout">
+                                <div class="filter-col">
+                                    <div style="margin-bottom: 25px;">
+                                        <label>Tháng báo cáo:</label>
+                                        <select id="filterMonthSelect" onchange="renderMonthlyReport()"></select>
+                                    </div>
+                                    <button class="btn-export" onclick="downloadMonthlyReport()"><i class="fas fa-file-word"></i> Xuất file Word</button>
                                 </div>
-                                <button class="btn-export" onclick="downloadMonthlyReport()" style="margin-left: auto;"><i class="fas fa-file-word"></i> Xuất file Word</button>
-                            </div>
-                            <div class="report-preview-container">
-                                <div class="report-preview" id="preview-thang"></div>
+                                <div class="report-preview-container">
+                                    <div class="report-preview" id="preview-thang"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -430,13 +496,23 @@
 
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
-        // --- Hàm tạo danh sách Tháng Tiếng Việt (Chỉ lấy 12 tháng năm hiện tại) ---
+        // --- DARK MODE THEME TOGGLE ---
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            root.setAttribute('data-theme', newTheme);
+            localStorage.setItem('visnam_theme', newTheme);
+            
+            const icon = document.querySelector('#btn-theme i');
+            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
         function initMonthSelectors() {
             const select1 = document.getElementById('filterWeekMonth');
             const select2 = document.getElementById('filterMonthSelect');
             const today = new Date();
             let optionsHTML = '';
-            
             const year = today.getFullYear();
             for(let m = 1; m <= 12; m++) {
                 let monthVal = `${year}-${String(m).padStart(2, '0')}`;
@@ -445,10 +521,15 @@
             }
             select1.innerHTML = optionsHTML;
             select2.innerHTML = optionsHTML;
+            document.getElementById('exportMonthSelect').value = `${year}-${String(today.getMonth() + 1).padStart(2, '0')}`;
         }
 
         // --- LOADER & AUTH ---
         document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem('visnam_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if(savedTheme === 'dark') document.querySelector('#btn-theme i').className = 'fas fa-sun';
+
             initMonthSelectors();
             let percent = 0; const loader = document.getElementById('loader');
             const loadText = document.getElementById('loading-text'); const progressBar = document.getElementById('progressBar');
@@ -481,7 +562,7 @@
         function updateActivity() { if (auth.currentUser) localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); }
         ['click', 'mousemove', 'keypress', 'scroll'].forEach(evt => document.addEventListener(evt, updateActivity));
 
-        // --- INIT APP ---
+        // --- INIT APP & TIME ---
         function showMainApp() {
             document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
             database.ref('visnam_data').once('value').then((snapshot) => { allData = snapshot.val() || {}; initApp(); }).catch(() => { initApp(); });
@@ -493,7 +574,6 @@
             const today = new Date().toISOString().split('T')[0];
             
             dateInput.value = today; currentSelectedDate = today; 
-            
             loadDataForDate(today);
             updateWeekSelect();
 
@@ -502,6 +582,15 @@
                 loadDataForDate(currentSelectedDate); 
                 updateAllReports(); 
             });
+
+            setInterval(() => {
+                const now = new Date();
+                const d = String(now.getDate()).padStart(2, '0');
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const y = now.getFullYear();
+                const timeStr = now.toLocaleTimeString('vi-VN', { hour12: false });
+                document.getElementById('current-time').innerText = `${d}/${m}/${y} - ${timeStr}`;
+            }, 1000);
         }
 
         function switchMainTab(tabId) {
@@ -516,6 +605,90 @@
             document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('sub-' + subId).classList.add('active'); event.currentTarget.classList.add('active');
             updateAllReports();
+        }
+
+        // --- IMPORT EXCEL THÔNG MINH (Xử lý chặt chẽ format) ---
+        window.importExcelData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const ext = file.name.split('.').pop().toLowerCase();
+            if(ext !== 'xlsx' && ext !== 'xls' && ext !== 'csv') {
+                showToast("Lỗi: File không đúng định dạng (.xlsx, .xls, .csv)!", true);
+                event.target.value = "";
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(firstSheet, {header: 1, defval: ""});
+                    
+                    if(rows.length < 2) {
+                        showToast("Lỗi: File không có dữ liệu!", true);
+                        return;
+                    }
+
+                    let importedCount = 0;
+                    let lastDateStr = ""; 
+                    
+                    for (let i = 1; i < rows.length; i++) {
+                        const row = rows[i];
+                        if (row.length === 0 || (!row[1] && !row[3] && !row[6])) continue; 
+
+                        let rawDate = row[0];
+                        if (rawDate) {
+                            if (typeof rawDate === 'number') {
+                                const d = new Date(Math.round((rawDate - 25569) * 86400 * 1000));
+                                lastDateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+                            } else {
+                                lastDateStr = rawDate.toString().trim(); 
+                            }
+                        }
+                        
+                        if(!lastDateStr) continue;
+
+                        const parts = lastDateStr.split('/');
+                        if(parts.length !== 3) continue;
+                        const dateIso = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                        
+                        const record = {
+                            mst: row[1] ? row[1].toString().trim() : "",
+                            sdt: row[2] ? row[2].toString().trim() : "",
+                            company: row[3] ? row[3].toString().trim() : "",
+                            type: row[4] ? row[4].toString().trim() : "HĐ",
+                            tech: row[5] ? row[5].toString().trim() : "Hưng",
+                            issue: row[6] ? row[6].toString().trim() : ""
+                        };
+
+                        if(!allData[dateIso]) allData[dateIso] = [];
+                        
+                        const isDuplicate = allData[dateIso].some(item => item.mst === record.mst && item.issue === record.issue && item.company === record.company);
+                        
+                        if(!isDuplicate) {
+                            allData[dateIso].push(record);
+                            importedCount++;
+                        }
+                    }
+
+                    if(importedCount > 0) {
+                        showToast(`Up file thành công. Có ${importedCount} dữ liệu được đồng bộ!`, false);
+                        triggerAutoSave();
+                        renderTerminal();
+                        updateAllReports();
+                    } else {
+                        showToast("Up file thành công. 0 dữ liệu mới được đồng bộ!", false);
+                    }
+                } catch(err) {
+                    console.error(err);
+                    showToast("Lỗi: File không đúng định dạng hoặc bị hỏng!", true);
+                }
+                event.target.value = ""; 
+            };
+            reader.readAsArrayBuffer(file);
         }
 
         // --- FORM & TERMINAL LOGIC ---
@@ -610,7 +783,6 @@
             document.getElementById('frm-company').value = data.company;
             document.getElementById('frm-sdt').value = data.sdt;
             document.getElementById('frm-type').value = data.type;
-            document.getElementById('frm-tech').value = data.tech;
             document.getElementById('frm-issue').value = data.issue;
 
             document.getElementById('btnSubmitForm').innerHTML = '<i class="fas fa-check"></i> CẬP NHẬT DÒNG ' + (idx + 1);
@@ -669,24 +841,18 @@
                 </tr>`;
             });
             tbody.innerHTML = html;
-            
-            // Scroll to bottom
             const container = document.querySelector('.terminal-content');
             container.scrollTop = container.scrollHeight;
         }
 
-        // --- COPY KHÔNG CÓ DÒNG TIÊU ĐỀ, ĐÚNG 6 CỘT ---
         function copyTerminalData() {
             const data = allData[currentSelectedDate] || [];
             if(data.length === 0) return showToast("Bảng trống!", true);
 
-            // Mảng chứa dữ liệu (Không có Title)
             let allText = [];
             data.forEach((item) => {
-                // MST | SĐT | Tên công ty | Loại HT | Tên KT | Vấn đề
                 allText.push(`${item.mst}\t${item.sdt}\t${item.company}\t${item.type}\t${item.tech}\t${item.issue}`);
             });
-
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${data.length} dòng dữ liệu!`, false));
         }
 
@@ -724,7 +890,7 @@
             const toast = document.getElementById("toast");
             document.getElementById("toast-msg").innerText = msg; 
             toast.className = isError ? "show error" : "show"; 
-            setTimeout(() => { toast.className = ""; }, 2500); 
+            setTimeout(() => { toast.className = ""; }, 3000); 
         }
 
         function calculateStatsForDates(dateArray) {
@@ -794,7 +960,6 @@
             const dateStr = currentSelectedDate;
             const year = parseInt(dateStr.substring(0, 4)); const month = parseInt(dateStr.substring(5, 7));
             
-            // --- THỐNG KÊ NGÀY ---
             document.getElementById('lblDay').innerText = `(${formatVN(dateStr)})`;
             let dayStats = calculateStatsForDates([dateStr]);
             document.getElementById('dailyStatsGrid').innerHTML = `
@@ -805,11 +970,8 @@
                 <div class="daily-card total"><h4>Tổng Cộng</h4><div class="num">${dayStats['Total']}</div></div>
             `;
             
-            // --- THỐNG KÊ TUẦN (LỌC TRONG THÁNG) ---
             let weekDaysFull = getWeekDays6(dateStr);
             let targetMonthStr = dateStr.substring(5, 7);
-            
-            // Chỉ lấy các ngày trong tuần ĐÓ mà CÙNG THÁNG với ngày đang chọn
             let filteredWeekDays = weekDaysFull.filter(d => d.substring(5, 7) === targetMonthStr);
 
             if(filteredWeekDays.length > 0) {
@@ -832,7 +994,6 @@
             weekHtml += `<tr class="row-total"><td>TỔNG TUẦN</td><td>${weekTotalStats['HĐ']}</td><td>${weekTotalStats['CKS']}</td><td>${weekTotalStats['BHXH']}</td><td>${weekTotalStats['ĐL/CTV']}</td><td>${weekTotalStats['Total']}</td></tr>`;
             document.getElementById('weeklyTableBody').innerHTML = weekHtml;
 
-            // --- THỐNG KÊ THÁNG ---
             document.getElementById('lblMonth').innerText = `(Tháng ${month}/${year})`;
             let monthWeeks = getMonthWeeks(year, month); let monthHtml = ''; let monthTotalStats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
             monthWeeks.forEach(w => {
@@ -844,16 +1005,14 @@
             document.getElementById('monthlyTableBody').innerHTML = monthHtml;
         }
 
-        // --- XUẤT EXCEL DATA THÁNG ---
+        // --- XUẤT EXCEL DATA THÁNG CHUẨN G-SHEET ---
         window.exportDataToExcel = function() {
-            // Lấy value từ ô dropdown THÁNG ở tab báo cáo tháng cho chuẩn
-            const filterVal = document.getElementById('filterMonthSelect').value; 
+            const filterVal = document.getElementById('exportMonthSelect').value; 
             if(!filterVal) return showToast("Vui lòng chọn tháng!", true);
 
             const year = filterVal.substring(0, 4);
             const month = filterVal.substring(5, 7);
 
-            // Lọc dữ liệu trong tháng
             let dataToExport = [];
             Object.keys(allData).forEach(d => {
                 if (d.startsWith(`${year}-${month}`)) {
@@ -862,10 +1021,10 @@
                             "Ngày": formatVN(d),
                             "MST": item.mst,
                             "SĐT": item.sdt,
-                            "Tên Công Ty": item.company,
-                            "Loại Hỗ Trợ": item.type,
+                            "Tên công ty": item.company,
+                            "Loại hỗ trợ": item.type,
                             "Tên KT": item.tech,
-                            "Vấn Đề Hỗ Trợ": item.issue
+                            "Vấn đề hỗ trợ": item.issue
                         });
                     });
                 }
@@ -873,30 +1032,48 @@
 
             if(dataToExport.length === 0) return showToast("Không có dữ liệu trong tháng này!", true);
 
-            // Sắp xếp theo ngày tăng dần
             dataToExport.sort((a,b) => {
                 let dA = a.Ngày.split('/').reverse().join('');
                 let dB = b.Ngày.split('/').reverse().join('');
                 return dA.localeCompare(dB);
             });
 
-            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            let processedData = [];
+            let lastDate = "";
+            dataToExport.forEach(item => {
+                let currentItem = { ...item };
+                if (currentItem.Ngày === lastDate) {
+                    currentItem.Ngày = ""; // Xóa dữ liệu ngày nếu trùng bên trên
+                } else {
+                    lastDate = currentItem.Ngày;
+                }
+                processedData.push(currentItem);
+            });
+
+            const ws = XLSX.utils.json_to_sheet(processedData);
 
             for (let i in ws) {
                 if (i[0] === '!') continue;
                 let col = i.replace(/[0-9]/g, '');
                 let row = parseInt(i.replace(/[A-Z]/g, ''));
-                ws[i].s = { alignment: { vertical: "center", horizontal: "center", wrapText: true } };
+                
+                ws[i].s = { 
+                    alignment: { vertical: "center", horizontal: "center", wrapText: true },
+                    font: { name: "Arial", sz: 10 }
+                };
+                
                 if (row === 1) {
                     ws[i].s.font = { bold: true, color: { rgb: "FFFFFF" } };
                     ws[i].s.fill = { fgColor: { rgb: "1A56A6" } };
                 }
             }
+            
+            // Khớp cột chuẩn
             ws['!cols'] = [{wch: 12}, {wch: 15}, {wch: 12}, {wch: 40}, {wch: 12}, {wch: 12}, {wch: 30}];
 
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "DuLieu");
-            XLSX.writeFile(wb, `Data_Thang_${month}_${year}.xlsx`);
+            XLSX.utils.book_append_sheet(wb, ws, "visnam_data");
+            XLSX.writeFile(wb, `visnam_data_Thang${month}.xlsx`);
         }
 
         function renderWeeklyReport() {
