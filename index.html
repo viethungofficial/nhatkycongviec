@@ -6,9 +6,7 @@
     <title>Hỗ Trợ Kỹ Thuật - Visnam</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- Giữ lại thư viện Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 
     <style>
@@ -52,16 +50,116 @@
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* Loader & Login */
-        #loader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; transition: opacity 0.5s ease; }
-        .running-track { width: 300px; height: 60px; position: relative; border-bottom: 3px solid rgba(255,255,255,0.2); margin-bottom: 20px; }
-        .running-boy { position: absolute; bottom: 0; left: 0; font-size: 45px; color: var(--secondary); transition: left 0.1s linear; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
-        .running-boy i { animation: runBounce 0.4s infinite alternate; }
-        @keyframes runBounce { 0% { transform: translateY(0) rotate(5deg); } 100% { transform: translateY(-10px) rotate(-5deg); } }
-        .progress-container { width: 300px; background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; margin-bottom: 15px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
-        .progress-bar { width: 0%; height: 100%; background: var(--secondary); border-radius: 10px; transition: width 0.1s linear; }
-        #loading-text { font-size: 24px; font-weight: bold; font-family: monospace; letter-spacing: 2px; }
+        /* ==========================================
+           HIỆU ỨNG LOADING CHUYÊN NGHIỆP (PRO & MÀU MÈ)
+           ========================================== */
+        #loader.pro-loader-wrapper {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #050b14; 
+            z-index: 99999;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1), visibility 0.6s;
+            overflow: hidden;
+        }
 
+        .loader-light-effect {
+            position: absolute;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(26,86,166,0.15) 0%, rgba(243,156,18,0.05) 40%, transparent 70%);
+            animation: pulseBg 4s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        .pro-loader {
+            position: relative;
+            width: 110px; height: 110px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 35px;
+            z-index: 1;
+        }
+
+        .outer-circle {
+            position: absolute;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: #f39c12; 
+            border-bottom-color: #e74c3c;
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.3);
+        }
+
+        .inner-circle {
+            position: absolute;
+            width: 70%; height: 70%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-left-color: #1a56a6;
+            border-right-color: #00d2ff;
+            animation: spin-reverse 1.8s linear infinite;
+            box-shadow: inset 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+
+        .loader-icon {
+            font-size: 35px;
+            animation: pulseIcon 1.5s ease-in-out infinite;
+            background: linear-gradient(45deg, #00d2ff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.8));
+        }
+
+        .loading-text-wrapper {
+            position: relative; z-index: 1; text-align: center;
+            display: flex; align-items: center;
+        }
+
+        .pro-loading-text {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 15px; font-weight: 800; letter-spacing: 4px;
+            background: linear-gradient(90deg, #f39c12, #f1c40f, #e74c3c, #f39c12);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 3s linear infinite;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+            background: linear-gradient(90deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 18px; font-weight: bold; letter-spacing: 2px;
+            display: inline-block; width: 25px; text-align: left;
+        }
+
+        .loading-progress-bar {
+            width: 220px; height: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px; margin-top: 25px;
+            overflow: hidden; position: relative; z-index: 1;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .loading-progress-fill {
+            height: 100%; width: 40%;
+            background: linear-gradient(90deg, transparent, #00d2ff, #1a56a6, transparent);
+            border-radius: 4px;
+            animation: loadFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+        @keyframes pulseIcon { 0%, 100% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
+        @keyframes gradientText { 0% { background-position: 0%; } 100% { background-position: 100%; } }
+        @keyframes pulseBg { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+        @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } 100% { content: ''; } }
+        @keyframes loadFill { 0% { transform: translateX(-150%); } 100% { transform: translateX(250%); } }
+
+        /* Login Screen */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color); display: none; justify-content: center; align-items: center; z-index: 9000; padding: 20px; }
         .login-box { background: var(--card-bg); padding: 40px 30px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--primary); color: var(--text-main); }
         .login-logo { font-size: 45px; color: var(--primary); margin-bottom: 15px; }
@@ -255,12 +353,20 @@
 </head>
 <body>
 
-    <div id="loader" class="bg-gradient-animate">
-        <div class="running-track">
-            <div class="running-boy" id="runner"><i class="fas fa-person-running"></i></div>
+    <!-- MÀN HÌNH LOADING PRO (Thay thế loader cũ) -->
+    <div id="loader" class="pro-loader-wrapper">
+        <div class="loader-light-effect"></div>
+        <div class="pro-loader">
+            <div class="inner-circle"></div>
+            <div class="outer-circle"></div>
+            <div class="loader-icon"><i class="fas fa-headset"></i></div>
         </div>
-        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
-        <div id="loading-text">0%</div>
+        <div class="loading-text-wrapper">
+            <span class="pro-loading-text">ĐANG KHỞI TẠO HỆ THỐNG</span><span class="loading-dots"></span>
+        </div>
+        <div class="loading-progress-bar">
+            <div class="loading-progress-fill"></div>
+        </div>
     </div>
 
     <div id="loginScreen">
@@ -273,7 +379,7 @@
             <div class="input-group">
                 <i class="fas fa-lock"></i><input type="password" id="password" placeholder="Mật khẩu">
             </div>
-            <button class="btn-login bg-gradient-animate" onclick="verifyLogin()">ĐĂNG NHẬP</button>
+            <button class="btn-login btn-gradient-animate" onclick="verifyLogin()">ĐĂNG NHẬP</button>
             <p id="loginError"><i class="fas fa-exclamation-triangle"></i> Lỗi đăng nhập!</p>
         </div>
     </div>
@@ -378,7 +484,8 @@
                                     <div style="display: flex; gap: 10px; align-items: center; flex: 1; justify-content: flex-end;">
                                         <div class="terminal-search-box">
                                             <i class="fas fa-search"></i>
-                                            <input type="text" id="terminalSearch" placeholder="Tìm MST, Tên, Lỗi..." onkeyup="renderTerminal()">
+                                            <!-- ĐÃ BỎ onkeyup, DÙNG JS DEBOUNCE -->
+                                            <input type="text" id="terminalSearch" placeholder="Tìm MST, Tên, Lỗi...">
                                         </div>
                                         <button class="btn-copy-terminal" onclick="copyTerminalData()"><i class="fas fa-copy"></i> Copy</button>
                                     </div>
@@ -491,40 +598,148 @@
 
     <div id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg"></span></div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDHFTbNY8ycl4NsfIqgu7v5lGEVwsO0LB4", authDomain: "phanviethung-hotrokythuat.firebaseapp.com",
-            projectId: "phanviethung-hotrokythuat", storageBucket: "phanviethung-hotrokythuat.firebasestorage.app",
-            messagingSenderId: "142402735822", appId: "1:142402735822:web:ff86f84f53dda983eb0a9f", measurementId: "G-7KWCTTFKRT"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const auth = firebase.auth(); 
+    <!-- SCRIPT FIREBASE V10 MODULAR & TOÀN BỘ LOGIC -->
+    <script type="module">
+        // 1. IMPORT FIREBASE v10 (MODULAR)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
+        // 2. CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHFTbNY8ycl4NsfIqgu7v5lGEVwsO0LB4", 
+            authDomain: "phanviethung-hotrokythuat.firebaseapp.com",
+            projectId: "phanviethung-hotrokythuat", 
+            storageBucket: "phanviethung-hotrokythuat.firebasestorage.app",
+            messagingSenderId: "142402735822", 
+            appId: "1:142402735822:web:ff86f84f53dda983eb0a9f", 
+            measurementId: "G-7KWCTTFKRT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
         const GOOGLE_SHEETS_API = "https://script.google.com/macros/s/AKfycbx8DSQqm7DwH_jIFNwH8_f9pcecoK4j4NUT7u226IHZPTpCBJ-b9--N2cH3WotvupEdbA/exec";
 
         let allData = {}; 
         let currentSelectedDate = ''; 
         let autoSaveTimer = null; 
         let exportWeekFilename = ""; let exportMonthFilename = "";
-
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
-        // Hàm lấy thời gian chuẩn Việt Nam (YYYY-MM-DD)
+        // ==========================================
+        // DEBOUNCE FUNCTION & SEARCH LISTENER
+        // ==========================================
+        function debounce(func, delay) {
+            let timeoutId;
+            return function (...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        }
+
+        // ==========================================
+        // LOADING THỰC TẾ & AUTHENTICATION
+        // ==========================================
+        const loader = document.getElementById('loader');
+        
+        function hideLoader() {
+            loader.style.opacity = '0'; 
+            setTimeout(() => loader.style.display = 'none', 600);
+        }
+
+        function showLoader() {
+            loader.style.display = 'flex';
+            loader.style.opacity = '1';
+            loader.style.visibility = 'visible';
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem('visnam_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if(savedTheme === 'dark') document.querySelector('#btn-theme i').className = 'fas fa-sun';
+            
+            initMonthSelectors();
+
+            // Gắn debounce 300ms cho ô tìm kiếm
+            document.getElementById('terminalSearch').addEventListener('input', debounce(renderTerminal, 300));
+        });
+
+        // Lắng nghe trạng thái đăng nhập thực tế
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const lastActive = localStorage.getItem(ACTIVITY_KEY);
+                if (lastActive && (Date.now() - parseInt(lastActive)) > TIMEOUT_LIMIT) {
+                    logout(); 
+                } else { 
+                    localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); 
+                    await loadDataFromCloud(); 
+                }
+            } else {
+                hideLoader();
+                forceLogout();
+            }
+        });
+
+        async function loadDataFromCloud() {
+            try {
+                const snapshot = await get(ref(database, 'visnam_data'));
+                allData = snapshot.val() || {}; 
+                initApp();
+                
+                document.getElementById('loginScreen').style.display = 'none'; 
+                document.getElementById('mainApp').style.display = 'block';
+                hideLoader();
+            } catch (error) {
+                console.error("Lỗi lấy dữ liệu: ", error);
+                showToast("Lỗi kết nối CSDL!", true);
+                hideLoader();
+            }
+        }
+
+        function verifyLogin() {
+            const email = document.getElementById('email').value.trim(); 
+            const pass = document.getElementById('password').value.trim();
+            const errorText = document.getElementById('loginError');
+            
+            if (!email || !pass) { errorText.style.display = 'block'; return; }
+            
+            showLoader(); 
+            signInWithEmailAndPassword(auth, email, pass).then(() => { 
+                localStorage.setItem(ACTIVITY_KEY, Date.now().toString());
+                errorText.style.display = 'none'; 
+                showToast("Đăng nhập thành công!", false); 
+            }).catch(() => { 
+                hideLoader();
+                errorText.style.display = 'block'; 
+            });
+        }
+
+        document.getElementById('password').addEventListener('keypress', e => { if(e.key === 'Enter') verifyLogin(); });
+
+        function forceLogout() { document.getElementById('mainApp').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }
+        function logout() { signOut(auth); }
+        
+        function updateActivity() { if (auth.currentUser) localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); }
+        ['click', 'mousemove', 'keypress', 'scroll'].forEach(evt => document.addEventListener(evt, updateActivity));
+
+        // ==========================================
+        // CORE FUNCTIONS
+        // ==========================================
         function getVNTimeDateString() {
             const now = new Date();
             const vnFormatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' });
             return vnFormatter.format(now);
         }
 
-        // --- DARK MODE THEME TOGGLE ---
         function toggleTheme() {
             const root = document.documentElement;
             const currentTheme = root.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             root.setAttribute('data-theme', newTheme);
             localStorage.setItem('visnam_theme', newTheme);
-            
             const icon = document.querySelector('#btn-theme i');
             icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
         }
@@ -547,59 +762,6 @@
             document.getElementById('exportMonthSelect').value = `${year}-${String(currentMonth).padStart(2, '0')}`;
         }
 
-        // --- LOADER & AUTH ---
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedTheme = localStorage.getItem('visnam_theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            if(savedTheme === 'dark') document.querySelector('#btn-theme i').className = 'fas fa-sun';
-
-            initMonthSelectors();
-            let percent = 0; const loader = document.getElementById('loader');
-            const loadText = document.getElementById('loading-text'); const progressBar = document.getElementById('progressBar');
-            const runner = document.getElementById('runner');
-            let loadingInterval = setInterval(() => {
-                percent += Math.floor(Math.random() * 5) + 2; if(percent > 100) percent = 100;
-                loadText.innerText = percent + "%"; progressBar.style.width = percent + "%";
-                runner.style.left = ((percent / 100) * 250) + "px";
-                if(percent >= 100) { clearInterval(loadingInterval); setTimeout(() => { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); }, 400); }
-            }, 30);
-        });
-
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                const lastActive = localStorage.getItem(ACTIVITY_KEY);
-                if (lastActive && (Date.now() - parseInt(lastActive)) > TIMEOUT_LIMIT) {
-                    logout(); 
-                } else { 
-                    localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); 
-                    showMainApp(); 
-                }
-            } else forceLogout();
-        });
-
-        function verifyLogin() {
-            const email = document.getElementById('email').value.trim(); const pass = document.getElementById('password').value.trim();
-            const errorText = document.getElementById('loginError');
-            if (!email || !pass) { errorText.style.display = 'block'; return; }
-            auth.signInWithEmailAndPassword(email, pass).then(() => { 
-                // Cập nhật session mới ngay khi đăng nhập thành công
-                localStorage.setItem(ACTIVITY_KEY, Date.now().toString());
-                errorText.style.display = 'none'; 
-                showToast("Đăng nhập thành công!", false); 
-            }).catch(() => { errorText.style.display = 'block'; });
-        }
-        document.getElementById('password').addEventListener('keypress', e => { if(e.key === 'Enter') verifyLogin(); });
-        function forceLogout() { document.getElementById('mainApp').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }
-        function logout() { auth.signOut(); }
-        function updateActivity() { if (auth.currentUser) localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); }
-        ['click', 'mousemove', 'keypress', 'scroll'].forEach(evt => document.addEventListener(evt, updateActivity));
-
-        // --- INIT APP & TIME ---
-        function showMainApp() {
-            document.getElementById('loginScreen').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
-            database.ref('visnam_data').once('value').then((snapshot) => { allData = snapshot.val() || {}; initApp(); }).catch(() => { initApp(); });
-        }
-
         function initApp() {
             if(currentSelectedDate !== '') return; 
             const dateInput = document.getElementById('workDate'); 
@@ -615,7 +777,6 @@
                 updateAllReports(); 
             });
 
-            // Đồng hồ chuẩn Việt Nam
             setInterval(() => {
                 const now = new Date();
                 const optionsTime = { timeZone: 'Asia/Ho_Chi_Minh', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -639,9 +800,11 @@
             updateAllReports();
         }
 
-        // --- IMPORT EXCEL ---
-        window.importExcelData = function(event) {
-            const file = event.target.files[0];
+        // ==========================================
+        // DỮ LIỆU & TERMINAL
+        // ==========================================
+        function importExcelData(event) {
+            const file = event.targetfiles[0];
             if (!file) return;
 
             const ext = file.name.split('.').pop().toLowerCase();
@@ -707,7 +870,6 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // --- FORM & TERMINAL LOGIC ---
         function loadDataForDate(dateStr) {
             if(!allData[dateStr]) allData[dateStr] = [];
             renderTerminal();
@@ -888,7 +1050,9 @@
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${data.length} dòng dữ liệu!`, false));
         }
 
-        // --- CLOUD SYNC & SAVE ---
+        // ==========================================
+        // LƯU TRỮ ĐÁM MÂY (FIREBASE V10)
+        // ==========================================
         function updateStatusIndicator(msg, typeClass) {
             const ind = document.getElementById('saveStatusIndicator'); ind.className = `save-status ${typeClass}`;
             ind.innerHTML = `${typeClass === 'saving' ? '<i class="fas fa-spinner fa-spin"></i>' : typeClass === 'saved' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-cloud"></i>'} ${msg}`;
@@ -904,7 +1068,7 @@
             const dataToSave = allData[currentSelectedDate] || [];
             updateStatusIndicator("Đồng bộ Đám mây...", "saving");
 
-            const firebasePromise = database.ref('visnam_data/' + currentSelectedDate).set(dataToSave);
+            const firebasePromise = set(ref(database, 'visnam_data/' + currentSelectedDate), dataToSave);
             const sheetPromise = fetch(GOOGLE_SHEETS_API, {
                 method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ date: currentSelectedDate, data: dataToSave, sheetName: "data" })
@@ -916,7 +1080,9 @@
             }).catch(err => { updateStatusIndicator("Lỗi đồng bộ", "saving"); });
         }
 
-        // --- BÁO CÁO & THỐNG KÊ ---
+        // ==========================================
+        // BÁO CÁO & THỐNG KÊ
+        // ==========================================
         function formatVN(dateStr) { return dateStr.split('-').reverse().join('/'); }
         function showToast(msg, isError) { 
             const toast = document.getElementById("toast");
@@ -1038,8 +1204,7 @@
             document.getElementById('monthlyTableBody').innerHTML = monthHtml;
         }
 
-        // --- XUẤT EXCEL DATA THÁNG ---
-        window.exportDataToExcel = function() {
+        function exportDataToExcel() {
             const filterVal = document.getElementById('exportMonthSelect').value; 
             if(!filterVal) return showToast("Vui lòng chọn tháng!", true);
 
@@ -1298,6 +1463,28 @@
 
         function downloadWeeklyReport() { exportHTMLToDoc('preview-tuan', exportWeekFilename); }
         function downloadMonthlyReport() { exportHTMLToDoc('preview-thang', exportMonthFilename); }
+
+        // ==========================================
+        // XUẤT GLOBAL SCOPE ĐỂ HTML ONCLICK GỌI ĐƯỢC
+        // ==========================================
+        window.verifyLogin = verifyLogin;
+        window.logout = logout;
+        window.toggleTheme = toggleTheme;
+        window.switchMainTab = switchMainTab;
+        window.switchSubTab = switchSubTab;
+        window.importExcelData = importExcelData;
+        window.searchMSTForm = searchMSTForm;
+        window.submitForm = submitForm;
+        window.cancelEdit = cancelEdit;
+        window.deleteRecord = deleteRecord;
+        window.editRecord = editRecord;
+        window.copyTerminalData = copyTerminalData;
+        window.exportDataToExcel = exportDataToExcel;
+        window.updateWeekSelect = updateWeekSelect;
+        window.renderWeeklyReport = renderWeeklyReport;
+        window.renderMonthlyReport = renderMonthlyReport;
+        window.downloadWeeklyReport = downloadWeeklyReport;
+        window.downloadMonthlyReport = downloadMonthlyReport;
 
     </script>
 </body>
