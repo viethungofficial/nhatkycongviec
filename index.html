@@ -148,10 +148,16 @@
             background: var(--terminal-bg); border-radius: var(--border-radius); padding: 15px; display: flex; flex-direction: column; 
             box-shadow: inset 0 0 20px rgba(0,0,0,0.5); border: 1px solid #1e293b; 
         }
-        .terminal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .terminal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 10px; gap: 10px; flex-wrap: wrap;}
         .terminal-title { color: #fff; font-family: 'Courier New', monospace; font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 8px;}
         .terminal-title i { color: var(--terminal-text); }
-        .btn-copy-terminal { background: #334155; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: 0.2s; display: flex; gap: 5px; align-items: center;}
+        .terminal-search-box { position: relative; display: flex; align-items: center; flex: 1; max-width: 300px;}
+        .terminal-search-box i { position: absolute; left: 10px; color: #94a3b8; font-size: 12px; }
+        .terminal-search-box input { width: 100%; padding: 6px 10px 6px 30px; border-radius: 6px; border: 1px solid #334155; background: rgba(255,255,255,0.05); color: #fff; font-size: 13px; outline: none; transition: 0.2s;}
+        .terminal-search-box input:focus { border-color: var(--secondary); background: rgba(255,255,255,0.1); }
+        .terminal-search-box input::placeholder { color: #64748b; }
+        
+        .btn-copy-terminal { background: #334155; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: 0.2s; display: flex; gap: 5px; align-items: center; white-space: nowrap;}
         .btn-copy-terminal:hover { background: #475569; }
 
         .terminal-content { flex: 1; overflow-y: auto; overflow-x: auto; padding-right: 5px; }
@@ -190,7 +196,7 @@
         .stats-table td:first-child { text-align: left; font-weight: 600; }
         .row-total td { font-weight: bold; font-size: 15px; border-top: 2px solid var(--secondary) !important; color: var(--secondary) !important;}
         
-        /* Dark mode overrides for table specifically */
+        /* Dark mode overrides */
         :root[data-theme="dark"] .stats-table th:first-child { background: #1e293b; }
         :root[data-theme="dark"] .row-total { background: #0f172a !important; }
         :root[data-theme="dark"] .daily-card { background: #334155; border-color: #475569; }
@@ -242,7 +248,8 @@
             .tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 5px;}
             .tab-btn { flex: 1; white-space: nowrap; padding: 10px; }
             .report-preview { zoom: 0.55; -moz-transform: scale(0.55); width: 100%; min-width: 600px;}
-            .user-greeting { display: none; } /* Ẩn lời chào trên mobile */
+            .user-greeting { display: none; }
+            .terminal-search-box { width: 100%; max-width: none; }
         }
     </style>
 </head>
@@ -368,7 +375,13 @@
                             <div class="terminal-panel">
                                 <div class="terminal-header">
                                     <div class="terminal-title"><i class="fas fa-terminal"></i> BẢNG DỮ LIỆU</div>
-                                    <button class="btn-copy-terminal" onclick="copyTerminalData()"><i class="fas fa-copy"></i> Copy Data GSheet</button>
+                                    <div style="display: flex; gap: 10px; align-items: center; flex: 1; justify-content: flex-end;">
+                                        <div class="terminal-search-box">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" id="terminalSearch" placeholder="Tìm MST, Tên, Lỗi..." onkeyup="renderTerminal()">
+                                        </div>
+                                        <button class="btn-copy-terminal" onclick="copyTerminalData()"><i class="fas fa-copy"></i> Copy</button>
+                                    </div>
                                 </div>
                                 <div class="terminal-content">
                                     <table class="term-table">
@@ -400,7 +413,6 @@
                         <button class="sub-tab-btn" onclick="switchSubTab('bctuan')"><i class="fas fa-file-alt"></i> Báo cáo Tuần</button>
                         <button class="sub-tab-btn" onclick="switchSubTab('bcthang')"><i class="fas fa-file-signature"></i> Báo cáo Tháng</button>
                         
-                        <!-- Cụm chức năng xuất Excel được nhóm lại -->
                         <div style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
                             <input type="month" id="exportMonthSelect" title="Chọn tháng xuất Excel">
                             <button class="btn-export-excel" onclick="exportDataToExcel()"><i class="fas fa-file-excel"></i> Xuất Excel</button>
@@ -414,8 +426,9 @@
                                 <div class="stats-title"><i class="fas fa-calendar-day"></i> Tổng kết Ngày <span id="lblDay"></span></div>
                                 <div class="daily-grid" id="dailyStatsGrid"></div>
                             </div>
+
                             <div class="stats-section">
-                                <div class="stats-title"><i class="fas fa-calendar-week"></i> Tổng kết Tuần (T2 - T7) <span id="lblWeek"></span></div>
+                                <div class="stats-title"><i class="fas fa-calendar-week"></i> Bảng chi tiết Tuần <span id="lblWeek"></span></div>
                                 <div class="table-responsive">
                                     <table class="stats-table">
                                         <thead><tr><th>Thứ / Ngày</th><th>Hóa Đơn (HĐ)</th><th>Chữ Ký Số (CKS)</th><th>Bảo Hiểm (BHXH)</th><th>Đại lý/CTV</th><th>Tổng Cộng</th></tr></thead>
@@ -423,6 +436,7 @@
                                     </table>
                                 </div>
                             </div>
+                            
                             <div class="stats-section">
                                 <div class="stats-title"><i class="fas fa-calendar-alt"></i> Tổng kết Tháng <span id="lblMonth"></span></div>
                                 <div class="table-responsive">
@@ -496,6 +510,13 @@
 
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
+        // Hàm lấy thời gian chuẩn Việt Nam (YYYY-MM-DD)
+        function getVNTimeDateString() {
+            const now = new Date();
+            const vnFormatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' });
+            return vnFormatter.format(now);
+        }
+
         // --- DARK MODE THEME TOGGLE ---
         function toggleTheme() {
             const root = document.documentElement;
@@ -511,17 +532,19 @@
         function initMonthSelectors() {
             const select1 = document.getElementById('filterWeekMonth');
             const select2 = document.getElementById('filterMonthSelect');
-            const today = new Date();
+            const todayStr = getVNTimeDateString();
+            const year = todayStr.substring(0, 4);
+            const currentMonth = parseInt(todayStr.substring(5, 7));
+            
             let optionsHTML = '';
-            const year = today.getFullYear();
             for(let m = 1; m <= 12; m++) {
                 let monthVal = `${year}-${String(m).padStart(2, '0')}`;
-                let isSelected = (m === (today.getMonth() + 1)) ? 'selected' : '';
+                let isSelected = (m === currentMonth) ? 'selected' : '';
                 optionsHTML += `<option value="${monthVal}" ${isSelected}>Tháng ${String(m).padStart(2, '0')}/${year}</option>`;
             }
             select1.innerHTML = optionsHTML;
             select2.innerHTML = optionsHTML;
-            document.getElementById('exportMonthSelect').value = `${year}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+            document.getElementById('exportMonthSelect').value = `${year}-${String(currentMonth).padStart(2, '0')}`;
         }
 
         // --- LOADER & AUTH ---
@@ -545,8 +568,12 @@
         auth.onAuthStateChanged((user) => {
             if (user) {
                 const lastActive = localStorage.getItem(ACTIVITY_KEY);
-                if (lastActive && (Date.now() - parseInt(lastActive)) > TIMEOUT_LIMIT) logout(); 
-                else { localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); showMainApp(); }
+                if (lastActive && (Date.now() - parseInt(lastActive)) > TIMEOUT_LIMIT) {
+                    logout(); 
+                } else { 
+                    localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); 
+                    showMainApp(); 
+                }
             } else forceLogout();
         });
 
@@ -554,7 +581,12 @@
             const email = document.getElementById('email').value.trim(); const pass = document.getElementById('password').value.trim();
             const errorText = document.getElementById('loginError');
             if (!email || !pass) { errorText.style.display = 'block'; return; }
-            auth.signInWithEmailAndPassword(email, pass).then(() => { errorText.style.display = 'none'; showToast("Đăng nhập thành công!", false); }).catch(() => { errorText.style.display = 'block'; });
+            auth.signInWithEmailAndPassword(email, pass).then(() => { 
+                // Cập nhật session mới ngay khi đăng nhập thành công
+                localStorage.setItem(ACTIVITY_KEY, Date.now().toString());
+                errorText.style.display = 'none'; 
+                showToast("Đăng nhập thành công!", false); 
+            }).catch(() => { errorText.style.display = 'block'; });
         }
         document.getElementById('password').addEventListener('keypress', e => { if(e.key === 'Enter') verifyLogin(); });
         function forceLogout() { document.getElementById('mainApp').style.display = 'none'; document.getElementById('loginScreen').style.display = 'flex'; }
@@ -571,10 +603,10 @@
         function initApp() {
             if(currentSelectedDate !== '') return; 
             const dateInput = document.getElementById('workDate'); 
-            const today = new Date().toISOString().split('T')[0];
+            const todayStr = getVNTimeDateString();
             
-            dateInput.value = today; currentSelectedDate = today; 
-            loadDataForDate(today);
+            dateInput.value = todayStr; currentSelectedDate = todayStr; 
+            loadDataForDate(todayStr);
             updateWeekSelect();
 
             dateInput.addEventListener('change', (e) => {
@@ -583,13 +615,13 @@
                 updateAllReports(); 
             });
 
+            // Đồng hồ chuẩn Việt Nam
             setInterval(() => {
                 const now = new Date();
-                const d = String(now.getDate()).padStart(2, '0');
-                const m = String(now.getMonth() + 1).padStart(2, '0');
-                const y = now.getFullYear();
-                const timeStr = now.toLocaleTimeString('vi-VN', { hour12: false });
-                document.getElementById('current-time').innerText = `${d}/${m}/${y} - ${timeStr}`;
+                const optionsTime = { timeZone: 'Asia/Ho_Chi_Minh', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const timeStr = now.toLocaleTimeString('vi-VN', optionsTime);
+                const dateParts = getVNTimeDateString().split('-');
+                document.getElementById('current-time').innerText = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]} - ${timeStr}`;
             }, 1000);
         }
 
@@ -607,7 +639,7 @@
             updateAllReports();
         }
 
-        // --- IMPORT EXCEL THÔNG MINH (Xử lý chặt chẽ format) ---
+        // --- IMPORT EXCEL ---
         window.importExcelData = function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -615,8 +647,7 @@
             const ext = file.name.split('.').pop().toLowerCase();
             if(ext !== 'xlsx' && ext !== 'xls' && ext !== 'csv') {
                 showToast("Lỗi: File không đúng định dạng (.xlsx, .xls, .csv)!", true);
-                event.target.value = "";
-                return;
+                event.target.value = ""; return;
             }
 
             const reader = new FileReader();
@@ -627,13 +658,9 @@
                     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                     const rows = XLSX.utils.sheet_to_json(firstSheet, {header: 1, defval: ""});
                     
-                    if(rows.length < 2) {
-                        showToast("Lỗi: File không có dữ liệu!", true);
-                        return;
-                    }
+                    if(rows.length < 2) { showToast("Lỗi: File không có dữ liệu!", true); return; }
 
-                    let importedCount = 0;
-                    let lastDateStr = ""; 
+                    let importedCount = 0; let lastDateStr = ""; 
                     
                     for (let i = 1; i < rows.length; i++) {
                         const row = rows[i];
@@ -644,9 +671,7 @@
                             if (typeof rawDate === 'number') {
                                 const d = new Date(Math.round((rawDate - 25569) * 86400 * 1000));
                                 lastDateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-                            } else {
-                                lastDateStr = rawDate.toString().trim(); 
-                            }
+                            } else { lastDateStr = rawDate.toString().trim(); }
                         }
                         
                         if(!lastDateStr) continue;
@@ -665,25 +690,16 @@
                         };
 
                         if(!allData[dateIso]) allData[dateIso] = [];
-                        
                         const isDuplicate = allData[dateIso].some(item => item.mst === record.mst && item.issue === record.issue && item.company === record.company);
                         
-                        if(!isDuplicate) {
-                            allData[dateIso].push(record);
-                            importedCount++;
-                        }
+                        if(!isDuplicate) { allData[dateIso].push(record); importedCount++; }
                     }
 
                     if(importedCount > 0) {
                         showToast(`Up file thành công. Có ${importedCount} dữ liệu được đồng bộ!`, false);
-                        triggerAutoSave();
-                        renderTerminal();
-                        updateAllReports();
-                    } else {
-                        showToast("Up file thành công. 0 dữ liệu mới được đồng bộ!", false);
-                    }
+                        triggerAutoSave(); renderTerminal(); updateAllReports();
+                    } else { showToast("Up file thành công. 0 dữ liệu mới được đồng bộ!", false); }
                 } catch(err) {
-                    console.error(err);
                     showToast("Lỗi: File không đúng định dạng hoặc bị hỏng!", true);
                 }
                 event.target.value = ""; 
@@ -769,9 +785,7 @@
                 showToast("Đã lưu dữ liệu!", false);
             }
 
-            renderTerminal();
-            cancelEdit();
-            triggerAutoSave();
+            renderTerminal(); cancelEdit(); triggerAutoSave();
         }
 
         function editRecord(idx) {
@@ -809,8 +823,7 @@
         function deleteRecord(idx) {
             if(confirm("Xóa dòng " + (idx + 1) + " khỏi báo cáo?")) {
                 allData[currentSelectedDate].splice(idx, 1);
-                renderTerminal();
-                triggerAutoSave();
+                renderTerminal(); triggerAutoSave();
                 if(parseInt(document.getElementById('frm-idx').value) === idx) cancelEdit();
                 showToast("Đã xóa dữ liệu!", false);
             }
@@ -818,31 +831,50 @@
 
         function renderTerminal() {
             const tbody = document.getElementById('terminalBody');
-            const data = allData[currentSelectedDate] || [];
+            const rawData = allData[currentSelectedDate] || [];
+            const searchInput = document.getElementById('terminalSearch');
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
             
-            if(data.length === 0) {
+            if(rawData.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7"><div class="empty-terminal">Chưa có dữ liệu nào trong ngày...</div></td></tr>`;
                 return;
             }
 
             let html = '';
-            data.forEach((item, index) => {
-                html += `<tr>
-                    <td class="t-stt">[${index + 1}]</td>
-                    <td class="t-mst">${item.mst}</td>
-                    <td class="t-sdt">${item.sdt}</td>
-                    <td class="t-ten">${item.company}</td>
-                    <td class="t-loai">${item.type}</td>
-                    <td class="t-vd">> ${item.issue}</td>
-                    <td class="t-action">
-                        <button class="action-btn-sm edit-btn" onclick="editRecord(${index})" title="Sửa"><i class="fas fa-edit"></i></button>
-                        <button class="action-btn-sm del-btn" onclick="deleteRecord(${index})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>`;
+            let matchCount = 0;
+
+            rawData.forEach((item, originalIndex) => {
+                const isMatch = (item.mst || '').toLowerCase().includes(searchTerm) ||
+                                (item.company || '').toLowerCase().includes(searchTerm) ||
+                                (item.issue || '').toLowerCase().includes(searchTerm) ||
+                                (item.sdt || '').toLowerCase().includes(searchTerm);
+                
+                if (isMatch) {
+                    html += `<tr>
+                        <td class="t-stt">[${originalIndex + 1}]</td>
+                        <td class="t-mst">${item.mst}</td>
+                        <td class="t-sdt">${item.sdt}</td>
+                        <td class="t-ten">${item.company}</td>
+                        <td class="t-loai">${item.type}</td>
+                        <td class="t-vd">> ${item.issue}</td>
+                        <td class="t-action">
+                            <button class="action-btn-sm edit-btn" onclick="editRecord(${originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn-sm del-btn" onclick="deleteRecord(${originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>`;
+                    matchCount++;
+                }
             });
-            tbody.innerHTML = html;
-            const container = document.querySelector('.terminal-content');
-            container.scrollTop = container.scrollHeight;
+
+            if(matchCount === 0 && searchTerm !== "") {
+                tbody.innerHTML = `<tr><td colspan="7"><div class="empty-terminal">Không tìm thấy kết quả phù hợp cho "${searchTerm}"...</div></td></tr>`;
+            } else {
+                tbody.innerHTML = html;
+                if(!searchTerm) {
+                    const container = document.querySelector('.terminal-content');
+                    container.scrollTop = container.scrollHeight;
+                }
+            }
         }
 
         function copyTerminalData() {
@@ -981,14 +1013,15 @@
             }
 
             let weekHtml = ''; let weekTotalStats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
-            
+
             filteredWeekDays.forEach((d) => {
                 let tempDate = new Date(d);
                 let dayNum = tempDate.getDay();
-                let dayName = dayNum === 0 ? 'Chủ Nhật' : 'Thứ ' + (dayNum + 1);
+                let dayName = dayNum === 0 ? 'CN' : 'Thứ ' + (dayNum + 1);
 
                 let s = calculateStatsForDates([d]);
                 weekHtml += `<tr><td>${dayName} (${d.substring(8,10)})</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
+                
                 weekTotalStats['HĐ'] += s['HĐ']; weekTotalStats['CKS'] += s['CKS']; weekTotalStats['BHXH'] += s['BHXH']; weekTotalStats['ĐL/CTV'] += s['ĐL/CTV']; weekTotalStats['Total'] += s['Total'];
             });
             weekHtml += `<tr class="row-total"><td>TỔNG TUẦN</td><td>${weekTotalStats['HĐ']}</td><td>${weekTotalStats['CKS']}</td><td>${weekTotalStats['BHXH']}</td><td>${weekTotalStats['ĐL/CTV']}</td><td>${weekTotalStats['Total']}</td></tr>`;
@@ -1005,7 +1038,7 @@
             document.getElementById('monthlyTableBody').innerHTML = monthHtml;
         }
 
-        // --- XUẤT EXCEL DATA THÁNG CHUẨN G-SHEET ---
+        // --- XUẤT EXCEL DATA THÁNG ---
         window.exportDataToExcel = function() {
             const filterVal = document.getElementById('exportMonthSelect').value; 
             if(!filterVal) return showToast("Vui lòng chọn tháng!", true);
@@ -1043,7 +1076,7 @@
             dataToExport.forEach(item => {
                 let currentItem = { ...item };
                 if (currentItem.Ngày === lastDate) {
-                    currentItem.Ngày = ""; // Xóa dữ liệu ngày nếu trùng bên trên
+                    currentItem.Ngày = ""; 
                 } else {
                     lastDate = currentItem.Ngày;
                 }
@@ -1068,7 +1101,6 @@
                 }
             }
             
-            // Khớp cột chuẩn
             ws['!cols'] = [{wch: 12}, {wch: 15}, {wch: 12}, {wch: 40}, {wch: 12}, {wch: 12}, {wch: 30}];
 
             const wb = XLSX.utils.book_new();
