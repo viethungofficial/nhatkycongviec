@@ -369,7 +369,7 @@
 </head>
 <body>
 
-    <!-- MÀN HÌNH LOADING PRO -->
+    <!-- MÀN HÌNH LOADING PRO (Thay thế loader cũ) -->
     <div id="loader" class="pro-loader-wrapper">
         <div class="loader-light-effect"></div>
         <div class="pro-loader">
@@ -664,6 +664,7 @@
             const issueInput = document.getElementById('frm-issue');
             const suggestionsBox = document.getElementById('issue-suggestions');
 
+            // Lấy danh sách các vấn đề duy nhất (unique) từ lịch sử
             function getUniqueIssues() {
                 let issues = new Set();
                 for (let date in allData) {
@@ -676,6 +677,7 @@
                 return Array.from(issues);
             }
 
+            // Xử lý khi gõ phím
             issueInput.addEventListener('input', function() {
                 const val = this.value.trim().toLowerCase();
                 suggestionsBox.innerHTML = '';
@@ -685,6 +687,7 @@
                 }
 
                 const uniqueIssues = getUniqueIssues();
+                // Lọc những từ khóa có chứa chuỗi đang gõ
                 const matches = uniqueIssues.filter(issue => issue.toLowerCase().includes(val));
 
                 if (matches.length > 0) {
@@ -704,6 +707,7 @@
                 }
             });
 
+            // Ẩn bảng gợi ý khi click ra ngoài
             document.addEventListener('click', function(e) {
                 if (e.target !== issueInput && e.target !== suggestionsBox) {
                     suggestionsBox.style.display = 'none';
@@ -733,11 +737,13 @@
             if(savedTheme === 'dark') document.querySelector('#btn-theme i').className = 'fas fa-sun';
             
             initMonthSelectors();
-            setupAutocomplete(); 
+            setupAutocomplete(); // Kích hoạt tính năng Auto-suggest
 
+            // Gắn debounce 300ms cho ô tìm kiếm
             document.getElementById('terminalSearch').addEventListener('input', debounce(renderTerminal, 300));
         });
 
+        // Lắng nghe trạng thái đăng nhập thực tế
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const lastActive = localStorage.getItem(ACTIVITY_KEY);
@@ -871,103 +877,7 @@
         }
 
         // ==========================================
-        // TÌM KIẾM CÔNG TY 3 LỚP (NGẦM HOÀN TOÀN)
-        // ==========================================
-        async function searchMSTForm() {
-            let mstInput = document.getElementById('frm-mst').value.replace(/[^0-9-]/g, '');
-            document.getElementById('frm-mst').value = mstInput;
-            
-            if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!", true);
-
-            const btn = document.getElementById('btnSearchMST');
-            const originalIcon = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
-
-            try {
-                let foundName = "";
-
-                // LỚP 1: API VietQR (Tốc độ cao nhất, an toàn nhất)
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 4000); // Đợi 4s
-                    
-                    let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`, { signal: controller.signal });
-                    clearTimeout(timeoutId);
-                    
-                    let data = await res.json();
-                    if (data.code === "00" && data.data && data.data.name) {
-                        foundName = data.data.name;
-                    }
-                } catch (err) {
-                    console.warn("Lớp 1 Timeout");
-                }
-
-                // LỚP 2: Masothue.com (Dùng Proxy AllOrigins)
-                if (!foundName) {
-                    try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 6000); // Đợi 6s
-                        
-                        let proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
-                        let res1 = await fetch(proxyUrl, { signal: controller.signal });
-                        clearTimeout(timeoutId);
-                        
-                        let data1 = await res1.json();
-                        if (data1.contents) {
-                            let match = data1.contents.match(/<title>(.*?)<\/title>/);
-                            if (match && match[1] && match[1].includes('Mã số thuế')) {
-                                let parts = match[1].split('-');
-                                if (parts.length > 1) { 
-                                    parts.shift(); 
-                                    foundName = parts.join('-').trim(); 
-                                }
-                            }
-                        }
-                    } catch (err) {
-                        console.warn("Lớp 2 Timeout");
-                    }
-                }
-
-                // LỚP 3: Dự phòng trường hợp Proxy 1 quá tải (Dùng Proxy Codetabs)
-                if (!foundName) {
-                    try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 6000); // Đợi 6s
-                        
-                        let proxyUrl2 = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
-                        let res2 = await fetch(proxyUrl2, { signal: controller.signal });
-                        clearTimeout(timeoutId);
-                        
-                        let text = await res2.text();
-                        let match = text.match(/<title>(.*?)<\/title>/);
-                        if (match && match[1] && match[1].includes('Mã số thuế')) {
-                            let parts = match[1].split('-');
-                            if (parts.length > 1) { 
-                                parts.shift(); 
-                                foundName = parts.join('-').trim(); 
-                            }
-                        }
-                    } catch (err) {
-                        console.warn("Lớp 3 Timeout");
-                    }
-                }
-
-                // TRẢ KẾT QUẢ CUỐI CÙNG
-                if (foundName) { 
-                    document.getElementById('frm-company').value = foundName; 
-                    showToast("Tra cứu thành công!", false); 
-                } else { 
-                    showToast("Mạng nghẽn! Hệ thống không tìm thấy, bạn nhập tay nhé.", true); 
-                }
-            } catch (error) { 
-                showToast("Lỗi hệ thống tra cứu!", true); 
-            } finally {
-                btn.innerHTML = originalIcon; btn.disabled = false;
-            }
-        }
-
-        // ==========================================
-        // XỬ LÝ TERMINAL VÀ DATA
+        // DỮ LIỆU & TERMINAL
         // ==========================================
         function importExcelData(event) {
             const file = event.target.files[0];
@@ -1041,6 +951,50 @@
             renderTerminal();
             cancelEdit(); 
             updateStatusIndicator("Hệ thống sẵn sàng", "");
+        }
+
+        async function searchMSTForm() {
+            let mstInput = document.getElementById('frm-mst').value.replace(/[^0-9-]/g, '');
+            document.getElementById('frm-mst').value = mstInput;
+            
+            if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!", true);
+
+            const btn = document.getElementById('btnSearchMST');
+            const originalIcon = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+
+            try {
+                let foundName = "";
+                let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
+                let data = await res.json();
+                if (data.code === "00" && data.data && data.data.name) foundName = data.data.name;
+
+                if (!foundName) {
+                    try {
+                        let proxyUrl1 = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
+                        let res1 = await fetch(proxyUrl1);
+                        let data1 = await res1.json();
+                        if (data1.contents) {
+                            let match = data1.contents.match(/<title>(.*?)<\/title>/);
+                            if (match && match[1] && match[1].includes('Mã số thuế')) {
+                                let parts = match[1].split('-');
+                                if (parts.length > 1) { parts.shift(); foundName = parts.join('-').trim(); }
+                            }
+                        }
+                    } catch (err) {}
+                }
+
+                if (foundName) { 
+                    document.getElementById('frm-company').value = foundName; 
+                    showToast("Tra cứu thành công!", false); 
+                } else { 
+                    showToast("Không tìm thấy Tên Cty!", true); 
+                }
+            } catch (error) { 
+                showToast("Lỗi kết nối mạng!", true); 
+            } finally {
+                btn.innerHTML = originalIcon; btn.disabled = false;
+            }
         }
 
         function submitForm() {
@@ -1531,7 +1485,7 @@
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Hóa Đơn</th>
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">CKS</th>
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">BHXH</th>
-                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Đại lý / CTV</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Đại lý/CTV</th>
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2;">Tổng Cộng</th>
                                 </tr>
                             </thead>
