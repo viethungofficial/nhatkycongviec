@@ -645,8 +645,16 @@
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
         // ==========================================
-        // DEBOUNCE FUNCTION & SEARCH LISTENER
+        // UTILITY FUNCTIONS & DEBOUNCE
         // ==========================================
+        
+        // Hàm thay thế các giá trị rỗng thành "—" để xuất file / lưu sheet
+        function formatEmptyField(val) {
+            if (val === null || val === undefined) return "—";
+            let strVal = val.toString().trim();
+            return strVal === "" ? "—" : strVal;
+        }
+
         function debounce(func, delay) {
             let timeoutId;
             return function (...args) {
@@ -907,7 +915,10 @@
 
                         let rawDate = row[0];
                         if (rawDate) {
-                            if (typeof rawDate === 'number') {
+                            // Cố gắng lọc cả các ký tự "-" điền vào do xuất file cũ
+                            if (rawDate === "—" && lastDateStr) {
+                                // giữ nguyên lastDateStr
+                            } else if (typeof rawDate === 'number') {
                                 const d = new Date(Math.round((rawDate - 25569) * 86400 * 1000));
                                 lastDateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
                             } else { lastDateStr = rawDate.toString().trim(); }
@@ -919,13 +930,16 @@
                         if(parts.length !== 3) continue;
                         const dateIso = `${parts[2]}-${parts[1]}-${parts[0]}`;
                         
+                        // Lọc các giá trị import nếu là "—" thì chuyển lại thành rỗng "" cho CSDL
+                        const filterDash = (val) => (val && val.toString().trim() === "—") ? "" : (val ? val.toString().trim() : "");
+
                         const record = {
-                            mst: row[1] ? row[1].toString().trim() : "",
-                            sdt: row[2] ? row[2].toString().trim() : "",
-                            company: row[3] ? row[3].toString().trim() : "",
-                            type: row[4] ? row[4].toString().trim() : "HĐ",
-                            tech: row[5] ? row[5].toString().trim() : "Hưng",
-                            issue: row[6] ? row[6].toString().trim() : ""
+                            mst: filterDash(row[1]),
+                            sdt: filterDash(row[2]),
+                            company: filterDash(row[3]),
+                            type: filterDash(row[4]) || "HĐ",
+                            tech: filterDash(row[5]) || "Hưng",
+                            issue: filterDash(row[6])
                         };
 
                         if(!allData[dateIso]) allData[dateIso] = [];
@@ -1088,13 +1102,19 @@
                                 (item.sdt || '').toLowerCase().includes(searchTerm);
                 
                 if (isMatch) {
+                    // Dùng logic hiển thị "—" cho Terminal nếu rỗng
+                    const d_mst = item.mst ? item.mst : "<span style='color:#475569'>—</span>";
+                    const d_sdt = item.sdt ? item.sdt : "<span style='color:#475569'>—</span>";
+                    const d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
+                    const d_issue = item.issue ? "> " + item.issue : "<span style='color:#475569'>—</span>";
+
                     html += `<tr>
                         <td class="t-stt">[${originalIndex + 1}]</td>
-                        <td class="t-mst">${item.mst}</td>
-                        <td class="t-sdt">${item.sdt}</td>
-                        <td class="t-ten">${item.company}</td>
+                        <td class="t-mst">${d_mst}</td>
+                        <td class="t-sdt">${d_sdt}</td>
+                        <td class="t-ten">${d_company}</td>
                         <td class="t-loai">${item.type}</td>
-                        <td class="t-vd">> ${item.issue}</td>
+                        <td class="t-vd">${d_issue}</td>
                         <td class="t-action">
                             <button class="action-btn-sm edit-btn" onclick="editRecord(${originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
                             <button class="action-btn-sm del-btn" onclick="deleteRecord(${originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
@@ -1115,13 +1135,14 @@
             }
         }
 
+        // Đã cập nhật copyClipboard để áp dụng "—"
         function copyTerminalData() {
             const data = allData[currentSelectedDate] || [];
             if(data.length === 0) return showToast("Bảng trống!", true);
 
             let allText = [];
             data.forEach((item) => {
-                allText.push(`${item.mst}\t${item.sdt}\t${item.company}\t${item.type}\t${item.tech}\t${item.issue}`);
+                allText.push(`${formatEmptyField(item.mst)}\t${formatEmptyField(item.sdt)}\t${formatEmptyField(item.company)}\t${formatEmptyField(item.type)}\t${formatEmptyField(item.tech)}\t${formatEmptyField(item.issue)}`);
             });
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${data.length} dòng dữ liệu!`, false));
         }
@@ -1144,10 +1165,22 @@
             const dataToSave = allData[currentSelectedDate] || [];
             updateStatusIndicator("Đồng bộ Đám mây...", "saving");
 
+            // Lưu thẳng lên Firebase gốc với dữ liệu gốc (chuỗi rỗng sẽ là chuỗi rỗng để không hỏng chức năng search/edit)
             const firebasePromise = set(ref(database, 'visnam_data/' + currentSelectedDate), dataToSave);
+            
+            // Xử lý dữ liệu chuyển đổi các chuỗi rỗng thành "—" trước khi đẩy lên Google Sheets
+            const formattedDataForSheets = dataToSave.map(item => ({
+                mst: formatEmptyField(item.mst),
+                company: formatEmptyField(item.company),
+                sdt: formatEmptyField(item.sdt),
+                type: formatEmptyField(item.type),
+                tech: formatEmptyField(item.tech),
+                issue: formatEmptyField(item.issue)
+            }));
+
             const sheetPromise = fetch(GOOGLE_SHEETS_API, {
                 method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ date: currentSelectedDate, data: dataToSave, sheetName: "data" })
+                body: JSON.stringify({ date: currentSelectedDate, data: formattedDataForSheets, sheetName: "data" })
             });
 
             Promise.all([firebasePromise, sheetPromise]).then(() => {
@@ -1280,6 +1313,7 @@
             document.getElementById('monthlyTableBody').innerHTML = monthHtml;
         }
 
+        // Đã cập nhật chức năng xuất Excel để điền "—"
         function exportDataToExcel() {
             const filterVal = document.getElementById('exportMonthSelect').value; 
             if(!filterVal) return showToast("Vui lòng chọn tháng!", true);
@@ -1293,12 +1327,12 @@
                     allData[d].forEach(item => {
                         dataToExport.push({
                             "Ngày": formatVN(d),
-                            "MST": item.mst,
-                            "SĐT": item.sdt,
-                            "Tên công ty": item.company,
-                            "Loại hỗ trợ": item.type,
-                            "Tên KT": item.tech,
-                            "Vấn đề hỗ trợ": item.issue
+                            "MST": formatEmptyField(item.mst),
+                            "SĐT": formatEmptyField(item.sdt),
+                            "Tên công ty": formatEmptyField(item.company),
+                            "Loại hỗ trợ": formatEmptyField(item.type),
+                            "Tên KT": formatEmptyField(item.tech),
+                            "Vấn đề hỗ trợ": formatEmptyField(item.issue)
                         });
                     });
                 }
@@ -1317,7 +1351,7 @@
             dataToExport.forEach(item => {
                 let currentItem = { ...item };
                 if (currentItem.Ngày === lastDate) {
-                    currentItem.Ngày = ""; 
+                    currentItem.Ngày = "—"; // Áp dụng "—" cho cả trường Ngày bị lặp
                 } else {
                     lastDate = currentItem.Ngày;
                 }
