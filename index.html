@@ -256,7 +256,7 @@
         /* ==========================================
            BẢNG DASHBOARD (NẰM DƯỚI FORM)
            ========================================== */
-        .dashboard-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .dashboard-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
         .dash-card { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--border-color); box-shadow: 0 3px 10px rgba(0,0,0,0.02); overflow: hidden; display: flex; flex-direction: column; }
         
         /* CẬP NHẬT: Gradient background cho Header Dashboard */
@@ -523,7 +523,7 @@
                         <!-- Table 1: Top SĐT -->
                         <div class="dash-card">
                             <div class="dash-card-header">
-                                <div><i class="fas fa-trophy"></i> TOP 3 SĐT HỖ TRỢ NHIỀU NHẤT</div>
+                                <div><i class="fas fa-trophy"></i> TOP 3 SĐT HỖ TRỢ </div>
                             </div>
                             <div class="dash-table-wrapper">
                                 <table class="dash-table">
@@ -540,7 +540,29 @@
                                 </table>
                             </div>
                         </div>
-                        <!-- Table 2: Tỷ lệ Hỗ trợ -->
+
+                        <!-- Table 2: Top MST (MỚI THÊM) -->
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <div><i class="fas fa-medal"></i> TOP 3 MST HỖ TRỢ </div>
+                            </div>
+                            <div class="dash-table-wrapper">
+                                <table class="dash-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 20%;">Xếp Hạng</th>
+                                            <th>MST & Tên Công Ty</th>
+                                            <th style="text-align: center; width: 20%;">Số Lượt</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="gs-top-mst-body">
+                                        <!-- JS render -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Table 3: Tỷ lệ Hỗ trợ (Đẩy xuống làm ô số 3) -->
                         <div class="dash-card">
                             <div class="dash-card-header">
                                 <div><i class="fas fa-chart-pie"></i>TỶ LỆ CÁC LOẠI HỖ TRỢ (All-time)</div>
@@ -771,6 +793,7 @@
         // ==========================================
         function updateGlobalStats() {
             let phoneData = {};
+            let mstData = {}; // Thêm dòng này
             let typeCounts = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0 };
             let totalRecords = 0;
 
@@ -786,6 +809,17 @@
                         phoneData[phone].count++;
                         if (item.company && item.company !== "—") {
                             phoneData[phone].company = item.company; // Cập nhật công ty mới nhất
+                        }
+                    }
+                    // Phân tích MST kèm Tên công ty (THÊM MỚI)
+                    if (item.mst && item.mst !== "—" && item.mst.trim() !== "") {
+                        let mst = item.mst.trim();
+                        if (!mstData[mst]) {
+                            mstData[mst] = { count: 0, company: item.company || "Cty không xác định" };
+                        }
+                        mstData[mst].count++;
+                        if (item.company && item.company !== "—") {
+                            mstData[mst].company = item.company; // Cập nhật công ty mới nhất
                         }
                     }
                     // Phân tích Type
@@ -822,7 +856,27 @@
                 topHtml = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có dữ liệu hỗ trợ</td></tr>`;
             }
             document.getElementById('gs-top-phone-body').innerHTML = topHtml;
-
+            // --- 1.5. RENDER BẢNG TOP MST (THÊM MỚI) ---
+            let sortedMst = Object.entries(mstData).sort((a, b) => b[1].count - a[1].count);
+            let topMstLimit = Math.min(3, sortedMst.length);
+            let topMstHtml = "";
+            
+            for(let i = 0; i < topMstLimit; i++) {
+                let mstStr = sortedMst[i][0];
+                let data = sortedMst[i][1];
+                topMstHtml += `<tr>
+                    <td class="${rankClasses[i]}">${rankIcons[i]}</td>
+                    <td>
+                        <div style="font-weight: 700; color: var(--primary);">${mstStr}</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;"><i class="fas fa-building"></i> ${data.company}</div>
+                    </td>
+                    <td style="text-align: center;"><span class="rank-badge">${data.count}</span></td>
+                </tr>`;
+            }
+            if(topMstLimit === 0) {
+                topMstHtml = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có dữ liệu hỗ trợ</td></tr>`;
+            }
+            document.getElementById('gs-top-mst-body').innerHTML = topMstHtml;
             // --- 2. RENDER BẢNG TỶ LỆ CÓ PROGRESS BAR ---
             let ratioHtml = "";
             if(totalRecords > 0) {
