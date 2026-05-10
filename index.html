@@ -1600,31 +1600,22 @@
             
             let html = `
                 <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 20pt 40pt; text-align: justify;">
-                    <table style="width: 100%; border: none; margin-bottom: 10pt;">
-                        <tr>
-                            <td style="border: none; text-align: left; width: 40%; vertical-align: top;">
-                                <div style="font-family: Arial, sans-serif; font-weight: 900; font-size: 26pt; color: #1a56a6; letter-spacing: -1px; line-height: 1;">visnam<span style="color: #f39c12;">.</span></div>
-                                <div style="font-family: Arial, sans-serif; font-size: 10pt; color: #f39c12; letter-spacing: 0.5px; margin-top: 2px;">save time save money</div>
-                            </td>
-                            <td style="border: none; text-align: right; width: 60%;"></td>
-                        </tr>
-                    </table>
                     
                     <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC TUẦN ${String(weekNumber).padStart(2, '0')} THÁNG ${m}</div>
                     
                     <table style="width: 100%; border: none; margin-bottom: 15pt;">
-                        <tr><td style="border:none; padding: 3pt; width: 50%;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 3pt;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
-                        <tr><td style="border:none; padding: 3pt;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none; padding: 3pt;"><b>Thời gian:</b> Tuần ${String(weekNumber).padStart(2, '0')} (từ ${startDay} đến ${endDay})</td></tr>
+                        <tr><td style="border:none; padding: 1pt; width: 50%;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 1pt;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
+                        <tr><td style="border:none; padding: 1pt;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none; padding: 1pt;"><b>Thời gian:</b> Tuần ${String(weekNumber).padStart(2, '0')} (từ ${startDay} - ${endDay})</td></tr>
                     </table>
 
                     <div style="margin-bottom: 15pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">1. Nội dung công việc đã thực hiện:</h3>
-                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tuần, tôi đã tiếp nhận và thực hiện các công việc kỹ thuật chuyên sâu sau:</p>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tuần, tôi đã tiếp nhận và thực hiện các công việc kỹ thuật sau:</p>
                         <ul style="margin-top: 5pt; margin-bottom: 5pt;">
                             <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng khắc phục sự cố, xử lý lỗi phần mềm liên quan đến <b>hóa đơn điện tử</b>.</li>
-                            <li style="margin-bottom: 4pt;">Triển khai cài đặt, cấu hình hệ thống và gia hạn <b>chữ ký số</b> cho các doanh nghiệp.</li>
-                            <li style="margin-bottom: 4pt;">Hướng dẫn và hỗ trợ khách hàng kê khai, nộp hồ sơ <b>bảo hiểm xã hội (BHXH) điện tử</b>.</li>
-                            <li style="margin-bottom: 4pt;">Kiểm tra, khắc phục lỗi hệ thống từ xa qua UltraViewer/TeamViewer đảm bảo tiến độ công việc của khách hàng.</li>
+                            <li style="margin-bottom: 4pt;">Triển khai cài đặt, cấu hình hệ thống và khắc phục lỗi liên quan đến <b>chữ ký số</b> cho các doanh nghiệp.</li>
+                            <li style="margin-bottom: 4pt;">Hướng dẫn và hỗ trợ khách hàng kê khai, nộp hồ sơ <b>bảo hiểm xã hội (BHXH)</b>.</li>
+                            <li style="margin-bottom: 4pt;">Kiểm tra, khắc phục lỗi hệ thống từ xa qua UltraViewer đảm bảo tiến độ công việc của khách hàng.</li>
                             <li style="margin-bottom: 4pt;">Phối hợp và hỗ trợ các yêu cầu kỹ thuật phát sinh từ Đại lý/CTV.</li>
                         </ul>
                     </div>
@@ -1681,21 +1672,12 @@
 
             let html = `
                 <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 20pt 40pt; text-align: justify;">
-                    <table style="width: 100%; border: none; margin-bottom: 10pt;">
-                        <tr>
-                            <td style="border: none; text-align: left; width: 40%; vertical-align: top;">
-                                <div style="font-family: Arial, sans-serif; font-weight: 900; font-size: 26pt; color: #1a56a6; letter-spacing: -1px; line-height: 1;">visnam<span style="color: #f39c12;">.</span></div>
-                                <div style="font-family: Arial, sans-serif; font-size: 10pt; color: #f39c12; letter-spacing: 0.5px; margin-top: 2px;">save time save money</div>
-                            </td>
-                            <td style="border: none; text-align: right; width: 60%;"></td>
-                        </tr>
-                    </table>
                     
                     <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
                     
                     <table style="width: 100%; border: none; margin-bottom: 15pt;">
                         <tr><td style="border:none; padding: 3pt; width: 50%; text-align: left;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 3pt; text-align: left;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
-                        <tr><td style="border:none; padding: 3pt; text-align: left;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none; padding: 3pt; text-align: left;"><b>Thời gian báo cáo:</b> Từ ${startDDMM}/${year} đến ${endDDMM}/${year}</td></tr>
+                        <tr><td style="border:none; padding: 3pt; text-align: left;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none; padding: 3pt; text-align: left;"><b>Thời gian:</b> Từ ${startDDMM}/${year} đến ${endDDMM}/${year}</td></tr>
                     </table>
 
                     <div style="margin-bottom: 15pt;">
