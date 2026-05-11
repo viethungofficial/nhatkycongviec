@@ -9,6 +9,9 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20 25 L50 80' stroke='%231a56a6' stroke-width='16' stroke-linecap='round'/%3E%3Cpath d='M80 25 L50 80' stroke='%23f39c12' stroke-width='16' stroke-linecap='round'/%3E%3C/svg%3E">
     <!-- Giữ lại thư viện Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+    <!-- THÊM MỚI: Thư viện xuất DOCX -->
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <style>
         /* Biến màu mặc định (Sáng) */
@@ -1732,7 +1735,9 @@
         }
 
         function exportHTMLToDoc(elementId, filename) {
-            var preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+            // Chuẩn bị khung HTML (Giữ nguyên CSS của bạn)
+            var preHtml = `<!DOCTYPE html>
+            <html>
             <head><meta charset='utf-8'><title>Export HTML To Doc</title>
             <style>
                 body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; }
@@ -1744,12 +1749,12 @@
             </style></head><body>`;
             var postHtml = "</body></html>";
             var html = preHtml + document.getElementById(elementId).innerHTML + postHtml;
-            var blob = new Blob(['\ufeff', html], { type: 'application/msword' });
-            var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
-            var downloadLink = document.createElement("a"); document.body.appendChild(downloadLink);
-            if(navigator.msSaveOrOpenBlob ){ navigator.msSaveOrOpenBlob(blob, filename + '.doc'); }
-            else { downloadLink.href = url; downloadLink.download = filename + '.doc'; downloadLink.click(); }
-            document.body.removeChild(downloadLink);
+
+            // Sử dụng html-docx-js để chuyển đổi HTML sang Blob định dạng .docx chuẩn
+            var converted = htmlDocx.asBlob(html, { orientation: 'portrait' });
+            
+            // Sử dụng FileSaver.js để tải file về máy tính
+            saveAs(converted, filename + '.docx');
         }
 
         window.downloadWeeklyReport = function() { exportHTMLToDoc('preview-tuan', exportWeekFilename); }
