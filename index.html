@@ -292,8 +292,28 @@
            BẢNG DASHBOARD (NẰM DƯỚI FORM)
            ========================================== */
         .dashboard-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
-        .dash-card { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--border-color); box-shadow: 0 3px 10px rgba(0,0,0,0.02); overflow: hidden; display: flex; flex-direction: column; }
         
+        .dash-card { 
+            background: var(--card-bg); border-radius: var(--border-radius); 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.02); 
+            overflow: hidden; display: flex; flex-direction: column; 
+            /* Thêm hiệu ứng chuyển động mượt và nẩy nhẹ */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hiệu ứng rê chuột (Hover) cho 3 thẻ thống kê */
+        .dash-card:hover {
+            transform: translateY(-8px); /* Nhấc thẻ nổi lên 8px */
+            box-shadow: 0 15px 30px rgba(26,86,166,0.12); /* Đổ bóng tỏa ra */
+            border-color: var(--primary); /* Làm sáng viền lên màu xanh */
+        }
+        
+        /* Riêng chế độ Dark Mode khi Hover sẽ tối ưu bóng đổ và viền Cam */
+        :root[data-theme="dark"] .dash-card:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            border-color: var(--secondary);
+        }
         /* CẬP NHẬT: Gradient background cho Header Dashboard */
         .dash-card-header { 
             background: linear-gradient(90deg, var(--primary), #2b6cb0); 
@@ -761,7 +781,8 @@
     <!-- SCRIPT FIREBASE V10 MODULAR & TOÀN BỘ LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // THÊM: setPersistence và inMemoryPersistence
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, inMemoryPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         const firebaseConfig = {
             apiKey: "AIzaSyDHFTbNY8ycl4NsfIqgu7v5lGEVwsO0LB4", 
@@ -774,6 +795,7 @@
         };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        setPersistence(auth, inMemoryPersistence);
         const database = getDatabase(app);
         const GOOGLE_SHEETS_API = "https://script.google.com/macros/s/AKfycbx8DSQqm7DwH_jIFNwH8_f9pcecoK4j4NUT7u226IHZPTpCBJ-b9--N2cH3WotvupEdbA/exec";
         let allData = {}; 
