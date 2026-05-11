@@ -110,8 +110,19 @@
         .login-box h2 { margin-bottom: 25px; font-size: 20px; }
         .input-group { position: relative; margin-bottom: 15px; }
         .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px;}
-        .input-group input { width: 100%; padding: 12px 15px 12px 40px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; outline: none; background-color: var(--input-bg); color: var(--text-main); transition: var(--transition-fast);}
-        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,166,0.1); }
+        .input-group input { 
+            width: 100%; padding: 12px 15px 12px 40px; 
+            border: 2px solid var(--border-color); 
+            border-radius: 16px; /* Bo tròn góc */
+            font-size: 13px; outline: none; background-color: var(--input-bg); color: var(--text-main); 
+            /* Thêm độ nẩy mượt mà */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .input-group input:focus { 
+            border-color: var(--primary); 
+            transform: translateY(-1.5px); /* Nhấc nẩy lên 3px */
+            box-shadow: 0 8px 15px rgba(26,86,166,0.15); /* Đổ bóng sâu hơn tạo cảm giác nổi 3D */
+        }
         .btn-login { width: 100%; padding: 12px; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: var(--transition-fast); }
         .btn-login:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(26,86,166,0.4); }
         .btn-login:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
@@ -145,12 +156,24 @@
         .date-picker-container label { font-weight: 600; color: var(--primary); margin-right: 8px; font-size: 12px; }
         
         /* Cập nhật thuộc tính background-color để không ghi đè mất custom SVG */
-        input[type="date"], select, input[type="month"] { padding: 4px 8px; border: 1.5px solid #94a3b8; border-radius: 4px; font-weight: 600; background-color: var(--card-bg); color: var(--text-main); outline: none; transition: var(--transition-fast); font-size: 12px; cursor: pointer;}
-        input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,166,0.1); }
+        input[type="date"], select, input[type="month"] { 
+            padding: 4px 8px; border: 1.5px solid #94a3b8; 
+            border-radius: 12px; /* Bo tròn góc */
+            font-weight: 600; background-color: var(--card-bg); color: var(--text-main); 
+            outline: none; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            font-size: 12px; cursor: pointer;
+        }
+        input[type="date"]:focus, select:focus, input[type="month"]:focus { 
+            border-color: var(--primary); 
+            transform: translateY(-1.5px); /* Nhấc nẩy lên 3px */
+            box-shadow: 0 6px 12px rgba(26,86,166,0.15); 
+        }
         
-        /* Dark mode overrides */
-        :root[data-theme="dark"] .date-picker-container { border-color: #64748b; }
-        :root[data-theme="dark"] input[type="date"], :root[data-theme="dark"] select, :root[data-theme="dark"] input[type="month"] { border-color: #64748b; background-color: #1e293b;}
+        /* Dark mode overrides cho input/select */
+        :root[data-theme="dark"] input[type="date"], :root[data-theme="dark"] select, :root[data-theme="dark"] input[type="month"] { 
+            border-color: #64748b; background-color: #1e293b;
+        }
 
         .btn-import-excel { background: #38a169; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
         .btn-import-excel:hover { background: #2f855a; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(56,161,105,0.3);}
@@ -186,11 +209,19 @@
         .frm-input { 
             width: 100%; padding: 8px 10px; 
             border: 1.5px solid #94a3b8;
-            border-radius: 6px; font-size: 12px; background-color: var(--input-bg); color: var(--text-main); transition: 0.2s; outline: none; height: 36px;
+            border-radius: 12px; /* Bo tròn góc */
+            font-size: 12px; background-color: var(--input-bg); color: var(--text-main); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            outline: none; height: 36px;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
         }
         :root[data-theme="dark"] .frm-input { border-color: #64748b; background-color: #1e293b; }
-        .frm-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,166,0.15); }
+        
+        .frm-input:focus { 
+            border-color: var(--primary); 
+            transform: translateY(-1.5px); /* Nhấc nẩy lên 3px */
+            box-shadow: 0 6px 12px rgba(26,86,166,0.15); /* Bóng đổ xuống dưới */
+        }
         
         /* Custom Select Fix (Bảo vệ icon SVG bằng !important) */
         .custom-select {
@@ -310,7 +341,7 @@
 
         .daily-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
         .daily-card { background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; text-align: center; transition: var(--transition-smooth); }
-        .daily-card:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.04); }
+        .daily-card:hover { transform: translateY(-1.5px); box-shadow: 0 8px 15px rgba(0,0,0,0.04); }
         .daily-card.total { background-color: #fffaf0; border-color: #fbd38d; }
         .daily-card.total:hover { border-color: var(--secondary); }
         .daily-card h4 { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
@@ -358,10 +389,71 @@
             .terminal-search-box { width: 100%; max-width: none; }
             .dashboard-cards { grid-template-columns: 1fr; }
         }
+        /* ==========================================
+           CSS HIỆU ỨNG TUYẾT, NGƯỜI TUYẾT & MÈO VÀNG
+           ========================================== */
+        #winter-wrapper {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; /* Tránh cản trở thao tác click chuột của app */
+            z-index: 0; overflow: hidden;
+        }
+        
+        /* Đảm bảo App luôn đè lên trên lớp hiệu ứng */
+        #mainApp, #loginScreen, header { position: relative; z-index: 1; }
+
+        /* Bông tuyết */
+        .snowflake {
+            position: absolute; top: -10px; opacity: 0.8; user-select: none;
+            animation-name: fall, shake; animation-iteration-count: infinite;
+            animation-timing-function: linear, ease-in-out;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        :root[data-theme="light"] .snowflake { color: #94a3b8; } /* Bông tuyết hơi xám nhẹ khi ở Light Mode */
+        :root[data-theme="dark"] .snowflake { color: #ffffff; }
+
+        @keyframes fall { 0% { top: -10%; } 100% { top: 110%; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(25px); } }
+
+        /* Người tuyết */
+        #snowman {
+            position: absolute; bottom: 20px; right: 5%; font-size: 70px;
+            animation: bounceSnowman 4s infinite ease-in-out; 
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
+        }
+        @keyframes bounceSnowman { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* ==========================================
+           CSS NGƯỜI TUYẾT & TUYẾT RƠI
+           ========================================== */
+        #snowman {
+            position: absolute; bottom: 20px; right: 5%; font-size: 70px;
+            animation: bounceSnowman 4s infinite ease-in-out; 
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
+            cursor: pointer; /* Biến con trỏ thành hình bàn tay khi hover */
+            pointer-events: auto; /* BẮT BUỘC: Cho phép click xuyên qua lớp wrapper */
+            z-index: 10;
+            transition: transform 0.1s;
+        }
+        
+        /* Hiệu ứng lún xuống một chút khi click chuột vào người tuyết */
+        #snowman:active {
+            transform: scale(0.9) translateY(5px);
+        }
+
+        @keyframes catWalkAnim {
+            0% { transform: translateY(0) rotate(-5deg); }
+            100% { transform: translateY(-8px) rotate(5deg); }
+        }
+        @keyframes catRun { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
-
+    <!-- ==========================================
+         HIỆU ỨNG MÙA ĐÔNG (TUYẾT & NGƯỜI TUYẾT)
+         ========================================== -->
+    <div id="winter-wrapper">
+        <div id="snowman" title="Click để tải lại trang">⛄</div>
+    </div>
     <!-- MÀN HÌNH LOADING PRO -->
     <div id="loader" class="pro-loader-wrapper">
         <div class="loader-light-effect"></div>
@@ -1733,7 +1825,53 @@
             `;
             document.getElementById('preview-thang').innerHTML = html;
         }
+        // ==========================================
+        // KHỞI TẠO HIỆU ỨNG MÙA ĐÔNG
+        // ==========================================
+        function initWinterEffects() {
+            const wrapper = document.getElementById('winter-wrapper');
+            if (!wrapper) return;
 
+            // 1. Tuyết rơi nhẹ nhàng
+            const numFlakes = 50; 
+            for (let i = 0; i < numFlakes; i++) {
+                let flake = document.createElement('div');
+                flake.className = 'snowflake';
+                flake.innerHTML = '❄';
+                flake.style.left = (Math.random() * 100) + 'vw';
+                flake.style.animationDuration = (Math.random() * 8 + 10) + 's, ' + (Math.random() * 4 + 4) + 's';
+                flake.style.animationDelay = (Math.random() * 5) + 's, ' + (Math.random() * 5) + 's';
+                flake.style.fontSize = (Math.random() * 12 + 10) + 'px';
+                flake.style.opacity = Math.random() * 0.8 + 0.2; 
+                wrapper.appendChild(flake);
+            }
+
+            // 2. Chức năng tải lại trang (Reload) khi click Người tuyết
+            const snowman = document.getElementById('snowman');
+            if (snowman) {
+                snowman.addEventListener('click', () => {
+                    // Bạn có thể giữ nguyên màn hình loading mặc định của trình duyệt
+                    window.location.reload();
+                });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initWinterEffects();
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initWinterEffects();
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initWinterEffects();
+        });
+
+        // Kích hoạt hiệu ứng ngay sau khi tải xong giao diện cơ bản
+        document.addEventListener("DOMContentLoaded", () => {
+            initWinterEffects();
+        });
         function exportHTMLToDoc(elementId, filename) {
             // Chuẩn bị khung HTML (Giữ nguyên CSS của bạn)
             var preHtml = `<!DOCTYPE html>
