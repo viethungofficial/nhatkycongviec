@@ -14,15 +14,50 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <style>
-        /* Biến màu mặc định (Sáng) */
+        /* ==========================================
+           HỌA TIẾT CHÌM BẢN ĐỒ VIỆT NAM (WATERMARK)
+           ========================================== */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw; height: 100vh;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e7/Map_of_Vietnam.svg');
+            /* Tăng kích thước bản đồ lên 85% chiều cao màn hình để hoành tráng hơn */
+            background-size: 85vh; 
+            background-position: center;
+            background-repeat: no-repeat;
+            /* TĂNG ĐỘ HIỂN THỊ: Nâng opacity từ 0.04 lên 0.12 để nhìn rõ nét chữ S */
+            opacity: 0.12; 
+            z-index: -1; 
+            pointer-events: none; 
+        }
+        
+        /* Chế độ Tối (Dark Mode) - Đảo màu bản đồ thành trắng mờ */
+        :root[data-theme="dark"] body::before {
+            opacity: 0.15;
+            filter: invert(1) opacity(0.5); 
+        }
+        /* ==========================================
+           BIẾN MÀU - CHẾ ĐỘ SÁNG (DỊU MẮT HƠN)
+           ========================================== */
         :root {
-            --primary: #1a56a6; --secondary: #f39c12; --bg-color: #f4f7fb;
-            --card-bg: #ffffff; --text-main: #2d3748; --text-muted: #718096;
-            --border-color: #e2e8f0; --input-bg: #f8fafc;
+            --primary: #1a56a6; 
+            --secondary: #f39c12; 
+            /* Hạ tông nền từ Trắng/Xanh nhạt xuống Xám-Xanh pastel dịu nhẹ */
+            --bg-color: #e2e8f0; 
+            /* Thẻ dữ liệu dùng màu Off-white (trắng sữa) thay vì trắng tinh (pure white) */
+            --card-bg: #f8fafc; 
+            --text-main: #1e293b; 
+            --text-muted: #475569; /* Chữ phụ đậm hơn một chút để dễ đọc trên nền mới */
+            --border-color: #cbd5e1; /* Viền phân cách rõ ràng hơn */
+            --input-bg: #ffffff; /* Giữ ô nhập liệu màu trắng để nổi bật nội dung gõ */
             --border-radius: 10px;
             --transition-fast: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             --transition-smooth: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            --terminal-bg: #0f172a; --terminal-text: #10b981;
+            --terminal-bg: #0f172a; 
+            --terminal-text: #10b981;
         }
 
         /* Biến màu chế độ Tối (Dark Mode) */
@@ -475,6 +510,41 @@
             100% { transform: translateY(-8px) rotate(5deg); }
         }
         @keyframes catRun { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
+        /* ==========================================
+           TRANG TRÍ CHỦ ĐỀ YÊU NƯỚC 🇻🇳
+           ========================================== */
+        /* 1. Điểm nhấn Ruy-băng Đỏ - Vàng tinh tế ở thanh Header */
+        header {
+            border-top: 4px solid #da251d !important; /* Đỏ cờ Tổ quốc */
+            border-bottom: 3px solid #ffc107 !important; /* Vàng sao vàng */
+        }
+
+        /* Đảm bảo giao diện App nổi lên trên bản đồ */
+        #mainApp, #loginScreen {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 2. Bản đồ Việt Nam in chìm (Hiển thị rõ ràng) */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 5vh; bottom: 5vh; left: 0; right: 5vw; /* Lệch sang phải một chút để cân đối */
+            /* Sử dụng bản đồ SVG chuẩn */
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e7/Map_of_Vietnam.svg');
+            background-size: contain;
+            background-position: right center;
+            background-repeat: no-repeat;
+            opacity: 0.12; /* Nổi bật vừa đủ, không làm lóa chữ */
+            z-index: 0; /* Nằm ngay trên màu nền, dưới các bảng dữ liệu */
+            pointer-events: none;
+        }
+
+        /* Tự động làm bản đồ phát sáng nhẹ khi ở Dark Mode */
+        :root[data-theme="dark"] body::after {
+            opacity: 0.08;
+            filter: invert(1) brightness(2); 
+        }
     </style>
 </head>
 <body>
@@ -511,6 +581,10 @@
             </div>
             <button id="btnLoginBtn" class="btn-login btn-gradient-animate" onclick="verifyLogin()">ĐĂNG NHẬP</button>
             <p id="loginError"><i class="fas fa-exclamation-triangle"></i> Thông tin không chính xác!</p>
+            <div style="margin-top: 30px; padding-top: 15px; border-top: 1px dashed var(--border-color); font-size: 11px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="VN" style="width: 18px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+                <span style="font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Tự hào trí tuệ Việt Nam</span>
+            </div>
         </div>
     </div>
 
