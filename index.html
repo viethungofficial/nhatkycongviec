@@ -6,7 +6,7 @@
     <title>Hỗ Trợ Kỹ Thuật - Visnam</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Favicon Mẫu Chữ V Kết Nối -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20 25 L50 80' stroke='%231a56a6' stroke-width='16' stroke-linecap='round'/%3E%3Cpath d='M80 25 L50 80' stroke='%23f39c12' stroke-width='16' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23da251d'/%3E%3Cpolygon points='50,15 61,35 85,35 66,50 73,75 50,60 27,75 34,50 15,35 39,35' fill='%23ffc107'/%3E%3C/svg%3E">
     <!-- Giữ lại thư viện Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
     <!-- THÊM MỚI: Thư viện xuất DOCX -->
@@ -109,7 +109,17 @@
         .login-logo { font-size: 40px; color: var(--primary); margin-bottom: 15px; }
         .login-box h2 { margin-bottom: 25px; font-size: 20px; }
         .input-group { position: relative; margin-bottom: 15px; }
-        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px;}
+        .input-group i { 
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%); 
+            color: var(--text-muted); font-size: 13px;
+            z-index: 10; /* Bắt buộc icon phải nổi lên trên cùng */
+            pointer-events: none; /* Xuyên qua icon, không cản trở thao tác click vào ô */
+            transition: 0.3s;
+        }
+        /* Đổi màu icon khi người dùng click vào ô nhập liệu */
+        .input-group:focus-within i {
+            color: var(--primary);
+        }
         .input-group input { 
             width: 100%; padding: 12px 15px 12px 40px; 
             border: 2px solid var(--border-color); 
@@ -509,7 +519,11 @@
             <div class="header-content">
                 <div class="save-status" id="saveStatusIndicator"><i class="fas fa-cloud"></i>Hệ thống sẵn sàng</div>
                 <div class="header-titles">
-                    <h1><i class="fas fa-headset"></i>HỖ TRỢ KỸ THUẬT</h1>
+                    <h1>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ VN" style="width: 24px; height: 16px; margin-right: 8px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">                     
+                        <span>HỖ TRỢ KỸ THUẬT </span>         
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ VN" style="width: 24px; height: 16px; margin-left: 8px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+                    </h1>
                     <p>Công ty Cổ phần thương mại Visnam</p>
                 </div>
                 <div class="header-right">
@@ -1868,12 +1882,36 @@
                 wrapper.appendChild(flake);
             }
 
-            // 2. Chức năng tải lại trang (Reload) khi click Người tuyết
+            // 2. Chức năng làm mới Dashboard (Refresh Data) khi click Người tuyết
             const snowman = document.getElementById('snowman');
             if (snowman) {
-                snowman.addEventListener('click', () => {
-                    // Bạn có thể giữ nguyên màn hình loading mặc định của trình duyệt
-                    window.location.reload();
+                snowman.addEventListener('click', async () => {
+                    // Bật thông báo và khóa click để tránh bấm liên tục nhiều lần
+                    showToast("Đang đồng bộ dữ liệu mới nhất...", false);
+                    snowman.style.pointerEvents = 'none';
+                    snowman.innerHTML = '⏳'; // Đổi tạm thành icon chờ
+                    snowman.style.transform = 'scale(1.1)';
+
+                    try {
+                        // Kéo dữ liệu mới nhất từ Firebase (Đã được import sẵn)
+                        const snapshot = await get(ref(database, 'visnam_data'));
+                        allData = snapshot.val() || {};
+                        
+                        // Cập nhật lại toàn bộ Bảng biểu, Terminal và Thống kê
+                        loadDataForDate(currentSelectedDate);
+                        updateGlobalStats();
+                        updateAllReports();
+                        
+                        showToast("Đã làm mới bảng điều khiển!", false);
+                    } catch (error) {
+                        console.error(error);
+                        showToast("Lỗi kết nối khi làm mới!", true);
+                    } finally {
+                        // Trả lại hình dáng Người tuyết ban đầu
+                        snowman.innerHTML = '⛄';
+                        snowman.style.transform = 'scale(1)';
+                        snowman.style.pointerEvents = 'auto';
+                    }
                 });
             }
         }
