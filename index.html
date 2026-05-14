@@ -397,7 +397,25 @@
         .stats-table td { text-align: center; font-size: 12px; font-weight: 500; color: var(--text-main); padding: 8px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color);}
         .stats-table td:first-child { text-align: left; font-weight: 600; }
         .row-total td { font-weight: bold; font-size: 13px; border-top: 2px solid var(--secondary) !important; color: var(--secondary) !important;}
-        
+        /* ==========================================
+        CSS NỔI BẬT DÒNG HIỆN TẠI (HIGHLIGHT)
+        ========================================== */
+        .highlight-current {
+            background-color: rgba(26, 86, 166, 0.08) !important; /* Nền xanh lam nhạt */
+            box-shadow: inset 4px 0 0 var(--primary); /* Thanh viền dọc đậm bên trái */
+        }
+        .highlight-current td {
+            color: var(--primary) !important;
+            font-weight: bold !important;
+        }
+        /* Tùy chỉnh riêng cho Chế độ Tối (Dark Mode) */
+        :root[data-theme="dark"] .highlight-current {
+            background-color: rgba(243, 156, 18, 0.15) !important;
+            box-shadow: inset 4px 0 0 var(--secondary);
+        }
+        :root[data-theme="dark"] .highlight-current td {
+            color: var(--secondary) !important;
+        }
         /* Dark mode overrides */
         :root[data-theme="dark"] .stats-table th:first-child { background-color: #1e293b; }
         :root[data-theme="dark"] .row-total { background-color: #0f172a !important; }
@@ -1696,7 +1714,10 @@
                 let dayName = dayNum === 0 ? 'CN' : 'Thứ ' + (dayNum + 1);
 
                 let s = calculateStatsForDates([d]);
-                weekHtml += `<tr><td>${dayName} (${d.substring(8,10)})</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
+                // KIỂM TRA: Nếu ngày trong vòng lặp trùng với ngày đang chọn thì thêm class highlight
+                let highlightClass = (d === currentSelectedDate) ? 'highlight-current' : '';
+                
+                weekHtml += `<tr class="${highlightClass}"><td>${dayName} (${d.substring(8,10)})</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
                 
                 weekTotalStats['HĐ'] += s['HĐ']; weekTotalStats['CKS'] += s['CKS']; weekTotalStats['BHXH'] += s['BHXH']; weekTotalStats['ĐL/CTV'] += s['ĐL/CTV']; weekTotalStats['Total'] += s['Total'];
             });
@@ -1707,7 +1728,11 @@
             let monthWeeks = getMonthWeeks(year, month); let monthHtml = ''; let monthTotalStats = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0, 'Total': 0 };
             monthWeeks.forEach(w => {
                 let s = calculateStatsForDates(w.days);
-                monthHtml += `<tr><td>${w.name}</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
+                // KIỂM TRA: Nếu tuần trong vòng lặp chứa ngày đang chọn thì thêm class highlight
+                let highlightClass = w.days.includes(currentSelectedDate) ? 'highlight-current' : '';
+                
+                monthHtml += `<tr class="${highlightClass}"><td>${w.name}</td><td>${s['HĐ']}</td><td>${s['CKS']}</td><td>${s['BHXH']}</td><td>${s['ĐL/CTV']}</td><td style="font-weight:bold; color:var(--primary);">${s['Total']}</td></tr>`;
+                
                 monthTotalStats['HĐ'] += s['HĐ']; monthTotalStats['CKS'] += s['CKS']; monthTotalStats['BHXH'] += s['BHXH']; monthTotalStats['ĐL/CTV'] += s['ĐL/CTV']; monthTotalStats['Total'] += s['Total'];
             });
             monthHtml += `<tr class="row-total"><td>TỔNG THÁNG</td><td>${monthTotalStats['HĐ']}</td><td>${monthTotalStats['CKS']}</td><td>${monthTotalStats['BHXH']}</td><td>${monthTotalStats['ĐL/CTV']}</td><td>${monthTotalStats['Total']}</td></tr>`;
