@@ -416,7 +416,7 @@
                                 <span><i class="fas fa-tools"></i> THÔNG TIN HỖ TRỢ</span>
                                 <span id="formModeBadge" style="font-size: 10px; background: #ebf4ff; color: #1a56a6; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
                             </div>
-                            <form id="inputForm">
+                            <form id="inputForm" style="display: flex; flex-direction: column; flex: 1;">
                                 <input type="hidden" id="frm-idx" value="-1">
                                 <div class="form-row">
                                     <div class="form-group" style="flex: 1.2;">
@@ -452,7 +452,7 @@
                                     </div>
                                 </div>
                                 <input type="hidden" id="frm-tech" value="Hưng">
-                                <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                <div style="display: flex; gap: 8px; margin-top: auto;">
                                     <button type="button" class="btn-submit btn-gradient-animate" id="btnSubmitForm" onclick="submitForm()">
                                         <i class="fas fa-save"></i> LƯU HỖ TRỢ
                                     </button>
@@ -480,9 +480,9 @@
                                                 <th class="t-stt">STT</th>
                                                 <th class="t-mst">MST</th>
                                                 <th class="t-sdt">SĐT</th>
-                                                <th class="t-ten">TÊN CÔNG TY</th>
-                                                <th class="t-loai">LOẠI</th>
-                                                <th class="t-vd">VẤN ĐỀ HỖ TRỢ</th>
+                                                <th class="t-ten" style="width: 100%;">TÊN CÔNG TY</th>
+                                                <th class="t-loai" style="white-space: nowrap; padding-right: 15px;">LOẠI</th>
+                                                <th class="t-vd" style="white-space: nowrap; padding-right: 15px;">VẤN ĐỀ HỖ TRỢ</th>
                                                 <th class="t-action">#</th>
                                             </tr>
                                         </thead>
@@ -497,7 +497,7 @@
                                 <span><i class="fas fa-shopping-cart"></i> THÔNG TIN MUA / GIA HẠN</span>
                                 <span id="formSalesModeBadge" style="font-size: 10px; background: #fdf2f8; color: #db2777; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
                             </div>
-                            <form id="inputSalesForm">
+                            <form id="inputSalesForm" style="display: flex; flex-direction: column; flex: 1;">
                                 <input type="hidden" id="frm-sales-idx" value="-1">
                                 <input type="hidden" id="frm-sales-date" value="">
                                 <div class="form-row">
@@ -535,7 +535,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                <div style="display: flex; gap: 8px; margin-top: auto;">
                                     <button type="button" class="btn-submit" id="btnSubmitSalesForm" onclick="submitSalesForm()" style="background: linear-gradient(-45deg, #db2777, #be185d);">
                                         <i class="fas fa-cart-plus"></i> LƯU YÊU CẦU
                                     </button>
@@ -548,8 +548,14 @@
                             <div class="terminal-panel">
                                 <div class="terminal-header">
                                     <div class="terminal-title"><i class="fas fa-list-alt" style="color: #db2777;"></i> BẢNG YÊU CẦU MUA / GIA HẠN (Toàn bộ)</div>
+                                    <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
+                                        <div class="terminal-search-box">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" id="terminalSalesSearch" placeholder="Tìm MST, Tên, SĐT...">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="terminal-content">
+                                <div class="terminal-content" id="terminalSalesContent">
                                     <table class="term-table">
                                         <thead>
                                             <tr>
@@ -557,9 +563,9 @@
                                                 <th style="width: 80px; color: #fbbf24;">Ngày</th>
                                                 <th class="t-mst">MST</th>
                                                 <th class="t-sdt">SĐT</th>
-                                                <th class="t-ten">Tên Công Ty</th>
-                                                <th style="color: #38bdf8;">Loại</th>
-                                                <th style="color: #f472b6;">Dịch vụ</th>
+                                                <th class="t-ten" style="width: 100%;">Tên Công Ty</th>
+                                                <th style="color: #38bdf8; white-space: nowrap; padding-right: 15px;">Loại</th>
+                                                <th style="color: #f472b6; white-space: nowrap; padding-right: 15px;">Dịch vụ</th>
                                                 <th class="t-action">Công cụ</th>
                                             </tr>
                                         </thead>
@@ -829,6 +835,8 @@
             initMonthSelectors();
             setupAutocomplete(); 
             document.getElementById('terminalSearch').addEventListener('input', debounce(renderTerminal, 300));
+            // Gắn event cho ô tìm kiếm Sales
+            document.getElementById('terminalSalesSearch').addEventListener('input', debounce(renderSalesTerminal, 300));
         });
 
         onAuthStateChanged(auth, async (user) => {
@@ -1275,15 +1283,28 @@
 
         window.renderSalesTerminal = function() {
             let tbody = document.getElementById('terminalSalesBody');
+            const searchInput = document.getElementById('terminalSalesSearch');
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+
             let html = ''; let stt = 1;
 
-            let sortedDates = Object.keys(allData).sort((a, b) => new Date(b) - new Date(a));
+            // ĐẢO LẠI THỨ TỰ SẮP XẾP: Tăng dần (Từ ngày cũ nhất đến ngày mới nhất)
+            let sortedDates = Object.keys(allData).sort((a, b) => new Date(a) - new Date(b));
             
             let totalSales = 0;
             sortedDates.forEach(dateStr => {
                 let items = allData[dateStr] || [];
                 let salesItems = items.map((item, index) => ({...item, originalIndex: index, date: dateStr})).filter(item => item.is_sales === true);
                 
+                // Áp dụng bộ lọc tìm kiếm
+                if(searchTerm) {
+                    salesItems = salesItems.filter(item => 
+                        (item.mst || '').toLowerCase().includes(searchTerm) ||
+                        (item.company || '').toLowerCase().includes(searchTerm) ||
+                        (item.sdt || '').toLowerCase().includes(searchTerm)
+                    );
+                }
+
                 if(salesItems.length > 0) {
                     totalSales += salesItems.length;
                     let firstRow = true;
@@ -1298,9 +1319,9 @@
                             <td style="font-weight: bold; color: #fbbf24;">${displayDate}</td>
                             <td class="t-mst">${d_mst}</td>
                             <td class="t-sdt">${d_sdt}</td>
-                            <td class="t-ten">${d_company}</td>
-                            <td style="color: #38bdf8;">${item.loai_mua}</td>
-                            <td style="color: #f472b6;">${item.dich_vu}</td>
+                            <td><div style="width: 100%; white-space: normal; font-weight: bold;">${d_company}</div></td>
+                            <td style="color: #38bdf8; white-space: nowrap; padding-right: 15px;">${item.loai_mua}</td>
+                            <td style="color: #f472b6; white-space: nowrap; padding-right: 15px;">${item.dich_vu}</td>
                             <td class="t-action">
                                 <button class="action-btn-sm edit-btn" onclick="editSalesRecord('${item.date}', ${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
                                 <button class="action-btn-sm del-btn" onclick="deleteSalesRecord('${item.date}', ${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
@@ -1312,9 +1333,17 @@
             });
 
             if(totalSales === 0) {
-                tbody.innerHTML = `<tr><td colspan="8"><div class="empty-terminal">Chưa có dữ liệu yêu cầu mua/gia hạn nào...</div></td></tr>`;
+                if(searchTerm !== "") {
+                    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-terminal">Không tìm thấy kết quả phù hợp...</div></td></tr>`;
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-terminal">Chưa có dữ liệu yêu cầu mua/gia hạn nào...</div></td></tr>`;
+                }
             } else {
                 tbody.innerHTML = html;
+                if(!searchTerm) {
+                    const container = document.getElementById('terminalSalesContent');
+                    if(container) container.scrollTop = container.scrollHeight;
+                }
             }
         }
 
@@ -1624,7 +1653,7 @@
                             <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng xử lý toàn diện các vấn đề liên quan đến <b>hóa đơn điện tử</b>.</li>
                             <li style="margin-bottom: 4pt;">Hỗ trợ thủ tục liên quan đến <b>bảo hiểm xã hội</b>.</li>
                             <li style="margin-bottom: 4pt;">Cài đặt phần mềm, gia hạn, thiết lập Token và xử lý sự cố liên quan đến <b>chữ ký số (CKS)</b>.</li>
-                            <li style="margin-bottom: 4pt;">Ghi nhận và chuyển giao các yêu cầu mua mới, gia hạn dịch vụ từ phía khách hàng.</li>
+                            <li style="margin-bottom: 4pt;">Ghi nhận, xử lý, và hỗ trợ các yêu cầu mua mới, gia hạn dịch vụ từ phía khách hàng.</li>
                         </ul>
                     </div>
                     <div style="margin-bottom: 15pt;">
@@ -1655,8 +1684,8 @@
                     </div>
 
                     <div style="margin-bottom: 15pt;">
-                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Tổng hợp yêu cầu của khách hàng (Mua mới / Gia hạn):</h3>
-                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tháng ${month}, tôi đã tiếp nhận và chuyển giao các yêu cầu sau:</p>
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Tổng hợp Dịch vụ (Mua mới / Gia hạn):</h3>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tháng ${month}, tôi đã tiếp nhận và thực hiện các dịch vụ sau:</p>
                         <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-top: 10pt; margin-bottom: 10pt;">
                             <thead>
                                 <tr>
