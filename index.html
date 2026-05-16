@@ -11,16 +11,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <style>
-        /* ==========================================
-           HỌA TIẾT CHÌM BẢN ĐỒ VIỆT NAM
-           ========================================== */
-        body::before {
-            content: ""; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100vw; height: 100vh;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e7/Map_of_Vietnam.svg');
-            background-size: 85vh; background-position: center; background-repeat: no-repeat; opacity: 0.12; z-index: -1; pointer-events: none; 
-        }
-        :root[data-theme="dark"] body::before { opacity: 0.15; filter: invert(1) opacity(0.5); }
-
         :root {
             --primary: #1a56a6; --secondary: #f39c12; --bg-color: #e2e8f0; --card-bg: #f8fafc; 
             --text-main: #1e293b; --text-muted: #475569; --border-color: #cbd5e1; --input-bg: #ffffff; 
@@ -46,7 +36,6 @@
         .btn-gradient-animate { background: linear-gradient(-45deg, #f39c12, #d68910, #e67e22, #b9770e); background-size: 300% 300%; animation: gradientBG 4s ease infinite; }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* LOADING */
         #loader.pro-loader-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #030712; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; overflow: hidden; }
         .loader-light-effect { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(26,86,166,0.1) 0%, rgba(243,156,18,0.05) 30%, transparent 60%); animation: pulseBg 6s ease-in-out infinite alternate; z-index: 0; }
         .pro-loader { position: relative; width: 100px; height: 100px; display: flex; justify-content: center; align-items: center; margin-bottom: 30px; z-index: 1; }
@@ -63,24 +52,34 @@
         @keyframes pulseBg { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* Login Screen */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color); display: none; justify-content: center; align-items: center; z-index: 9000; padding: 20px; }
         .login-box { background: var(--card-bg); padding: 30px 25px; border-radius: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); width: 100%; max-width: 380px; text-align: center; border-top: 5px solid var(--primary); color: var(--text-main); }
         .login-logo { font-size: 40px; color: var(--primary); margin-bottom: 15px; }
         .login-box h2 { margin-bottom: 25px; font-size: 20px; }
         .input-group { position: relative; margin-bottom: 15px; }
         .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; z-index: 10; pointer-events: none; transition: 0.3s; }
-        .input-group:focus-within i { color: var(--primary); }
+        .input-group:focus-within i { color: var(--secondary); }
         .input-group input { width: 100%; padding: 12px 15px 12px 40px; border: 2px solid var(--border-color); border-radius: 16px; font-size: 13px; outline: none; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .input-group input:focus { border-color: var(--primary); transform: translateY(-1.5px); box-shadow: 0 8px 15px rgba(26,86,166,0.15); }
+        .input-group input:focus { border-color: var(--secondary); transform: translateY(-1.5px); box-shadow: 0 8px 15px rgba(243,156,18,0.25); }
         .btn-login { width: 100%; padding: 12px; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: var(--transition-fast); }
-        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(26,86,166,0.4); }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(243,156,18,0.4); }
         .btn-login:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
         #loginError { color: #e53e3e; font-size: 13px; margin-top: 15px; display: none; background: #fff5f5; padding: 8px; border-radius: 6px; }
 
+        .confirm-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(2px); }
+        .confirm-box { background: var(--card-bg); padding: 20px; border-radius: 12px; width: 300px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid var(--border-color); animation: fadeIn 0.2s ease-out; }
+        .confirm-box p { margin-bottom: 20px; font-size: 14px; color: var(--text-main); font-weight: 500;}
+        .confirm-btns { display: flex; gap: 10px; justify-content: center; }
+        .confirm-btns button { padding: 8px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 12px;}
+        .btn-yes { background: #ef4444; color: white; }
+        .btn-yes:hover { background: #dc2626; transform: translateY(-1px);}
+        .btn-no { background: #e2e8f0; color: #475569; }
+        .btn-no:hover { background: #cbd5e1; }
+        :root[data-theme="dark"] .btn-no { background: #334155; color: #e2e8f0; }
+        :root[data-theme="dark"] .btn-no:hover { background: #475569; }
+
         #mainApp { display: none; }
         
-        /* Header */
         header { background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-bottom: 3px solid #ffc107 !important; border-top: 4px solid #da251d !important; position: sticky; top: 0; z-index: 1000; padding: 8px 0; transition: 0.3s; }
         .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1500px; margin: 0 auto; padding: 0 15px; }
         .save-status { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; font-weight: 600; width: 180px;}
@@ -110,7 +109,8 @@
             border-radius: 8px; font-weight: 600; background-color: var(--card-bg); color: var(--text-main); 
             outline: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 12px; cursor: pointer;
         }
-        input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--primary); transform: translateY(-1.5px); box-shadow: 0 6px 12px rgba(26,86,166,0.15); }
+        /* Hiệu ứng focus viền sáng vàng cho các Input controls */
+        input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--secondary); transform: translateY(-1.5px); box-shadow: 0 6px 12px rgba(243,156,18,0.2); }
         :root[data-theme="dark"] input[type="date"], :root[data-theme="dark"] select, :root[data-theme="dark"] input[type="month"] { border-color: #64748b; background-color: #1e293b; }
 
         .btn-import-excel { background: #38a169; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
@@ -133,53 +133,59 @@
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ==========================================
-           BỐ CỤC FORM VÀ TERMINAL (CĂN BẰNG NHAU HOÀN HẢO)
-           ========================================== */
         .split-row { 
             display: flex; 
             gap: 15px; 
             margin-bottom: 15px; 
-            align-items: stretch; /* Để Wrapper của Terminal tự động bằng Form */
-        }
-        
-        .form-panel { 
-            flex: 0 0 420px; 
-            background: var(--card-bg); 
-            border-radius: var(--border-radius); 
-            padding: 12px 15px; /* Giảm padding để gọn hơn */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03); 
-            border: 1px solid var(--border-color); 
-            height: fit-content; /* Quan trọng: Form ôm sát nội dung, không giãn thừa */
+            align-items: stretch; 
         }
 
-        .terminal-wrapper {
-            flex: 1;
-            position: relative; /* Quan trọng: Làm gốc cho terminal-panel absolute */
+        .form-panel { 
+            flex: 0 0 350px; 
+            background: var(--card-bg); 
+            border-radius: var(--border-radius); 
+            padding: 12px 15px; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.03); 
+            border: 1px solid var(--border-color); 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-wrapper-outer {
+            flex: 1; 
             min-width: 0;
+            position: relative; 
+        }
+
+        .stats-wrapper-outer {
+            flex: 0 0 320px; 
+            position: relative; 
+        }
+
+        .terminal-panel, .dash-card {
+            position: absolute;
+            inset: 0; 
+            display: flex;
+            flex-direction: column;
         }
 
         .terminal-panel { 
-            position: absolute; 
-            inset: 0; /* Ép Terminal lấp đầy Wrapper => Bằng đúng chiều cao Form */
             background-color: var(--terminal-bg); 
             border-radius: var(--border-radius); 
             padding: 10px 12px; 
-            display: flex; 
-            flex-direction: column; 
             box-shadow: inset 0 0 15px rgba(0,0,0,0.4); 
             border: 1px solid #1e293b; 
         }
 
-        .terminal-content { 
-            flex: 1; 
-            overflow-y: auto; 
-            overflow-x: auto; 
-            padding-right: 4px; 
-            min-height: 0; 
+        .dash-card { 
+            background: var(--card-bg); 
+            border-radius: var(--border-radius); 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.02); 
+            overflow: hidden; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
-        /* Tinh chỉnh Input gọn lại hết mức */
         .form-header { font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 8px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center;}
         .form-row { display: flex; gap: 12px; margin-bottom: 6px; }
         .form-group { flex: 1; margin-bottom: 6px; }
@@ -187,22 +193,24 @@
         
         .frm-input { width: 100%; padding: 6px 10px; border: 1.5px solid #94a3b8; border-radius: 8px; font-size: 12px; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); outline: none; height: 32px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
         :root[data-theme="dark"] .frm-input { border-color: #64748b; background-color: #1e293b; }
-        .frm-input:focus { border-color: var(--primary); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(26,86,166,0.15); }
+        /* HIỆU ỨNG SÁNG VÀNG KHI CLICK VÀO Ô NHẬP DỮ LIỆU */
+        .frm-input:focus { border-color: var(--secondary); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(243,156,18,0.25); }
         
         .custom-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat !important; background-position: right 6px center !important; background-size: 16px !important; padding-right: 25px; cursor: pointer; }
-        .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a56a6'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
+        .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
         :root[data-theme="dark"] .custom-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
+        :root[data-theme="dark"] .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
 
         .input-with-btn { display: flex; gap: 6px; }
         .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; transition: 0.2s; height: 32px;}
         .btn-lookup:hover { background: #113c7a; }
-        .btn-submit { color: white; width: 100%; padding: 6px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 2px; transition: 0.2s; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px;}
+        .btn-submit { color: white; width: 100%; padding: 6px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px;}
         .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(243,156,18,0.3); }
 
-        .autocomplete-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1.5px solid var(--primary); border-radius: 6px; box-shadow: 0 6px 15px rgba(0,0,0,0.15); max-height: 150px; overflow-y: auto; z-index: 1000; display: none; margin-top: 2px; }
+        .autocomplete-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1.5px solid var(--secondary); border-radius: 6px; box-shadow: 0 6px 15px rgba(243,156,18,0.15); max-height: 150px; overflow-y: auto; z-index: 1000; display: none; margin-top: 2px; }
         .suggestion-item { padding: 6px 10px; font-size: 12px; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); transition: background 0.1s; }
         .suggestion-item:last-child { border-bottom: none; }
-        .suggestion-item:hover, .suggestion-item.active { background-color: var(--primary); color: #fff; font-weight: bold;}
+        .suggestion-item:hover, .suggestion-item.active { background-color: var(--secondary); color: #fff; font-weight: bold;}
 
         .terminal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid #334155; padding-bottom: 6px; gap: 10px; flex-wrap: wrap;}
         .terminal-title { color: #fff; font-family: 'Courier New', monospace; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px;}
@@ -215,8 +223,19 @@
         .btn-copy-terminal { background-color: #334155; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.2s; display: flex; gap: 4px; align-items: center; white-space: nowrap;}
         .btn-copy-terminal:hover { background-color: #475569; }
 
-        .terminal-content::-webkit-scrollbar { width: 4px; height: 4px;}
+        .terminal-content, .dash-table-wrapper { 
+            flex: 1; 
+            overflow-y: auto; 
+            overflow-x: auto; 
+            min-height: 0; 
+        }
+        .terminal-content { padding-right: 4px; }
+        .dash-table-wrapper { padding-bottom: 5px; }
+
+        .terminal-content::-webkit-scrollbar, .dash-table-wrapper::-webkit-scrollbar { width: 4px; height: 4px;}
         .terminal-content::-webkit-scrollbar-thumb { background-color: #475569; border-radius: 2px; }
+        .dash-table-wrapper::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 2px; }
+        :root[data-theme="dark"] .dash-table-wrapper::-webkit-scrollbar-thumb { background-color: #475569; }
         
         .term-table { width: 100%; border-collapse: collapse; font-family: 'Consolas', monospace; font-size: 12px; color: #e2e8f0; min-width: 700px; }
         .term-table th { position: sticky; top: 0; background-color: var(--terminal-bg); border-bottom: 1px dashed #475569; padding: 5px; text-align: left; color: #94a3b8; white-space: nowrap; font-weight: normal; z-index: 10;}
@@ -236,24 +255,25 @@
         .del-btn { color: #f87171; } .del-btn:hover { background-color: rgba(248,113,113,0.1); }
         .empty-terminal { text-align: center; color: #475569; margin-top: 20px; font-style: italic; }
 
-        /* Dashboard */
-        .dashboard-cards { display: grid; grid-template-columns: repeat(1, 1fr); gap: 15px; margin-bottom: 15px; }
-        .dash-card { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--border-color); box-shadow: 0 3px 10px rgba(0,0,0,0.02); overflow: hidden; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .dash-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(26,86,166,0.08); border-color: var(--primary); }
-        :root[data-theme="dark"] .dash-card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.4); border-color: var(--secondary); }
-        
-        .dash-card-header { background: linear-gradient(90deg, var(--primary), #2b6cb0); padding: 10px 15px; font-weight: bold; color: #ffffff; font-size: 12px; border-bottom: none; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
-        .dash-card-header i { margin-right: 6px; color: #fbd38d; font-size: 14px;}
+        .dash-card-header { background: linear-gradient(90deg, var(--primary), #2b6cb0); padding: 10px 15px; font-weight: bold; color: #ffffff; font-size: 11px; border-bottom: none; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; flex-shrink: 0; }
+        .dash-card-header.sales-header { background: linear-gradient(90deg, #db2777, #be185d); }
+        .dash-card-header i { margin-right: 6px; color: #fbd38d; font-size: 13px;}
         :root[data-theme="dark"] .dash-card-header { background: linear-gradient(90deg, #1e3a8a, #1d4ed8); color: #ffffff;}
+        :root[data-theme="dark"] .dash-card-header.sales-header { background: linear-gradient(90deg, #831843, #9d174d); }
         
-        .dash-table-wrapper { flex: 1; overflow-x: auto; }
-        .dash-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .dash-table { width: 100%; border-collapse: collapse; font-size: 11px; }
         .dash-table th { background-color: rgba(0,0,0,0.02); color: var(--text-muted); text-align: left; padding: 6px 12px; font-weight: 600; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
         .dash-table td { padding: 6px 12px; color: var(--text-main); border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         .dash-table tr:hover td { background-color: rgba(0,0,0,0.01); }
-        .dash-totalbadge { background-color: var(--secondary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        .dash-totalbadge { background-color: var(--secondary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
 
-        /* Reports */
+        /* Biểu đồ tròn (Pie Chart) CSS */
+        .pie-chart-container { display: flex; align-items: center; justify-content: center; gap: 15px; padding: 10px 15px; border-top: 1px dashed var(--border-color); margin-top: auto; background-color: rgba(0,0,0,0.01);}
+        .pie-chart { width: 70px; height: 70px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
+        .pie-legend { display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: var(--text-main);}
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-color { width: 12px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 2px rgba(0,0,0,0.2);}
+
         .report-wrapper { background: var(--card-bg); border-radius: var(--border-radius); padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.02); border: 1px solid var(--border-color);}
         .stats-section { margin-bottom: 20px; }
         .stats-title { font-size: 13px; color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: bold; }
@@ -302,10 +322,11 @@
         #toast.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
         #toast.error { background: #ef4444; box-shadow: 0 4px 12px rgba(239,68,68,0.3);}
 
-        @media (max-width: 992px) {
-            .split-row { flex-direction: column; }
-            .form-panel { flex: none; width: 100%; }
-            .terminal-wrapper { height: 350px; width: 100%; }
+        @media (max-width: 1200px) {
+            .split-row { flex-direction: column; align-items: stretch; }
+            .form-panel, .terminal-wrapper-outer, .stats-wrapper-outer { width: 100%; flex: none; }
+            .terminal-wrapper-outer { height: 400px; }
+            .stats-wrapper-outer { height: 350px; }
             .report-split-layout { flex-direction: column; }
             .filter-col { width: 100%; flex: none; }
             .header-content { flex-wrap: wrap; gap: 8px; justify-content: center;}
@@ -319,7 +340,6 @@
             .terminal-search-box { width: 100%; max-width: none; }
         }
 
-        /* Winter */
         #winter-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; overflow: hidden; }
         #mainApp, #loginScreen, header { position: relative; z-index: 1; }
         .snowflake { position: absolute; top: -10px; opacity: 0.8; user-select: none; animation-name: fall, shake; animation-iteration-count: infinite; animation-timing-function: linear, ease-in-out; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
@@ -327,15 +347,11 @@
         :root[data-theme="dark"] .snowflake { color: #ffffff; }
         @keyframes fall { 0% { top: -10%; } 100% { top: 110%; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(25px); } }
-        #snowman { position: absolute; bottom: 20px; right: 5%; font-size: 70px; animation: bounceSnowman 4s infinite ease-in-out; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); cursor: pointer; pointer-events: auto; z-index: 10; transition: transform 0.1s; }
-        #snowman:active { transform: scale(0.9) translateY(5px); }
-        @keyframes bounceSnowman { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
     </style>
 </head>
 <body>
-    <div id="winter-wrapper">
-        <div id="snowman" title="Click để tải lại trang">⛄</div>
-    </div>
+    <!-- Giữ lại hiệu ứng tuyết rơi nhẹ nhàng -->
+    <div id="winter-wrapper"></div>
     
     <div id="loader" class="pro-loader-wrapper">
         <div class="loader-light-effect"></div>
@@ -348,6 +364,16 @@
         <div class="loading-text-wrapper">
             <span class="pro-loading-text">KHỞI TẠO HỆ THỐNG</span>
             <span class="loading-subtext">Đang đồng bộ dữ liệu bảo mật...</span>
+        </div>
+    </div>
+
+    <div id="customConfirm" class="confirm-modal">
+        <div class="confirm-box">
+            <p id="confirmMsg">Bạn có chắc chắn muốn thực hiện hành động này?</p>
+            <div class="confirm-btns">
+                <button id="btnConfirmYes" class="btn-yes">Đồng ý</button>
+                <button id="btnConfirmNo" class="btn-no">Hủy</button>
+            </div>
         </div>
     </div>
 
@@ -411,12 +437,13 @@
                 <div id="tab-nhaplieu" class="main-tab-content active">
                     
                     <div class="split-row">
+                        <!-- Form -->
                         <div class="form-panel">
                             <div class="form-header">
                                 <span><i class="fas fa-tools"></i> THÔNG TIN HỖ TRỢ</span>
-                                <span id="formModeBadge" style="font-size: 10px; background: #ebf4ff; color: #1a56a6; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
+                                <span id="formModeBadge" style="font-size: 10px; background: #ebf4ff; color: #fcd603; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
                             </div>
-                            <form id="inputForm" style="display: flex; flex-direction: column; flex: 1;">
+                            <form id="inputForm" style="display: flex; flex-direction: column;">
                                 <input type="hidden" id="frm-idx" value="-1">
                                 <div class="form-row">
                                     <div class="form-group" style="flex: 1.2;">
@@ -452,7 +479,7 @@
                                     </div>
                                 </div>
                                 <input type="hidden" id="frm-tech" value="Hưng">
-                                <div style="display: flex; gap: 8px; margin-top: auto;">
+                                <div style="display: flex; gap: 8px; margin-top: 10px;">
                                     <button type="button" class="btn-submit btn-gradient-animate" id="btnSubmitForm" onclick="submitForm()">
                                         <i class="fas fa-save"></i> LƯU HỖ TRỢ
                                     </button>
@@ -461,10 +488,11 @@
                             </form>
                         </div>
 
-                        <div class="terminal-wrapper">
+                        <!-- Terminal -->
+                        <div class="terminal-wrapper-outer">
                             <div class="terminal-panel">
                                 <div class="terminal-header">
-                                    <div class="terminal-title"><i class="fas fa-terminal"></i> BẢNG DỮ LIỆU HỖ TRỢ (Ngày chỉ định)</div>
+                                    <div class="terminal-title"><i class="fas fa-terminal"></i> BẢNG DỮ LIỆU HỖ TRỢ </div>
                                     <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
                                         <div class="terminal-search-box">
                                             <i class="fas fa-search"></i>
@@ -491,13 +519,39 @@
                                 </div>
                             </div>
                         </div>
-                    </div> <div class="split-row">
+
+                        <!-- Stats -->
+                        <div class="stats-wrapper-outer">
+                            <div class="dash-card">
+                                <div class="dash-card-header">
+                                    <div><i class="fas fa-chart-pie"></i>TỶ LỆ HỖ TRỢ KỸ THUẬT (All-time)</div>
+                                    <div class="dash-totalbadge" title="Tổng số yêu cầu">Tổng: <span id="gs-total-badge">0</span></div>
+                                </div>
+                                <div class="dash-table-wrapper">
+                                    <table class="dash-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Loại Hỗ Trợ</th>
+                                                <th style="width: 50%;">Tỷ Lệ (%)</th>
+                                                <th style="text-align: center;">SL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="gs-ratio-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> 
+                    
+                    <div class="split-row">
+                        <!-- Form Mua Hàng -->
                         <div class="form-panel">
                             <div class="form-header">
                                 <span><i class="fas fa-shopping-cart"></i> THÔNG TIN MUA / GIA HẠN</span>
                                 <span id="formSalesModeBadge" style="font-size: 10px; background: #fdf2f8; color: #db2777; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
                             </div>
-                            <form id="inputSalesForm" style="display: flex; flex-direction: column; flex: 1;">
+                            <form id="inputSalesForm" style="display: flex; flex-direction: column;">
                                 <input type="hidden" id="frm-sales-idx" value="-1">
                                 <input type="hidden" id="frm-sales-date" value="">
                                 <div class="form-row">
@@ -535,7 +589,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div style="display: flex; gap: 8px; margin-top: auto;">
+                                <div style="display: flex; gap: 8px; margin-top: 10px;">
                                     <button type="button" class="btn-submit" id="btnSubmitSalesForm" onclick="submitSalesForm()" style="background: linear-gradient(-45deg, #db2777, #be185d);">
                                         <i class="fas fa-cart-plus"></i> LƯU YÊU CẦU
                                     </button>
@@ -544,7 +598,8 @@
                             </form>
                         </div>
 
-                        <div class="terminal-wrapper">
+                        <!-- Terminal Mua Hàng -->
+                        <div class="terminal-wrapper-outer">
                             <div class="terminal-panel">
                                 <div class="terminal-header">
                                     <div class="terminal-title"><i class="fas fa-list-alt" style="color: #db2777;"></i> BẢNG YÊU CẦU MUA / GIA HẠN (Toàn bộ)</div>
@@ -574,27 +629,37 @@
                                 </div>
                             </div>
                         </div>
-                    </div> <div class="dashboard-cards">
-                        <div class="dash-card">
-                            <div class="dash-card-header">
-                                <div><i class="fas fa-chart-pie"></i>TỶ LỆ CÁC LOẠI HỖ TRỢ KỸ THUẬT (All-time)</div>
-                                <div class="dash-totalbadge" title="Tổng số yêu cầu">Tổng: <span id="gs-total-badge">0</span></div>
-                            </div>
-                            <div class="dash-table-wrapper">
-                                <table class="dash-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Loại Hỗ Trợ</th>
-                                            <th style="width: 50%;">Tỷ Lệ (%)</th>
-                                            <th style="text-align: center;">Số Lượng</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="gs-ratio-body"></tbody>
-                                </table>
+
+                        <!-- Stats Mua Hàng & Pie Chart -->
+                        <div class="stats-wrapper-outer">
+                            <div class="dash-card">
+                                <div class="dash-card-header sales-header">
+                                    <div><i class="fas fa-shopping-cart"></i>TỶ LỆ TIẾP NHẬN YÊU CẦU MUA HÀNG</div>
+                                    <div class="dash-totalbadge" style="background:#be185d;" title="Tổng số yêu cầu">Tổng: <span id="gs-sales-total-badge">0</span></div>
+                                </div>
+                                <div class="dash-table-wrapper" style="overflow: hidden;">
+                                    <table class="dash-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Dịch vụ</th>
+                                                <th style="width: 50%;">Tỷ Lệ (%)</th>
+                                                <th style="text-align: center;">SL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="gs-sales-service-body"></tbody>
+                                    </table>
+                                </div>
+                                <!-- Thùng chứa biểu đồ Pie Chart -->
+                                <div class="pie-chart-container" id="gs-sales-pie-container">
+                                    <!-- Biểu đồ sẽ được vẽ bằng JS CSS Conic Gradient -->
+                                </div>
                             </div>
                         </div>
+
                     </div>
-                </div> <div id="tab-baocao" class="main-tab-content">
+                </div> 
+
+                <div id="tab-baocao" class="main-tab-content">
                     <div class="sub-tabs">
                         <button class="sub-tab-btn active" onclick="switchSubTab('thongke')"><i class="fas fa-chart-line"></i> Tổng quan Thống kê</button>
                         <button class="sub-tab-btn" onclick="switchSubTab('bctuan')"><i class="fas fa-file-alt"></i> Báo cáo Tuần</button>
@@ -694,7 +759,6 @@
         let exportWeekFilename = ""; let exportMonthFilename = "";
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
-        // UTILITY FUNCTIONS & DEBOUNCE
         function formatEmptyField(val) {
             if (val === null || val === undefined) return "—";
             let strVal = val.toString().trim();
@@ -708,7 +772,22 @@
             };
         }
 
-        // AUTOCOMPLETE VẤN ĐỀ HỖ TRỢ
+        // Custom Confirm Logic
+        function showConfirm(msg, callback) {
+            const modal = document.getElementById('customConfirm');
+            document.getElementById('confirmMsg').innerText = msg;
+            modal.style.display = 'flex';
+            
+            document.getElementById('btnConfirmYes').onclick = function() {
+                modal.style.display = 'none';
+                callback();
+            };
+            
+            document.getElementById('btnConfirmNo').onclick = function() {
+                modal.style.display = 'none';
+            };
+        }
+
         function setupAutocomplete() {
             const issueInput = document.getElementById('frm-issue');
             const suggestionsBox = document.getElementById('issue-suggestions');
@@ -773,36 +852,44 @@
             }
         }
 
-        // GLOBAL DASHBOARD STATS
         function updateGlobalStats() {
-            let typeCounts = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0 };
-            let totalRecords = 0;
+            // Stats cho Hỗ Trợ Kỹ Thuật
+            let supportCounts = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0 };
+            let totalSupport = 0;
+            
+            // Stats cho Yêu Cầu Bán Hàng
+            let salesServiceCounts = { 'CKS': 0, 'HĐ': 0, 'BHXH': 0, 'Chứng từ': 0 };
+            let salesTypeCounts = { 'Mua mới': 0, 'Gia hạn': 0 };
+            let totalSales = 0;
 
             for (let date in allData) {
                 allData[date].forEach(item => {
                     if (item.is_sales !== true) {
-                        totalRecords++;
-                        if(typeCounts[item.type] !== undefined) {
-                            typeCounts[item.type]++;
-                        }
+                        totalSupport++;
+                        if(supportCounts[item.type] !== undefined) supportCounts[item.type]++;
+                    } else {
+                        totalSales++;
+                        let dv = item.dich_vu || 'CKS';
+                        if(salesServiceCounts[dv] !== undefined) salesServiceCounts[dv]++;
+                        let lm = item.loai_mua || 'Mua mới';
+                        if(salesTypeCounts[lm] !== undefined) salesTypeCounts[lm]++;
                     }
                 });
             }
 
-            let ratioHtml = "";
-            if(totalRecords > 0) {
-                let typesInfo = [
+            // Render Support Stats
+            let supportHtml = "";
+            if(totalSupport > 0) {
+                let sTypes = [
                     { id: 'HĐ', name: 'Hóa đơn ĐT (HĐ)' },
                     { id: 'CKS', name: 'Chữ ký số (CKS)' },
                     { id: 'BHXH', name: 'Bảo hiểm XH (BHXH)' },
                     { id: 'ĐL/CTV', name: 'Đại lý / CTV' }
                 ];
-                
-                typesInfo.forEach(t => {
-                    let count = typeCounts[t.id] || 0;
-                    let pct = ((count / totalRecords) * 100).toFixed(1);
-                    
-                    ratioHtml += `<tr>
+                sTypes.forEach(t => {
+                    let count = supportCounts[t.id] || 0;
+                    let pct = ((count / totalSupport) * 100).toFixed(1);
+                    supportHtml += `<tr>
                         <td style="font-weight: 600;">${t.name}</td>
                         <td>
                             <div style="display: flex; align-items: center; gap: 10px;">
@@ -816,13 +903,57 @@
                     </tr>`;
                 });
             } else {
-                ratioHtml = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có dữ liệu hỗ trợ</td></tr>`;
+                supportHtml = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có dữ liệu</td></tr>`;
             }
-            document.getElementById('gs-ratio-body').innerHTML = ratioHtml;
-            document.getElementById('gs-total-badge').innerText = totalRecords;
+            document.getElementById('gs-ratio-body').innerHTML = supportHtml;
+            document.getElementById('gs-total-badge').innerText = totalSupport;
+
+            // Render Sales Stats (Services Table)
+            let salesHtml = "";
+            if(totalSales > 0) {
+                let slTypes = ['CKS', 'HĐ', 'BHXH', 'Chứng từ'];
+                slTypes.forEach(dv => {
+                    let count = salesServiceCounts[dv] || 0;
+                    let pct = ((count / totalSales) * 100).toFixed(1);
+                    salesHtml += `<tr>
+                        <td style="font-weight: 600;">${dv}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="flex: 1; background-color: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
+                                    <div style="width: ${pct}%; background-color: #db2777; height: 100%; border-radius: 4px; box-shadow: 0 0 5px #db2777;"></div>
+                                </div>
+                                <span style="font-weight: bold; width: 45px; text-align: right;">${pct}%</span>
+                            </div>
+                        </td>
+                        <td style="text-align: center; font-weight: bold; color: #db2777;">${count}</td>
+                    </tr>`;
+                });
+            } else {
+                salesHtml = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có dữ liệu</td></tr>`;
+            }
+            document.getElementById('gs-sales-service-body').innerHTML = salesHtml;
+            document.getElementById('gs-sales-total-badge').innerText = totalSales;
+
+            // Render Pie Chart for Sales (Mua Mới vs Gia Hạn)
+            let pieContainer = document.getElementById('gs-sales-pie-container');
+            if(totalSales > 0) {
+                let muaMoi = salesTypeCounts['Mua mới'] || 0;
+                let giaHan = salesTypeCounts['Gia hạn'] || 0;
+                let pctMuaMoi = Math.round((muaMoi / totalSales) * 100);
+                
+                let chartHtml = `
+                    <div class="pie-chart" style="background: conic-gradient(#38bdf8 0% ${pctMuaMoi}%, #f472b6 ${pctMuaMoi}% 100%);"></div>
+                    <div class="pie-legend">
+                        <div class="legend-item"><div class="legend-color" style="background: #38bdf8;"></div> Mua mới: <b>${muaMoi}</b> (${pctMuaMoi}%)</div>
+                        <div class="legend-item"><div class="legend-color" style="background: #f472b6;"></div> Gia hạn: <b>${giaHan}</b> (${100 - pctMuaMoi}%)</div>
+                    </div>
+                `;
+                pieContainer.innerHTML = chartHtml;
+            } else {
+                pieContainer.innerHTML = `<div style="font-style:italic; color:var(--text-muted); font-size: 11px;">Chưa có dữ liệu biểu đồ</div>`;
+            }
         }
 
-        // LOADING & AUTHENTICATION
         const loader = document.getElementById('loader');
         function hideLoader() { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); }
         function showLoader() { loader.style.display = 'flex'; void loader.offsetWidth; loader.style.opacity = '1'; loader.style.visibility = 'visible'; }
@@ -835,7 +966,6 @@
             initMonthSelectors();
             setupAutocomplete(); 
             document.getElementById('terminalSearch').addEventListener('input', debounce(renderTerminal, 300));
-            // Gắn event cho ô tìm kiếm Sales
             document.getElementById('terminalSalesSearch').addEventListener('input', debounce(renderSalesTerminal, 300));
         });
 
@@ -897,7 +1027,6 @@
         function updateActivity() { if (auth.currentUser) localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); }
         ['click', 'mousemove', 'keypress', 'scroll'].forEach(evt => document.addEventListener(evt, updateActivity));
 
-        // CORE FUNCTIONS
         function getVNTimeDateString() {
             const now = new Date();
             const vnFormatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -969,7 +1098,6 @@
             updateAllReports();
         }
 
-        // TÍNH NĂNG NHẬP LIỆU
         window.importExcelData = function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1035,7 +1163,6 @@
             updateStatusIndicator("Hệ thống sẵn sàng", "");
         }
 
-        // Logic Lấy Tên Cty API
         async function fetchCompanyName(mstInput) {
             let foundName = "";
             let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
@@ -1089,9 +1216,6 @@
             finally { btn.innerHTML = originalIcon; btn.disabled = false; }
         }
 
-        // ==========================================
-        // QUẢN LÝ FORM HỖ TRỢ KỸ THUẬT
-        // ==========================================
         window.submitForm = function() {
             const mst = document.getElementById('frm-mst').value.trim();
             const company = document.getElementById('frm-company').value.trim();
@@ -1146,17 +1270,14 @@
         }
 
         window.deleteRecord = function(idx) {
-            if(confirm("Xóa dòng hỗ trợ này khỏi báo cáo?")) {
+            showConfirm("Xóa dòng hỗ trợ này khỏi hệ thống?", () => {
                 allData[currentSelectedDate].splice(idx, 1);
                 renderTerminal(); triggerAutoSave(); updateGlobalStats();
                 if(parseInt(document.getElementById('frm-idx').value) === idx) cancelEdit();
                 showToast("Đã xóa dữ liệu!", false);
-            }
+            });
         }
 
-        // ==========================================
-        // QUẢN LÝ FORM BÁN HÀNG / GIA HẠN
-        // ==========================================
         window.submitSalesForm = function() {
             const mst = document.getElementById('frm-sales-mst').value.trim();
             const company = document.getElementById('frm-sales-company').value.trim();
@@ -1181,7 +1302,7 @@
                 showToast("Đã lưu yêu cầu mua/gia hạn!", false);
                 triggerAutoSave(); 
             }
-            renderSalesTerminal(); cancelSalesEdit(); document.getElementById('frm-sales-mst').focus();
+            renderSalesTerminal(); cancelSalesEdit(); updateGlobalStats(); document.getElementById('frm-sales-mst').focus();
         }
 
         window.editSalesRecord = function(dateStr, idx) {
@@ -1216,17 +1337,14 @@
         }
 
         window.deleteSalesRecord = function(dateStr, idx) {
-            if(confirm("Xóa yêu cầu mua/gia hạn này khỏi hệ thống?")) {
+            showConfirm("Xóa yêu cầu mua/gia hạn này khỏi hệ thống?", () => {
                 allData[dateStr].splice(idx, 1);
-                renderSalesTerminal(); saveDataToCloudSpecificDate(dateStr);
+                renderSalesTerminal(); updateGlobalStats(); saveDataToCloudSpecificDate(dateStr);
                 if(document.getElementById('frm-sales-date').value === dateStr && parseInt(document.getElementById('frm-sales-idx').value) === idx) cancelSalesEdit();
                 showToast("Đã xóa thành công!", false);
-            }
+            });
         }
 
-        // ==========================================
-        // RENDER TERMINALS
-        // ==========================================
         function renderTerminal() {
             const tbody = document.getElementById('terminalBody');
             const rawData = allData[currentSelectedDate] || [];
@@ -1288,7 +1406,6 @@
 
             let html = ''; let stt = 1;
 
-            // ĐẢO LẠI THỨ TỰ SẮP XẾP: Tăng dần (Từ ngày cũ nhất đến ngày mới nhất)
             let sortedDates = Object.keys(allData).sort((a, b) => new Date(a) - new Date(b));
             
             let totalSales = 0;
@@ -1296,7 +1413,6 @@
                 let items = allData[dateStr] || [];
                 let salesItems = items.map((item, index) => ({...item, originalIndex: index, date: dateStr})).filter(item => item.is_sales === true);
                 
-                // Áp dụng bộ lọc tìm kiếm
                 if(searchTerm) {
                     salesItems = salesItems.filter(item => 
                         (item.mst || '').toLowerCase().includes(searchTerm) ||
@@ -1357,9 +1473,6 @@
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${data.length} dòng dữ liệu!`, false));
         }
 
-        // ==========================================
-        // LƯU TRỮ ĐÁM MÂY
-        // ==========================================
         function updateStatusIndicator(msg, typeClass) {
             const ind = document.getElementById('saveStatusIndicator'); ind.className = `save-status ${typeClass}`;
             ind.innerHTML = `${typeClass === 'saving' ? '<i class="fas fa-spinner fa-spin"></i>' : typeClass === 'saved' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-cloud"></i>'} ${msg}`;
@@ -1397,9 +1510,6 @@
             }).catch(err => { updateStatusIndicator("Lỗi đồng bộ", "saving"); });
         }
 
-        // ==========================================
-        // BÁO CÁO & THỐNG KÊ
-        // ==========================================
         function formatVN(dateStr) { return dateStr.split('-').reverse().join('/'); }
         function showToast(msg, isError) { 
             const toast = document.getElementById("toast");
@@ -1640,6 +1750,7 @@
                 }
             });
 
+            // Báo cáo đã được chỉnh sửa để chuyên nghiệp hơn trong việc "Tiếp nhận và chuyển giao"
             let html = `
                 <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 20pt 40pt; text-align: justify;">
                     <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
@@ -1653,7 +1764,7 @@
                             <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng xử lý toàn diện các vấn đề liên quan đến <b>hóa đơn điện tử</b>.</li>
                             <li style="margin-bottom: 4pt;">Hỗ trợ thủ tục liên quan đến <b>bảo hiểm xã hội</b>.</li>
                             <li style="margin-bottom: 4pt;">Cài đặt phần mềm, gia hạn, thiết lập Token và xử lý sự cố liên quan đến <b>chữ ký số (CKS)</b>.</li>
-                            <li style="margin-bottom: 4pt;">Ghi nhận, xử lý, và hỗ trợ các yêu cầu mua mới, gia hạn dịch vụ từ phía khách hàng.</li>
+                            <li style="margin-bottom: 4pt;">Ghi nhận nhu cầu, tiếp nhận thông tin và tư vấn sơ bộ các yêu cầu mua mới/gia hạn dịch vụ từ phía khách hàng trước khi chuyển giao nội bộ.</li>
                         </ul>
                     </div>
                     <div style="margin-bottom: 15pt;">
@@ -1684,19 +1795,19 @@
                     </div>
 
                     <div style="margin-bottom: 15pt;">
-                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Tổng hợp Dịch vụ (Mua mới / Gia hạn):</h3>
-                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tháng ${month}, tôi đã tiếp nhận và thực hiện các dịch vụ sau:</p>
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Công tác tiếp nhận & chuyển giao Yêu cầu Dịch vụ:</h3>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tháng ${month}, thông qua quá trình hỗ trợ, tôi đã tiếp nhận và chuyển giao thành công cho bộ phận CSKH xử lý các yêu cầu sau:</p>
                         <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-top: 10pt; margin-bottom: 10pt;">
                             <thead>
                                 <tr>
-                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 70%;">Phân loại yêu cầu</th>
+                                    <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 70%;">Phân loại yêu cầu tiếp nhận & chuyển giao</th>
                                     <th style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; background-color: #f2f2f2; width: 30%;">Số lượng</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td style="border: 1px solid black; padding: 6pt;">Dịch vụ Mua mới (CKS, HĐ, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${totalMuaMoi}</td></tr>
-                                <tr><td style="border: 1px solid black; padding: 6pt;">Dịch vụ Gia hạn (CKS, HĐ, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${totalGiaHan}</td></tr>
-                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG YÊU CẦU DỊCH VỤ</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; color: red;">${totalMuaMoi + totalGiaHan}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt;">Yêu cầu Mua mới dịch vụ (CKS, HĐ, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${totalMuaMoi}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt;">Yêu cầu Gia hạn dịch vụ (CKS, HĐ, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${totalGiaHan}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG SỐ YÊU CẦU ĐÃ CHUYỂN GIAO CSKH</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; color: red;">${totalMuaMoi + totalGiaHan}</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -1704,8 +1815,8 @@
                     <div style="margin-bottom: 15pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">4. Đánh giá và nhận xét chung:</h3>
                         <ul style="margin-top: 5pt; margin-bottom: 5pt;">
-                            <li style="margin-bottom: 4pt;"><b>Về tiến độ:</b> Tiếp nhận và hoàn thành 100% các yêu cầu hỗ trợ. Đảm bảo đúng thời gian cam kết xử lý.</li>
-                            <li style="margin-bottom: 4pt;"><b>Đề xuất:</b> Các bộ phận liên quan cần chuẩn hóa việc thu thập thông tin lỗi cơ bản trước khi chuyển giao nhằm tối ưu hóa quy trình.</li>
+                            <li style="margin-bottom: 4pt;"><b>Về công tác hỗ trợ:</b> Tiếp nhận và hoàn thành 100% các yêu cầu lỗi phần mềm. Đảm bảo đúng thời gian cam kết xử lý với khách hàng.</li>
+                            <li style="margin-bottom: 4pt;"><b>Về công tác phối hợp:</b> Phối hợp nhịp nhàng với bộ phận CSKH, chuyển giao thông tin mua hàng nhanh chóng, chính xác, không để khách hàng chờ đợi lâu.</li>
                         </ul>
                     </div>
                 </div>
@@ -1713,39 +1824,19 @@
             document.getElementById('preview-thang').innerHTML = html;
         }
 
-        // ==========================================
-        // KHỞI TẠO HIỆU ỨNG MÙA ĐÔNG
-        // ==========================================
         function initWinterEffects() {
             const wrapper = document.getElementById('winter-wrapper');
             if (!wrapper) return;
-            const numFlakes = 50; 
+            // Tăng số lượng tuyết rơi lên nhiều hơn (150 bông)
+            const numFlakes = 150; 
             for (let i = 0; i < numFlakes; i++) {
                 let flake = document.createElement('div'); flake.className = 'snowflake'; flake.innerHTML = '❄';
                 flake.style.left = (Math.random() * 100) + 'vw';
-                flake.style.animationDuration = (Math.random() * 8 + 10) + 's, ' + (Math.random() * 4 + 4) + 's';
-                flake.style.animationDelay = (Math.random() * 5) + 's, ' + (Math.random() * 5) + 's';
+                // Giảm tốc độ tuyết rơi (Tăng số giây animation)
+                flake.style.animationDuration = (Math.random() * 8 + 8) + 's, ' + (Math.random() * 4 + 4) + 's';
+                flake.style.animationDelay = (Math.random() * 3) + 's, ' + (Math.random() * 3) + 's';
                 flake.style.fontSize = (Math.random() * 12 + 10) + 'px'; flake.style.opacity = Math.random() * 0.8 + 0.2; 
                 wrapper.appendChild(flake);
-            }
-
-            const snowman = document.getElementById('snowman');
-            if (snowman) {
-                snowman.addEventListener('click', async () => {
-                    showToast("Đang đồng bộ dữ liệu mới nhất...", false);
-                    snowman.style.pointerEvents = 'none'; snowman.innerHTML = '⏳'; snowman.style.transform = 'scale(1.1)';
-
-                    try {
-                        const snapshot = await get(ref(database, 'visnam_data'));
-                        allData = snapshot.val() || {};
-                        loadDataForDate(currentSelectedDate); updateGlobalStats(); updateAllReports();
-                        showToast("Đã làm mới bảng điều khiển!", false);
-                    } catch (error) {
-                        showToast("Lỗi kết nối khi làm mới!", true);
-                    } finally {
-                        snowman.innerHTML = '⛄'; snowman.style.transform = 'scale(1)'; snowman.style.pointerEvents = 'auto';
-                    }
-                });
             }
         }
         document.addEventListener("DOMContentLoaded", () => { initWinterEffects(); });
