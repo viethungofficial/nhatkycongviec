@@ -11,20 +11,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <style>
-        /* ==========================================
-           HỌA TIẾT CHÌM BẢN ĐỒ VIỆT NAM
-           ========================================== */
-        body::before {
-            content: ""; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100vw; height: 100vh;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e7/Map_of_Vietnam.svg');
-            background-size: 85vh; background-position: center; background-repeat: no-repeat; opacity: 0.12; z-index: -1; pointer-events: none; 
-        }
-        :root[data-theme="dark"] body::before { opacity: 0.15; filter: invert(1) opacity(0.5); }
-
         :root {
             --primary: #1a56a6; --secondary: #f39c12; --bg-color: #e2e8f0; --card-bg: #f8fafc; 
             --text-main: #1e293b; --text-muted: #475569; --border-color: #cbd5e1; --input-bg: #ffffff; 
-            --border-radius: 10px; --transition-fast: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --border-radius: 8px; --transition-fast: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             --transition-smooth: 0.4s cubic-bezier(0.25, 1, 0.5, 1); --terminal-bg: #0f172a; --terminal-text: #10b981;
         }
 
@@ -71,8 +61,8 @@
         .input-group { position: relative; margin-bottom: 15px; }
         .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; z-index: 10; pointer-events: none; transition: 0.3s; }
         .input-group:focus-within i { color: var(--primary); }
-        .input-group input { width: 100%; padding: 12px 15px 12px 40px; border: 2px solid var(--border-color); border-radius: 16px; font-size: 13px; outline: none; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .input-group input:focus { border-color: var(--primary); transform: translateY(-1.5px); box-shadow: 0 8px 15px rgba(26,86,166,0.15); }
+        .input-group input { width: 100%; padding: 12px 15px 12px 40px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 13px; outline: none; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .input-group input:focus { border-color: var(--primary); transform: translateY(-1px); box-shadow: 0 8px 15px rgba(26,86,166,0.15); }
         .btn-login { width: 100%; padding: 12px; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: var(--transition-fast); }
         .btn-login:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(26,86,166,0.4); }
         .btn-login:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
@@ -102,22 +92,32 @@
         .controls-card { background: var(--card-bg); padding: 10px 15px; border-radius: var(--border-radius); box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;}
         
         .controls-left-group { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-        .date-picker-container { display: flex; align-items: center; background-color: var(--input-bg); padding: 5px 10px; border-radius: 6px; border: 1.5px solid #94a3b8; }
+        .date-picker-container { display: flex; align-items: center; background-color: var(--input-bg); padding: 5px 10px; border-radius: 6px; border: 1px solid #94a3b8; }
         .date-picker-container label { font-weight: 600; color: var(--primary); margin-right: 8px; font-size: 12px; }
         
         input[type="date"], select, input[type="month"] { 
-            padding: 4px 8px; border: 1.5px solid #94a3b8; 
-            border-radius: 8px; font-weight: 600; background-color: var(--card-bg); color: var(--text-main); 
-            outline: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 12px; cursor: pointer;
+            padding: 4px 8px; border: 1px solid #94a3b8; 
+            border-radius: 6px; font-weight: 600; background-color: var(--card-bg); color: var(--text-main); 
+            outline: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 12px; cursor: pointer; height: 26px;
         }
-        input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--primary); transform: translateY(-1.5px); box-shadow: 0 6px 12px rgba(26,86,166,0.15); }
+        
+        /* Hiệu ứng nẩy và sáng chung cho ô chọn lọc */
+        input[type="date"]:hover, select:hover, input[type="month"]:hover { 
+            border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(26,86,166,0.25); 
+        }
+        input[type="date"]:focus, select:focus, input[type="month"]:focus { 
+            border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(26,86,166,0.25); 
+        }
         :root[data-theme="dark"] input[type="date"], :root[data-theme="dark"] select, :root[data-theme="dark"] input[type="month"] { border-color: #64748b; background-color: #1e293b; }
+        :root[data-theme="dark"] input[type="date"]:hover, :root[data-theme="dark"] select:hover, :root[data-theme="dark"] input[type="month"]:hover {
+            border-color: var(--secondary); box-shadow: 0 4px 12px rgba(243,156,18,0.3);
+        }
 
-        .btn-import-excel { background: #38a169; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
+        .btn-import-excel { background: #38a169; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; height: 28px;}
         .btn-import-excel:hover { background: #2f855a; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(56,161,105,0.3);}
 
         .tabs { display: flex; gap: 6px; background-color: var(--input-bg); padding: 4px; border-radius: 8px; flex-wrap: wrap; border: 1px solid var(--border-color);}
-        .tab-btn { padding: 6px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition-fast); }
+        .tab-btn { padding: 6px 18px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition-fast); }
         .tab-btn.active { background-color: var(--card-bg); color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
         .sub-tabs { display: flex; gap: 12px; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; align-items: center;}
@@ -134,34 +134,36 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ==========================================
-           BỐ CỤC FORM VÀ TERMINAL (CĂN BẰNG NHAU HOÀN HẢO)
+           BỐ CỤC 3 CỘT (CỐ ĐỊNH CHIỀU CAO - GỌN GÀNG NHẤT)
            ========================================== */
-        .split-row { 
+        .three-col-layout { 
             display: flex; 
             gap: 15px; 
+            align-items: flex-start; /* Không ép giãn chiều cao để Form không bị rỗng */
             margin-bottom: 15px; 
-            align-items: stretch; /* Để Wrapper của Terminal tự động bằng Form */
         }
         
-        .form-panel { 
-            flex: 0 0 420px; 
-            background: var(--card-bg); 
-            border-radius: var(--border-radius); 
-            padding: 12px 15px; /* Giảm padding để gọn hơn */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03); 
-            border: 1px solid var(--border-color); 
-            height: fit-content; /* Quan trọng: Form ôm sát nội dung, không giãn thừa */
+        .col-forms { flex: 0 0 310px; display: flex; flex-direction: column; gap: 15px; }
+        .col-terminals { flex: 1; display: flex; flex-direction: column; gap: 15px; min-width: 0; }
+        .col-dashboards { flex: 0 0 300px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* ĐỒNG BỘ CHIỀU CAO 250px CHO TẤT CẢ CÁC BẢNG ĐỂ THẲNG HÀNG TĂM TẮP */
+        .form-panel, .terminal-panel, .dash-card {
+            height: 250px;
         }
 
-        .terminal-wrapper {
-            flex: 1;
-            position: relative; /* Quan trọng: Làm gốc cho terminal-panel absolute */
-            min-width: 0;
+        /* Elements inside Columns */
+        .form-panel { 
+            background: var(--card-bg); 
+            border-radius: var(--border-radius); 
+            padding: 10px 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03); 
+            border: 1px solid var(--border-color); 
+            display: flex;
+            flex-direction: column;
         }
 
         .terminal-panel { 
-            position: absolute; 
-            inset: 0; /* Ép Terminal lấp đầy Wrapper => Bằng đúng chiều cao Form */
             background-color: var(--terminal-bg); 
             border-radius: var(--border-radius); 
             padding: 10px 12px; 
@@ -171,89 +173,96 @@
             border: 1px solid #1e293b; 
         }
 
-        .terminal-content { 
-            flex: 1; 
-            overflow-y: auto; 
-            overflow-x: auto; 
-            padding-right: 4px; 
-            min-height: 0; 
+        .dash-card { 
+            background: var(--card-bg); 
+            border-radius: var(--border-radius); 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.02); 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
+        .dash-card:hover { box-shadow: 0 8px 20px rgba(26,86,166,0.08); border-color: var(--primary); }
+        :root[data-theme="dark"] .dash-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.4); border-color: var(--secondary); }
 
-        /* Tinh chỉnh Input gọn lại hết mức */
-        .form-header { font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 8px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center;}
-        .form-row { display: flex; gap: 12px; margin-bottom: 6px; }
+        .dash-card-header { background: linear-gradient(90deg, var(--primary), #2b6cb0); padding: 8px 12px; font-weight: bold; color: #ffffff; font-size: 11px; border-bottom: none; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+        .dash-card-header.pink { background: linear-gradient(90deg, #db2777, #be185d); }
+        .dash-card-header i { margin-right: 6px; color: #fbd38d; font-size: 13px;}
+        :root[data-theme="dark"] .dash-card-header { background: linear-gradient(90deg, #1e3a8a, #1d4ed8); color: #ffffff;}
+        :root[data-theme="dark"] .dash-card-header.pink { background: linear-gradient(90deg, #9d174d, #831843); }
+
+        .dash-table-wrapper { flex: 1; overflow-y: auto; }
+        .dash-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .dash-table th { position: sticky; top: 0; background-color: var(--card-bg); color: var(--text-muted); text-align: left; padding: 6px 10px; font-weight: 600; border-bottom: 1px solid var(--border-color); white-space: nowrap; z-index: 5;}
+        .dash-table td { padding: 6px 10px; color: var(--text-main); border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .dash-table tr:hover td { background-color: rgba(0,0,0,0.01); }
+        .dash-totalbadge { background-color: var(--secondary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+
+        /* Tinh chỉnh Input cực gọn */
+        .form-header { font-size: 12px; font-weight: bold; color: var(--primary); margin-bottom: 6px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center;}
+        .form-row { display: flex; gap: 8px; margin-bottom: 6px; }
         .form-group { flex: 1; margin-bottom: 6px; }
-        .form-group label { display: block; margin-bottom: 3px; font-size: 11px; font-weight: 600; color: var(--text-main); }
+        .form-group label { display: block; margin-bottom: 2px; font-size: 10px; font-weight: 600; color: var(--text-main); transition: 0.3s; }
         
-        .frm-input { width: 100%; padding: 6px 10px; border: 1.5px solid #94a3b8; border-radius: 8px; font-size: 12px; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); outline: none; height: 32px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+        .frm-input { width: 100%; padding: 4px 8px; border: 1px solid #94a3b8; border-radius: 6px; font-size: 11px; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); outline: none; height: 28px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
         :root[data-theme="dark"] .frm-input { border-color: #64748b; background-color: #1e293b; }
-        .frm-input:focus { border-color: var(--primary); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(26,86,166,0.15); }
         
-        .custom-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat !important; background-position: right 6px center !important; background-size: 16px !important; padding-right: 25px; cursor: pointer; }
+        /* Hiệu ứng rê chuột nẩy & sáng cho Form Input */
+        .frm-input:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(26,86,166,0.25); }
+        :root[data-theme="dark"] .frm-input:hover { border-color: var(--secondary); box-shadow: 0 4px 12px rgba(243,156,18,0.3); }
+        .frm-input:focus { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(26,86,166,0.25); }
+        
+        .custom-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat !important; background-position: right 4px center !important; background-size: 14px !important; padding-right: 20px; cursor: pointer; }
         .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a56a6'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
         :root[data-theme="dark"] .custom-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
 
-        .input-with-btn { display: flex; gap: 6px; }
-        .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; transition: 0.2s; height: 32px;}
+        .input-with-btn { display: flex; gap: 4px; }
+        .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 8px; cursor: pointer; transition: 0.2s; height: 28px;}
         .btn-lookup:hover { background: #113c7a; }
-        .btn-submit { color: white; width: 100%; padding: 6px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 2px; transition: 0.2s; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px;}
-        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(243,156,18,0.3); }
+        .btn-submit { color: white; width: 100%; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: auto; transition: 0.2s; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 6px; height: 30px;}
+        .btn-submit:hover { opacity: 0.9; box-shadow: 0 4px 10px rgba(243,156,18,0.3); }
 
-        .autocomplete-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1.5px solid var(--primary); border-radius: 6px; box-shadow: 0 6px 15px rgba(0,0,0,0.15); max-height: 150px; overflow-y: auto; z-index: 1000; display: none; margin-top: 2px; }
-        .suggestion-item { padding: 6px 10px; font-size: 12px; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); transition: background 0.1s; }
+        .autocomplete-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid var(--primary); border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-height: 120px; overflow-y: auto; z-index: 1000; display: none; margin-top: 2px; }
+        .suggestion-item { padding: 5px 8px; font-size: 11px; color: var(--text-main); cursor: pointer; border-bottom: 1px solid var(--border-color); }
         .suggestion-item:last-child { border-bottom: none; }
         .suggestion-item:hover, .suggestion-item.active { background-color: var(--primary); color: #fff; font-weight: bold;}
 
-        .terminal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid #334155; padding-bottom: 6px; gap: 10px; flex-wrap: wrap;}
-        .terminal-title { color: #fff; font-family: 'Courier New', monospace; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px;}
+        /* Terminal Headers & Content */
+        .terminal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid #334155; padding-bottom: 4px; gap: 10px; flex-wrap: wrap;}
+        .terminal-title { color: #fff; font-family: 'Courier New', monospace; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px;}
         .terminal-title i { color: var(--terminal-text); }
-        .terminal-search-box { position: relative; display: flex; align-items: center; flex: 1; max-width: 200px;}
-        .terminal-search-box i { position: absolute; left: 10px; color: #94a3b8; font-size: 11px; }
-        .terminal-search-box input { width: 100%; padding: 4px 10px 4px 25px; border-radius: 4px; border: 1px solid #334155; background-color: rgba(255,255,255,0.05); color: #fff; font-size: 11px; outline: none; transition: 0.2s;}
+        .terminal-search-box { position: relative; display: flex; align-items: center; flex: 1; max-width: 180px;}
+        .terminal-search-box i { position: absolute; left: 8px; color: #94a3b8; font-size: 10px; }
+        .terminal-search-box input { width: 100%; height: 24px; padding: 2px 8px 2px 22px; border-radius: 4px; border: 1px solid #334155; background-color: rgba(255,255,255,0.05); color: #fff; font-size: 10px; outline: none; transition: 0.2s;}
         .terminal-search-box input:focus { border-color: var(--secondary); background-color: rgba(255,255,255,0.1); }
         
-        .btn-copy-terminal { background-color: #334155; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.2s; display: flex; gap: 4px; align-items: center; white-space: nowrap;}
+        .btn-copy-terminal { background-color: #334155; color: white; border: none; height: 24px; padding: 0 8px; border-radius: 4px; cursor: pointer; font-size: 10px; transition: 0.2s; display: flex; gap: 4px; align-items: center; white-space: nowrap;}
         .btn-copy-terminal:hover { background-color: #475569; }
 
+        .terminal-content { flex: 1; overflow-y: auto; overflow-x: auto; padding-right: 2px; min-height: 0; }
         .terminal-content::-webkit-scrollbar { width: 4px; height: 4px;}
         .terminal-content::-webkit-scrollbar-thumb { background-color: #475569; border-radius: 2px; }
         
-        .term-table { width: 100%; border-collapse: collapse; font-family: 'Consolas', monospace; font-size: 12px; color: #e2e8f0; min-width: 700px; }
-        .term-table th { position: sticky; top: 0; background-color: var(--terminal-bg); border-bottom: 1px dashed #475569; padding: 5px; text-align: left; color: #94a3b8; white-space: nowrap; font-weight: normal; z-index: 10;}
-        .term-table td { padding: 5px; border-bottom: 1px solid #1e293b; vertical-align: top;}
+        .term-table { width: 100%; border-collapse: collapse; font-family: 'Consolas', monospace; font-size: 11px; color: #e2e8f0; min-width: 600px; }
+        .term-table th { position: sticky; top: 0; background-color: var(--terminal-bg); border-bottom: 1px dashed #475569; padding: 4px; text-align: left; color: #94a3b8; white-space: nowrap; font-weight: normal; z-index: 10;}
+        .term-table td { padding: 4px; border-bottom: 1px solid #1e293b; vertical-align: middle;}
         .term-table tr:hover td { background-color: rgba(255,255,255,0.05); }
         
-        .t-stt { color: #fbbf24; width: 35px; font-weight: bold;}
-        .t-mst { color: #38bdf8; width: 85px; }
-        .t-sdt { color: #cbd5e1; width: 85px; }
-        .t-ten { color: #fff; font-weight: bold; min-width: 140px;}
-        .t-loai { color: #f472b6; width: 55px; }
+        .t-stt { color: #fbbf24; width: 25px; font-weight: bold; text-align: center;}
+        .t-mst { color: #38bdf8; width: 75px; }
+        .t-sdt { color: #cbd5e1; width: 75px; }
+        .t-ten { color: #fff; font-weight: bold; min-width: 100px;}
+        .t-loai { color: #f472b6; width: 45px; }
         .t-vd { color: #94a3b8; font-style: italic; }
-        .t-action { width: 55px; text-align: right; white-space: nowrap;}
+        .t-action { width: 40px; text-align: right; white-space: nowrap;}
         
         .action-btn-sm { background: none; border: none; cursor: pointer; padding: 2px 4px; border-radius: 3px; font-size: 11px; transition: 0.2s;}
         .edit-btn { color: #38bdf8; } .edit-btn:hover { background-color: rgba(56,189,248,0.1); }
         .del-btn { color: #f87171; } .del-btn:hover { background-color: rgba(248,113,113,0.1); }
-        .empty-terminal { text-align: center; color: #475569; margin-top: 20px; font-style: italic; }
+        .empty-terminal { text-align: center; color: #475569; margin-top: 15px; font-style: italic; }
 
-        /* Dashboard */
-        .dashboard-cards { display: grid; grid-template-columns: repeat(1, 1fr); gap: 15px; margin-bottom: 15px; }
-        .dash-card { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--border-color); box-shadow: 0 3px 10px rgba(0,0,0,0.02); overflow: hidden; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .dash-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(26,86,166,0.08); border-color: var(--primary); }
-        :root[data-theme="dark"] .dash-card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.4); border-color: var(--secondary); }
-        
-        .dash-card-header { background: linear-gradient(90deg, var(--primary), #2b6cb0); padding: 10px 15px; font-weight: bold; color: #ffffff; font-size: 12px; border-bottom: none; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
-        .dash-card-header i { margin-right: 6px; color: #fbd38d; font-size: 14px;}
-        :root[data-theme="dark"] .dash-card-header { background: linear-gradient(90deg, #1e3a8a, #1d4ed8); color: #ffffff;}
-        
-        .dash-table-wrapper { flex: 1; overflow-x: auto; }
-        .dash-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        .dash-table th { background-color: rgba(0,0,0,0.02); color: var(--text-muted); text-align: left; padding: 6px 12px; font-weight: 600; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
-        .dash-table td { padding: 6px 12px; color: var(--text-main); border-bottom: 1px solid var(--border-color); vertical-align: middle; }
-        .dash-table tr:hover td { background-color: rgba(0,0,0,0.01); }
-        .dash-totalbadge { background-color: var(--secondary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
-
-        /* Reports */
+        /* Reports & Stats Area */
         .report-wrapper { background: var(--card-bg); border-radius: var(--border-radius); padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.02); border: 1px solid var(--border-color);}
         .stats-section { margin-bottom: 20px; }
         .stats-title { font-size: 13px; color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: bold; }
@@ -289,10 +298,10 @@
         .report-split-layout { display: flex; gap: 15px; align-items: flex-start;}
         .filter-col { flex: 0 0 200px; background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; }
         .filter-col label { font-weight: bold; color: var(--text-main); font-size: 11px; display: block; margin-bottom: 4px;}
-        .filter-col select { width: 100%; margin-bottom: 10px;}
+        .filter-col select { width: 100%; margin-bottom: 10px; height: 28px; font-size: 11px;}
         .btn-export { background: #1a56a6; color: white; width: 100%; font-size: 11px; padding: 6px 10px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;}
         .btn-export:hover { background: #113c7a; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(26,86,166,0.3);}
-        .btn-export-excel { background: #10b981; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
+        .btn-export-excel { background: #10b981; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.2s; height: 26px;}
         .btn-export-excel:hover { background: #059669; }
 
         .report-preview-container { flex: 1; overflow-x: auto; background-color: var(--input-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); display: flex; justify-content: center; }
@@ -302,40 +311,24 @@
         #toast.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
         #toast.error { background: #ef4444; box-shadow: 0 4px 12px rgba(239,68,68,0.3);}
 
-        @media (max-width: 992px) {
-            .split-row { flex-direction: column; }
-            .form-panel { flex: none; width: 100%; }
-            .terminal-wrapper { height: 350px; width: 100%; }
-            .report-split-layout { flex-direction: column; }
-            .filter-col { width: 100%; flex: none; }
-            .header-content { flex-wrap: wrap; gap: 8px; justify-content: center;}
-            .header-titles { order: -1; width: 100%; }
-            .controls-card { flex-direction: column; align-items: flex-start;}
-            .controls-left-group { width: 100%; flex-direction: column; align-items: flex-start;}
-            .tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px;}
-            .tab-btn { flex: 1; white-space: nowrap; padding: 8px; }
-            .report-preview { zoom: 0.55; -moz-transform: scale(0.55); width: 100%; min-width: 600px;}
-            .user-greeting { display: none; }
-            .terminal-search-box { width: 100%; max-width: none; }
+        @media (max-width: 1200px) {
+            .three-col-layout { flex-wrap: wrap; }
+            .col-forms, .col-dashboards { flex: 1 1 100%; }
+            .col-terminals { width: 100%; }
         }
 
-        /* Winter */
-        #winter-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; overflow: hidden; }
+        /* Tĩnh tuyết rơi - Đã chỉnh lại z-index để tuyết rơi bay phía trước bảng */
+        #winter-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; overflow: hidden; }
         #mainApp, #loginScreen, header { position: relative; z-index: 1; }
         .snowflake { position: absolute; top: -10px; opacity: 0.8; user-select: none; animation-name: fall, shake; animation-iteration-count: infinite; animation-timing-function: linear, ease-in-out; text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
         :root[data-theme="light"] .snowflake { color: #94a3b8; } 
         :root[data-theme="dark"] .snowflake { color: #ffffff; }
         @keyframes fall { 0% { top: -10%; } 100% { top: 110%; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(25px); } }
-        #snowman { position: absolute; bottom: 20px; right: 5%; font-size: 70px; animation: bounceSnowman 4s infinite ease-in-out; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); cursor: pointer; pointer-events: auto; z-index: 10; transition: transform 0.1s; }
-        #snowman:active { transform: scale(0.9) translateY(5px); }
-        @keyframes bounceSnowman { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
     </style>
 </head>
 <body>
-    <div id="winter-wrapper">
-        <div id="snowman" title="Click để tải lại trang">⛄</div>
-    </div>
+    <div id="winter-wrapper"></div>
     
     <div id="loader" class="pro-loader-wrapper">
         <div class="loader-light-effect"></div>
@@ -362,6 +355,7 @@
             <div style="margin-top: 30px; padding-top: 15px; border-top: 1px dashed var(--border-color); font-size: 11px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="VN" style="width: 18px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
                 <span style="font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Tự hào trí tuệ Việt Nam</span>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="VN" style="width: 18px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
             </div>
         </div>
     </div>
@@ -408,64 +402,124 @@
 
             <div class="tab-content-wrapper">
                 
+                <!-- TAB NHẬP LIỆU (BỐ CỤC 3 CỘT - ĐÃ CỐ ĐỊNH CHIỀU CAO) -->
                 <div id="tab-nhaplieu" class="main-tab-content active">
-                    
-                    <div class="split-row">
-                        <div class="form-panel">
-                            <div class="form-header">
-                                <span><i class="fas fa-tools"></i> THÔNG TIN HỖ TRỢ</span>
-                                <span id="formModeBadge" style="font-size: 10px; background: #ebf4ff; color: #1a56a6; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
-                            </div>
-                            <form id="inputForm" style="display: flex; flex-direction: column; flex: 1;">
-                                <input type="hidden" id="frm-idx" value="-1">
-                                <div class="form-row">
-                                    <div class="form-group" style="flex: 1.2;">
-                                        <label>Mã số thuế</label>
-                                        <div class="input-with-btn">
-                                            <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập MST..." autocomplete="off">
-                                            <button type="button" class="btn-lookup" onclick="searchMSTForm()" id="btnSearchMST" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
+                    <div class="three-col-layout">
+                        
+                        <!-- CỘT 1: FORM NHẬP LIỆU -->
+                        <div class="col-forms">
+                            <!-- Form Hỗ trợ -->
+                            <div class="form-panel">
+                                <div class="form-header">
+                                    <span><i class="fas fa-tools"></i> THÔNG TIN HỖ TRỢ</span>
+                                    <span id="formModeBadge" style="font-size: 9px; background: #ebf4ff; color: #1a56a6; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
+                                </div>
+                                <form id="inputForm" style="display: flex; flex-direction: column; flex: 1;">
+                                    <input type="hidden" id="frm-idx" value="-1">
+                                    <div class="form-row">
+                                        <div class="form-group" style="flex: 1.2;">
+                                            <label>Mã số thuế</label>
+                                            <div class="input-with-btn">
+                                                <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập MST..." autocomplete="off">
+                                                <button type="button" class="btn-lookup" onclick="searchMSTForm()" id="btnSearchMST" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="flex: 1;">
+                                            <label>Số điện thoại</label>
+                                            <input type="text" id="frm-sdt" class="frm-input" placeholder="Nhập SĐT..." autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group" style="flex: 1;">
-                                        <label>Số điện thoại</label>
-                                        <input type="text" id="frm-sdt" class="frm-input" placeholder="Nhập SĐT..." autocomplete="off">
+                                    <div class="form-group">
+                                        <label>Tên công ty</label>
+                                        <input type="text" id="frm-company" class="frm-input" placeholder="Tự động hoặc nhập tay..." autocomplete="off">
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Tên công ty</label>
-                                    <input type="text" id="frm-company" class="frm-input" placeholder="Tự động hoặc nhập tay..." autocomplete="off">
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group" style="flex: 0.8;">
-                                        <label>Loại hỗ trợ</label>
-                                        <select id="frm-type" class="frm-input custom-select">
-                                            <option value="HĐ">Hóa đơn (HĐ)</option>
-                                            <option value="CKS">Chữ ký số (CKS)</option>
-                                            <option value="BHXH">Bảo hiểm (BHXH)</option>
-                                            <option value="ĐL/CTV">Đại lý / CTV</option>
-                                        </select>
+                                    <div class="form-row">
+                                        <div class="form-group" style="flex: 0.8;">
+                                            <label>Loại hỗ trợ</label>
+                                            <select id="frm-type" class="frm-input custom-select">
+                                                <option value="HĐ">Hóa đơn (HĐ)</option>
+                                                <option value="CKS">Chữ ký số (CKS)</option>
+                                                <option value="BHXH">Bảo hiểm (BHXH)</option>
+                                                <option value="ĐL/CTV">Đại lý / CTV</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="flex: 1.2; position: relative;">
+                                            <label>Vấn đề hỗ trợ xử lý</label>
+                                            <input type="text" id="frm-issue" class="frm-input" placeholder="Ghi chú chi tiết..." autocomplete="off">
+                                            <div id="issue-suggestions" class="autocomplete-suggestions"></div>
+                                        </div>
                                     </div>
-                                    <div class="form-group" style="flex: 1.2; position: relative;">
-                                        <label>Vấn đề hỗ trợ xử lý</label>
-                                        <input type="text" id="frm-issue" class="frm-input" placeholder="Ghi chú chi tiết..." autocomplete="off">
-                                        <div id="issue-suggestions" class="autocomplete-suggestions"></div>
+                                    <input type="hidden" id="frm-tech" value="Hưng">
+                                    <div style="display: flex; gap: 8px; margin-top: auto;">
+                                        <button type="button" class="btn-submit btn-gradient-animate" id="btnSubmitForm" onclick="submitForm()">
+                                            <i class="fas fa-save"></i> LƯU HỖ TRỢ
+                                        </button>
+                                        <button type="button" class="btn-submit" id="btnCancelEdit" onclick="cancelEdit()" style="display: none; background: #64748b; flex: 0.5;">HỦY</button>
                                     </div>
+                                </form>
+                            </div>
+
+                            <!-- Form Mua / Gia Hạn -->
+                            <div class="form-panel">
+                                <div class="form-header" style="color: #db2777;">
+                                    <span><i class="fas fa-shopping-cart"></i> THÔNG TIN MUA / GIA HẠN</span>
+                                    <span id="formSalesModeBadge" style="font-size: 9px; background: #fdf2f8; color: #db2777; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
                                 </div>
-                                <input type="hidden" id="frm-tech" value="Hưng">
-                                <div style="display: flex; gap: 8px; margin-top: auto;">
-                                    <button type="button" class="btn-submit btn-gradient-animate" id="btnSubmitForm" onclick="submitForm()">
-                                        <i class="fas fa-save"></i> LƯU HỖ TRỢ
-                                    </button>
-                                    <button type="button" class="btn-submit" id="btnCancelEdit" onclick="cancelEdit()" style="display: none; background: #64748b; flex: 0.5;">HỦY</button>
-                                </div>
-                            </form>
+                                <form id="inputSalesForm" style="display: flex; flex-direction: column; flex: 1;">
+                                    <input type="hidden" id="frm-sales-idx" value="-1">
+                                    <input type="hidden" id="frm-sales-date" value="">
+                                    <div class="form-row">
+                                        <div class="form-group" style="flex: 1.2;">
+                                            <label>Mã số thuế</label>
+                                            <div class="input-with-btn">
+                                                <input type="text" id="frm-sales-mst" class="frm-input" placeholder="Nhập MST..." autocomplete="off">
+                                                <button type="button" class="btn-lookup" onclick="searchMSTFormSales()" id="btnSearchMSTSales" style="background:#db2777;" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="flex: 1;">
+                                            <label>Số điện thoại</label>
+                                            <input type="text" id="frm-sales-sdt" class="frm-input" placeholder="Nhập SĐT..." autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tên công ty</label>
+                                        <input type="text" id="frm-sales-company" class="frm-input" placeholder="Tự động hoặc nhập tay..." autocomplete="off">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group" style="flex: 1;">
+                                            <label>Loại yêu cầu</label>
+                                            <select id="frm-sales-loai" class="frm-input custom-select">
+                                                <option value="Gia hạn">Gia hạn</option>
+                                                <option value="Mua mới">Mua mới</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="flex: 1;">
+                                            <label>Dịch vụ</label>
+                                            <select id="frm-sales-dichvu" class="frm-input custom-select">
+                                                <option value="CKS">Chữ ký số (CKS)</option>
+                                                <option value="HĐ">Hóa đơn (HĐ)</option>
+                                                <option value="BHXH">Bảo hiểm (BHXH)</option>
+                                                <option value="Chứng từ">Chứng từ khấu trừ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 8px; margin-top: auto;">
+                                        <button type="button" class="btn-submit" id="btnSubmitSalesForm" onclick="submitSalesForm()" style="background: linear-gradient(-45deg, #db2777, #be185d);">
+                                            <i class="fas fa-cart-plus"></i> LƯU YÊU CẦU
+                                        </button>
+                                        <button type="button" class="btn-submit" id="btnCancelSalesEdit" onclick="cancelSalesEdit()" style="display: none; background: #64748b; flex: 0.5;">HỦY</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
 
-                        <div class="terminal-wrapper">
+                        <!-- CỘT 2: TERMINALS -->
+                        <div class="col-terminals">
+                            <!-- Terminal Hỗ Trợ -->
                             <div class="terminal-panel">
                                 <div class="terminal-header">
-                                    <div class="terminal-title"><i class="fas fa-terminal"></i> BẢNG DỮ LIỆU HỖ TRỢ (Ngày chỉ định)</div>
-                                    <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
+                                    <div class="terminal-title"><i class="fas fa-terminal"></i> BẢNG DỮ LIỆU HỖ TRỢ </div>
+                                    <div style="display: flex; gap: 6px; align-items: center; justify-content: flex-end;">
                                         <div class="terminal-search-box">
                                             <i class="fas fa-search"></i>
                                             <input type="text" id="terminalSearch" placeholder="Tìm MST, Tên, Lỗi...">
@@ -473,7 +527,7 @@
                                         <button class="btn-copy-terminal" onclick="copyTerminalData()"><i class="fas fa-copy"></i> Copy</button>
                                     </div>
                                 </div>
-                                <div class="terminal-content">
+                                <div class="terminal-content" id="terminalContent">
                                     <table class="term-table">
                                         <thead>
                                             <tr>
@@ -490,65 +544,12 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                    </div> <div class="split-row">
-                        <div class="form-panel">
-                            <div class="form-header">
-                                <span><i class="fas fa-shopping-cart"></i> THÔNG TIN MUA / GIA HẠN</span>
-                                <span id="formSalesModeBadge" style="font-size: 10px; background: #fdf2f8; color: #db2777; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
-                            </div>
-                            <form id="inputSalesForm" style="display: flex; flex-direction: column; flex: 1;">
-                                <input type="hidden" id="frm-sales-idx" value="-1">
-                                <input type="hidden" id="frm-sales-date" value="">
-                                <div class="form-row">
-                                    <div class="form-group" style="flex: 1.2;">
-                                        <label>Mã số thuế</label>
-                                        <div class="input-with-btn">
-                                            <input type="text" id="frm-sales-mst" class="frm-input" placeholder="Nhập MST..." autocomplete="off">
-                                            <button type="button" class="btn-lookup" onclick="searchMSTFormSales()" id="btnSearchMSTSales" style="background:#db2777;" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" style="flex: 1;">
-                                        <label>Số điện thoại</label>
-                                        <input type="text" id="frm-sales-sdt" class="frm-input" placeholder="Nhập SĐT..." autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Tên công ty</label>
-                                    <input type="text" id="frm-sales-company" class="frm-input" placeholder="Tự động hoặc nhập tay..." autocomplete="off">
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group" style="flex: 1;">
-                                        <label>Loại yêu cầu</label>
-                                        <select id="frm-sales-loai" class="frm-input custom-select">
-                                            <option value="Gia hạn">Gia hạn</option>
-                                            <option value="Mua mới">Mua mới</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="flex: 1;">
-                                        <label>Dịch vụ</label>
-                                        <select id="frm-sales-dichvu" class="frm-input custom-select">
-                                            <option value="CKS">Chữ ký số (CKS)</option>
-                                            <option value="HĐ">Hóa đơn (HĐ)</option>
-                                            <option value="BHXH">Bảo hiểm (BHXH)</option>
-                                            <option value="Chứng từ">Chứng từ khấu trừ</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 8px; margin-top: auto;">
-                                    <button type="button" class="btn-submit" id="btnSubmitSalesForm" onclick="submitSalesForm()" style="background: linear-gradient(-45deg, #db2777, #be185d);">
-                                        <i class="fas fa-cart-plus"></i> LƯU YÊU CẦU
-                                    </button>
-                                    <button type="button" class="btn-submit" id="btnCancelSalesEdit" onclick="cancelSalesEdit()" style="display: none; background: #64748b; flex: 0.5;">HỦY</button>
-                                </div>
-                            </form>
-                        </div>
 
-                        <div class="terminal-wrapper">
+                            <!-- Terminal Mua / Gia hạn -->
                             <div class="terminal-panel">
                                 <div class="terminal-header">
                                     <div class="terminal-title"><i class="fas fa-list-alt" style="color: #db2777;"></i> BẢNG YÊU CẦU MUA / GIA HẠN (Toàn bộ)</div>
-                                    <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
+                                    <div style="display: flex; gap: 6px; align-items: center; justify-content: flex-end;">
                                         <div class="terminal-search-box">
                                             <i class="fas fa-search"></i>
                                             <input type="text" id="terminalSalesSearch" placeholder="Tìm MST, Tên, SĐT...">
@@ -560,7 +561,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="t-stt">STT</th>
-                                                <th style="width: 80px; color: #fbbf24;">Ngày</th>
+                                                <th style="width: 75px; color: #fbbf24;">Ngày</th>
                                                 <th class="t-mst">MST</th>
                                                 <th class="t-sdt">SĐT</th>
                                                 <th class="t-ten" style="width: 100%;">Tên Công Ty</th>
@@ -574,27 +575,54 @@
                                 </div>
                             </div>
                         </div>
-                    </div> <div class="dashboard-cards">
-                        <div class="dash-card">
-                            <div class="dash-card-header">
-                                <div><i class="fas fa-chart-pie"></i>TỶ LỆ CÁC LOẠI HỖ TRỢ KỸ THUẬT (All-time)</div>
-                                <div class="dash-totalbadge" title="Tổng số yêu cầu">Tổng: <span id="gs-total-badge">0</span></div>
+
+                        <!-- CỘT 3: DASHBOARDS (TỶ LỆ) -->
+                        <div class="col-dashboards">
+                            <!-- Dashboard Hỗ trợ -->
+                            <div class="dash-card">
+                                <div class="dash-card-header">
+                                    <div><i class="fas fa-chart-pie"></i>TỶ LỆ LOẠI HỖ TRỢ KỸ THUẬT</div>
+                                    <div class="dash-totalbadge" title="Tổng số yêu cầu">Tổng: <span id="gs-total-badge">0</span></div>
+                                </div>
+                                <div class="dash-table-wrapper">
+                                    <table class="dash-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Loại Hỗ Trợ</th>
+                                                <th style="width: 50%;">Tỷ Lệ (%)</th>
+                                                <th style="text-align: center;">SL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="gs-ratio-body"></tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="dash-table-wrapper">
-                                <table class="dash-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Loại Hỗ Trợ</th>
-                                            <th style="width: 50%;">Tỷ Lệ (%)</th>
-                                            <th style="text-align: center;">Số Lượng</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="gs-ratio-body"></tbody>
-                                </table>
+
+                            <!-- Dashboard Mua / Gia Hạn -->
+                            <div class="dash-card">
+                                <div class="dash-card-header pink">
+                                    <div><i class="fas fa-chart-pie"></i>TỶ LỆ YÊU CẦU MUA / GIA HẠN</div>
+                                    <div class="dash-totalbadge" style="background:#be185d;" title="Tổng số yêu cầu">Tổng: <span id="gs-sales-total-badge">0</span></div>
+                                </div>
+                                <div class="dash-table-wrapper">
+                                    <table class="dash-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Dịch vụ</th>
+                                                <th style="width: 50%;">Tỷ Lệ (%)</th>
+                                                <th style="text-align: center;">SL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="gs-sales-ratio-body"></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div> <div id="tab-baocao" class="main-tab-content">
+                </div> <!-- Kết thúc Tab Nhập liệu -->
+
+                <!-- TAB BÁO CÁO & THỐNG KÊ -->
+                <div id="tab-baocao" class="main-tab-content">
                     <div class="sub-tabs">
                         <button class="sub-tab-btn active" onclick="switchSubTab('thongke')"><i class="fas fa-chart-line"></i> Tổng quan Thống kê</button>
                         <button class="sub-tab-btn" onclick="switchSubTab('bctuan')"><i class="fas fa-file-alt"></i> Báo cáo Tuần</button>
@@ -605,6 +633,7 @@
                         </div>
                     </div>
                     <div class="report-wrapper">
+                        <!-- Thống kê chung -->
                         <div id="sub-thongke" class="sub-tab-content active">
                             <div class="stats-section">
                                 <div class="stats-title"><i class="fas fa-calendar-day"></i> Tổng kết Ngày <span id="lblDay"></span></div>
@@ -629,6 +658,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Báo cáo Tuần -->
                         <div id="sub-bctuan" class="sub-tab-content">
                             <div class="report-split-layout">
                                 <div class="filter-col">
@@ -647,6 +677,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Báo cáo Tháng -->
                         <div id="sub-bcthang" class="sub-tab-content">
                             <div class="report-split-layout">
                                 <div class="filter-col">
@@ -668,6 +699,7 @@
     </div>
     <div id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg"></span></div>
 
+    <!-- SCRIPT FIREBASE & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, inMemoryPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -694,7 +726,7 @@
         let exportWeekFilename = ""; let exportMonthFilename = "";
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
 
-        // UTILITY FUNCTIONS & DEBOUNCE
+        // UTILITY FUNCTIONS
         function formatEmptyField(val) {
             if (val === null || val === undefined) return "—";
             let strVal = val.toString().trim();
@@ -773,43 +805,43 @@
             }
         }
 
-        // GLOBAL DASHBOARD STATS
+        // GLOBAL DASHBOARD STATS (2 BẢNG)
         function updateGlobalStats() {
             let typeCounts = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0 };
+            let salesSvcCounts = { 'CKS': 0, 'HĐ': 0, 'BHXH': 0, 'Chứng từ': 0 };
             let totalRecords = 0;
+            let totalSales = 0;
 
             for (let date in allData) {
                 allData[date].forEach(item => {
                     if (item.is_sales !== true) {
                         totalRecords++;
-                        if(typeCounts[item.type] !== undefined) {
-                            typeCounts[item.type]++;
-                        }
+                        if(typeCounts[item.type] !== undefined) typeCounts[item.type]++;
+                    } else {
+                        totalSales++;
+                        if(salesSvcCounts[item.dich_vu] !== undefined) salesSvcCounts[item.dich_vu]++;
                     }
                 });
             }
 
+            // Dashboard Hỗ trợ
             let ratioHtml = "";
             if(totalRecords > 0) {
                 let typesInfo = [
-                    { id: 'HĐ', name: 'Hóa đơn ĐT (HĐ)' },
-                    { id: 'CKS', name: 'Chữ ký số (CKS)' },
-                    { id: 'BHXH', name: 'Bảo hiểm XH (BHXH)' },
-                    { id: 'ĐL/CTV', name: 'Đại lý / CTV' }
+                    { id: 'HĐ', name: 'Hóa đơn ĐT (HĐ)' }, { id: 'CKS', name: 'Chữ ký số (CKS)' },
+                    { id: 'BHXH', name: 'Bảo hiểm XH (BHXH)' }, { id: 'ĐL/CTV', name: 'Đại lý / CTV' }
                 ];
-                
                 typesInfo.forEach(t => {
                     let count = typeCounts[t.id] || 0;
                     let pct = ((count / totalRecords) * 100).toFixed(1);
-                    
                     ratioHtml += `<tr>
                         <td style="font-weight: 600;">${t.name}</td>
                         <td>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="flex: 1; background-color: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="flex: 1; background-color: var(--border-color); height: 6px; border-radius: 4px; overflow: hidden;">
                                     <div style="width: ${pct}%; background-color: var(--primary); height: 100%; border-radius: 4px; box-shadow: 0 0 5px var(--primary);"></div>
                                 </div>
-                                <span style="font-weight: bold; width: 45px; text-align: right;">${pct}%</span>
+                                <span style="font-weight: bold; width: 40px; text-align: right;">${pct}%</span>
                             </div>
                         </td>
                         <td style="text-align: center; font-weight: bold; color: var(--primary);">${count}</td>
@@ -820,6 +852,35 @@
             }
             document.getElementById('gs-ratio-body').innerHTML = ratioHtml;
             document.getElementById('gs-total-badge').innerText = totalRecords;
+
+            // Dashboard Yêu cầu mua / gia hạn
+            let salesHtml = "";
+            if(totalSales > 0) {
+                let salesInfo = [
+                    { id: 'CKS', name: 'Chữ ký số (CKS)' }, { id: 'HĐ', name: 'Hóa đơn ĐT (HĐ)' },
+                    { id: 'BHXH', name: 'Bảo hiểm XH (BHXH)' }, { id: 'Chứng từ', name: 'Chứng từ khấu trừ' }
+                ];
+                salesInfo.forEach(t => {
+                    let count = salesSvcCounts[t.id] || 0;
+                    let pct = ((count / totalSales) * 100).toFixed(1);
+                    salesHtml += `<tr>
+                        <td style="font-weight: 600;">${t.name}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="flex: 1; background-color: var(--border-color); height: 6px; border-radius: 4px; overflow: hidden;">
+                                    <div style="width: ${pct}%; background-color: #db2777; height: 100%; border-radius: 4px; box-shadow: 0 0 5px #db2777;"></div>
+                                </div>
+                                <span style="font-weight: bold; width: 40px; text-align: right;">${pct}%</span>
+                            </div>
+                        </td>
+                        <td style="text-align: center; font-weight: bold; color: #db2777;">${count}</td>
+                    </tr>`;
+                });
+            } else {
+                salesHtml = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có dữ liệu mua/gia hạn</td></tr>`;
+            }
+            document.getElementById('gs-sales-ratio-body').innerHTML = salesHtml;
+            document.getElementById('gs-sales-total-badge').innerText = totalSales;
         }
 
         // LOADING & AUTHENTICATION
@@ -834,8 +895,8 @@
             
             initMonthSelectors();
             setupAutocomplete(); 
+            initWinterEffects();
             document.getElementById('terminalSearch').addEventListener('input', debounce(renderTerminal, 300));
-            // Gắn event cho ô tìm kiếm Sales
             document.getElementById('terminalSalesSearch').addEventListener('input', debounce(renderSalesTerminal, 300));
         });
 
@@ -969,7 +1030,7 @@
             updateAllReports();
         }
 
-        // TÍNH NĂNG NHẬP LIỆU
+        // NHẬP LIỆU EXCEL
         window.importExcelData = function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1035,7 +1096,7 @@
             updateStatusIndicator("Hệ thống sẵn sàng", "");
         }
 
-        // Logic Lấy Tên Cty API
+        // Lấy Tên Cty API
         async function fetchCompanyName(mstInput) {
             let foundName = "";
             let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
@@ -1062,7 +1123,7 @@
         window.searchMSTForm = async function() {
             let mstInput = document.getElementById('frm-mst').value.replace(/[^0-9-]/g, '');
             document.getElementById('frm-mst').value = mstInput;
-            if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!", true);
+            if (!mstInput) return showToast("Vui lòng nhập MST!", true);
             const btn = document.getElementById('btnSearchMST'); const originalIcon = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
 
@@ -1077,7 +1138,7 @@
         window.searchMSTFormSales = async function() {
             let mstInput = document.getElementById('frm-sales-mst').value.replace(/[^0-9-]/g, '');
             document.getElementById('frm-sales-mst').value = mstInput;
-            if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!", true);
+            if (!mstInput) return showToast("Vui lòng nhập MST!", true);
             const btn = document.getElementById('btnSearchMSTSales'); const originalIcon = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
 
@@ -1089,9 +1150,7 @@
             finally { btn.innerHTML = originalIcon; btn.disabled = false; }
         }
 
-        // ==========================================
         // QUẢN LÝ FORM HỖ TRỢ KỸ THUẬT
-        // ==========================================
         window.submitForm = function() {
             const mst = document.getElementById('frm-mst').value.trim();
             const company = document.getElementById('frm-company').value.trim();
@@ -1154,9 +1213,7 @@
             }
         }
 
-        // ==========================================
-        // QUẢN LÝ FORM BÁN HÀNG / GIA HẠN
-        // ==========================================
+        // QUẢN LÝ FORM YÊU CẦU MUA / GIA HẠN
         window.submitSalesForm = function() {
             const mst = document.getElementById('frm-sales-mst').value.trim();
             const company = document.getElementById('frm-sales-company').value.trim();
@@ -1181,7 +1238,8 @@
                 showToast("Đã lưu yêu cầu mua/gia hạn!", false);
                 triggerAutoSave(); 
             }
-            renderSalesTerminal(); cancelSalesEdit(); document.getElementById('frm-sales-mst').focus();
+            renderSalesTerminal(); cancelSalesEdit(); updateGlobalStats();
+            document.getElementById('frm-sales-mst').focus();
         }
 
         window.editSalesRecord = function(dateStr, idx) {
@@ -1218,15 +1276,13 @@
         window.deleteSalesRecord = function(dateStr, idx) {
             if(confirm("Xóa yêu cầu mua/gia hạn này khỏi hệ thống?")) {
                 allData[dateStr].splice(idx, 1);
-                renderSalesTerminal(); saveDataToCloudSpecificDate(dateStr);
+                renderSalesTerminal(); saveDataToCloudSpecificDate(dateStr); updateGlobalStats();
                 if(document.getElementById('frm-sales-date').value === dateStr && parseInt(document.getElementById('frm-sales-idx').value) === idx) cancelSalesEdit();
                 showToast("Đã xóa thành công!", false);
             }
         }
 
-        // ==========================================
         // RENDER TERMINALS
-        // ==========================================
         function renderTerminal() {
             const tbody = document.getElementById('terminalBody');
             const rawData = allData[currentSelectedDate] || [];
@@ -1275,7 +1331,7 @@
             } else {
                 tbody.innerHTML = html;
                 if(!searchTerm) {
-                    const container = document.querySelector('.terminal-panel:first-child .terminal-content');
+                    const container = document.getElementById('terminalContent');
                     if(container) container.scrollTop = container.scrollHeight;
                 }
             }
@@ -1288,7 +1344,7 @@
 
             let html = ''; let stt = 1;
 
-            // ĐẢO LẠI THỨ TỰ SẮP XẾP: Tăng dần (Từ ngày cũ nhất đến ngày mới nhất)
+            // XẾP TĂNG DẦN THEO NGÀY (Cũ trên, Mới dưới)
             let sortedDates = Object.keys(allData).sort((a, b) => new Date(a) - new Date(b));
             
             let totalSales = 0;
@@ -1296,7 +1352,6 @@
                 let items = allData[dateStr] || [];
                 let salesItems = items.map((item, index) => ({...item, originalIndex: index, date: dateStr})).filter(item => item.is_sales === true);
                 
-                // Áp dụng bộ lọc tìm kiếm
                 if(searchTerm) {
                     salesItems = salesItems.filter(item => 
                         (item.mst || '').toLowerCase().includes(searchTerm) ||
@@ -1319,7 +1374,7 @@
                             <td style="font-weight: bold; color: #fbbf24;">${displayDate}</td>
                             <td class="t-mst">${d_mst}</td>
                             <td class="t-sdt">${d_sdt}</td>
-                            <td><div style="width: 100%; white-space: normal; font-weight: bold;">${d_company}</div></td>
+                            <td class="t-ten"><div style="width: 100%; white-space: normal; font-weight: bold;">${d_company}</div></td>
                             <td style="color: #38bdf8; white-space: nowrap; padding-right: 15px;">${item.loai_mua}</td>
                             <td style="color: #f472b6; white-space: nowrap; padding-right: 15px;">${item.dich_vu}</td>
                             <td class="t-action">
@@ -1357,9 +1412,7 @@
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${data.length} dòng dữ liệu!`, false));
         }
 
-        // ==========================================
-        // LƯU TRỮ ĐÁM MÂY
-        // ==========================================
+        // LƯU TRỮ ĐÁM MÂY & GOOGLE SHEETS
         function updateStatusIndicator(msg, typeClass) {
             const ind = document.getElementById('saveStatusIndicator'); ind.className = `save-status ${typeClass}`;
             ind.innerHTML = `${typeClass === 'saving' ? '<i class="fas fa-spinner fa-spin"></i>' : typeClass === 'saved' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-cloud"></i>'} ${msg}`;
@@ -1377,29 +1430,44 @@
 
             const firebasePromise = set(ref(database, 'visnam_data/' + dateStr), dataToSave);
             
-            const formattedDataForSheets = dataToSave.map(item => ({
-                mst: formatEmptyField(item.mst),
-                company: formatEmptyField(item.company),
-                sdt: formatEmptyField(item.sdt),
-                type: formatEmptyField(item.type || item.loai_mua), 
-                tech: formatEmptyField(item.tech || item.dich_vu), 
-                issue: formatEmptyField(item.issue || "YÊU CẦU MUA/GIA HẠN")
+            // Phân tách Data
+            const supportData = dataToSave.filter(item => item.is_sales !== true);
+            const salesData = dataToSave.filter(item => item.is_sales === true);
+
+            // Gửi sang Sheet 'data'
+            const formattedSupportForSheets = supportData.map(item => ({
+                mst: formatEmptyField(item.mst), company: formatEmptyField(item.company), sdt: formatEmptyField(item.sdt),
+                type: formatEmptyField(item.type), tech: formatEmptyField(item.tech), issue: formatEmptyField(item.issue)
             }));
 
-            const sheetPromise = fetch(GOOGLE_SHEETS_API, {
-                method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ date: dateStr, data: formattedDataForSheets, sheetName: "data" })
-            });
+            // Gửi sang Sheet 'yêu cầu mua hàng'
+            const formattedSalesForSheets = salesData.map(item => ({
+                mst: formatEmptyField(item.mst), sdt: formatEmptyField(item.sdt), company: formatEmptyField(item.company),
+                loai_mua: formatEmptyField(item.loai_mua), dich_vu: formatEmptyField(item.dich_vu)
+            }));
 
-            Promise.all([firebasePromise, sheetPromise]).then(() => {
+            const sheetReqs = [firebasePromise];
+
+            if(formattedSupportForSheets.length > 0 || supportData.length === 0) {
+                sheetReqs.push(fetch(GOOGLE_SHEETS_API, {
+                    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ date: dateStr, data: formattedSupportForSheets, sheetName: "data" })
+                }));
+            }
+            if(formattedSalesForSheets.length > 0 || salesData.length === 0) {
+                sheetReqs.push(fetch(GOOGLE_SHEETS_API, {
+                    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ date: dateStr, data: formattedSalesForSheets, sheetName: "yêu cầu mua hàng" })
+                }));
+            }
+
+            Promise.all(sheetReqs).then(() => {
                 updateStatusIndicator("Đã lưu an toàn", "saved");
                 updateAllReports(); 
             }).catch(err => { updateStatusIndicator("Lỗi đồng bộ", "saving"); });
         }
 
-        // ==========================================
         // BÁO CÁO & THỐNG KÊ
-        // ==========================================
         function formatVN(dateStr) { return dateStr.split('-').reverse().join('/'); }
         function showToast(msg, isError) { 
             const toast = document.getElementById("toast");
@@ -1446,9 +1514,7 @@
         }
 
         function updateAllReports() {
-            renderStatistics();
-            renderWeeklyReport();
-            renderMonthlyReport();
+            renderStatistics(); renderWeeklyReport(); renderMonthlyReport();
         }
 
         window.updateWeekSelect = function() {
@@ -1517,33 +1583,57 @@
             if(!filterVal) return showToast("Vui lòng chọn tháng!", true);
             const year = filterVal.substring(0, 4); const month = filterVal.substring(5, 7);
 
-            let dataToExport = [];
+            let dataSupport = []; let dataSales = [];
             Object.keys(allData).forEach(d => {
                 if (d.startsWith(`${year}-${month}`)) {
                     allData[d].forEach(item => {
                         if(item.is_sales !== true) {
-                            dataToExport.push({ "Ngày": formatVN(d), "MST": formatEmptyField(item.mst), "SĐT": formatEmptyField(item.sdt), "Tên công ty": formatEmptyField(item.company), "Loại hỗ trợ": formatEmptyField(item.type), "Tên KT": formatEmptyField(item.tech), "Vấn đề hỗ trợ": formatEmptyField(item.issue) });
+                            dataSupport.push({ "Ngày": formatVN(d), "MST": formatEmptyField(item.mst), "SĐT": formatEmptyField(item.sdt), "Tên công ty": formatEmptyField(item.company), "Loại hỗ trợ": formatEmptyField(item.type), "Tên KT": formatEmptyField(item.tech), "Vấn đề hỗ trợ": formatEmptyField(item.issue) });
+                        } else {
+                            dataSales.push({ "Ngày": formatVN(d), "MST": formatEmptyField(item.mst), "SĐT": formatEmptyField(item.sdt), "Tên công ty": formatEmptyField(item.company), "Loại yêu cầu": formatEmptyField(item.loai_mua), "Dịch vụ": formatEmptyField(item.dich_vu) });
                         }
                     });
                 }
             });
 
-            if(dataToExport.length === 0) return showToast("Không có dữ liệu trong tháng này!", true);
+            if(dataSupport.length === 0 && dataSales.length === 0) return showToast("Không có dữ liệu trong tháng này!", true);
 
-            dataToExport.sort((a,b) => { let dA = a.Ngày.split('/').reverse().join(''); let dB = b.Ngày.split('/').reverse().join(''); return dA.localeCompare(dB); });
+            dataSupport.sort((a,b) => { let dA = a.Ngày.split('/').reverse().join(''); let dB = b.Ngày.split('/').reverse().join(''); return dA.localeCompare(dB); });
+            dataSales.sort((a,b) => { let dA = a.Ngày.split('/').reverse().join(''); let dB = b.Ngày.split('/').reverse().join(''); return dA.localeCompare(dB); });
 
-            let processedData = []; let lastDate = "";
-            dataToExport.forEach(item => { let currentItem = { ...item }; if (currentItem.Ngày === lastDate) { currentItem.Ngày = "—"; } else { lastDate = currentItem.Ngày; } processedData.push(currentItem); });
+            let processedSupport = []; let lastDateSup = "";
+            dataSupport.forEach(item => { let currentItem = { ...item }; if (currentItem.Ngày === lastDateSup) { currentItem.Ngày = "—"; } else { lastDateSup = currentItem.Ngày; } processedSupport.push(currentItem); });
 
-            const ws = XLSX.utils.json_to_sheet(processedData);
-            for (let i in ws) {
-                if (i[0] === '!') continue;
-                let col = i.replace(/[0-9]/g, ''); let row = parseInt(i.replace(/[A-Z]/g, ''));
-                ws[i].s = { alignment: { vertical: "center", horizontal: "center", wrapText: true }, font: { name: "Arial", sz: 10 } };
-                if (row === 1) { ws[i].s.font = { bold: true, color: { rgb: "FFFFFF" } }; ws[i].s.fill = { fgColor: { rgb: "1A56A6" } }; }
+            let processedSales = []; let lastDateSal = "";
+            dataSales.forEach(item => { let currentItem = { ...item }; if (currentItem.Ngày === lastDateSal) { currentItem.Ngày = "—"; } else { lastDateSal = currentItem.Ngày; } processedSales.push(currentItem); });
+
+            const wb = XLSX.utils.book_new();
+
+            if(processedSupport.length > 0) {
+                const wsSup = XLSX.utils.json_to_sheet(processedSupport);
+                for (let i in wsSup) {
+                    if (i[0] === '!') continue;
+                    let row = parseInt(i.replace(/[A-Z]/g, ''));
+                    wsSup[i].s = { alignment: { vertical: "center", horizontal: "center", wrapText: true }, font: { name: "Arial", sz: 10 } };
+                    if (row === 1) { wsSup[i].s.font = { bold: true, color: { rgb: "FFFFFF" } }; wsSup[i].s.fill = { fgColor: { rgb: "1A56A6" } }; }
+                }
+                wsSup['!cols'] = [{wch: 12}, {wch: 15}, {wch: 12}, {wch: 40}, {wch: 12}, {wch: 12}, {wch: 30}];
+                XLSX.utils.book_append_sheet(wb, wsSup, "Hỗ trợ Kỹ thuật");
             }
-            ws['!cols'] = [{wch: 12}, {wch: 15}, {wch: 12}, {wch: 40}, {wch: 12}, {wch: 12}, {wch: 30}];
-            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "visnam_data"); XLSX.writeFile(wb, `visnam_data_Thang${month}.xlsx`);
+
+            if(processedSales.length > 0) {
+                const wsSal = XLSX.utils.json_to_sheet(processedSales);
+                for (let i in wsSal) {
+                    if (i[0] === '!') continue;
+                    let row = parseInt(i.replace(/[A-Z]/g, ''));
+                    wsSal[i].s = { alignment: { vertical: "center", horizontal: "center", wrapText: true }, font: { name: "Arial", sz: 10 } };
+                    if (row === 1) { wsSal[i].s.font = { bold: true, color: { rgb: "FFFFFF" } }; wsSal[i].s.fill = { fgColor: { rgb: "db2777" } }; }
+                }
+                wsSal['!cols'] = [{wch: 12}, {wch: 15}, {wch: 12}, {wch: 40}, {wch: 15}, {wch: 15}];
+                XLSX.utils.book_append_sheet(wb, wsSal, "Yêu cầu Mua hàng");
+            }
+
+            XLSX.writeFile(wb, `visnam_data_Thang${month}.xlsx`);
         }
 
         window.renderWeeklyReport = function() {
@@ -1653,7 +1743,7 @@
                             <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng xử lý toàn diện các vấn đề liên quan đến <b>hóa đơn điện tử</b>.</li>
                             <li style="margin-bottom: 4pt;">Hỗ trợ thủ tục liên quan đến <b>bảo hiểm xã hội</b>.</li>
                             <li style="margin-bottom: 4pt;">Cài đặt phần mềm, gia hạn, thiết lập Token và xử lý sự cố liên quan đến <b>chữ ký số (CKS)</b>.</li>
-                            <li style="margin-bottom: 4pt;">Ghi nhận, xử lý, và hỗ trợ các yêu cầu mua mới, gia hạn dịch vụ từ phía khách hàng.</li>
+                            <li style="margin-bottom: 4pt;">Ghi nhận và chuyển giao các yêu cầu mua mới, gia hạn dịch vụ từ phía khách hàng.</li>
                         </ul>
                     </div>
                     <div style="margin-bottom: 15pt;">
@@ -1684,8 +1774,8 @@
                     </div>
 
                     <div style="margin-bottom: 15pt;">
-                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Tổng hợp Dịch vụ (Mua mới / Gia hạn):</h3>
-                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tháng ${month}, tôi đã tiếp nhận và thực hiện các dịch vụ sau:</p>
+                        <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Tổng hợp Yêu cầu (Mua mới / Gia hạn):</h3>
+                        <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tháng ${month}, tôi đã tiếp nhận và chuyển giao các yêu cầu mua hàng sau:</p>
                         <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-top: 10pt; margin-bottom: 10pt;">
                             <thead>
                                 <tr>
@@ -1712,43 +1802,6 @@
             `;
             document.getElementById('preview-thang').innerHTML = html;
         }
-
-        // ==========================================
-        // KHỞI TẠO HIỆU ỨNG MÙA ĐÔNG
-        // ==========================================
-        function initWinterEffects() {
-            const wrapper = document.getElementById('winter-wrapper');
-            if (!wrapper) return;
-            const numFlakes = 50; 
-            for (let i = 0; i < numFlakes; i++) {
-                let flake = document.createElement('div'); flake.className = 'snowflake'; flake.innerHTML = '❄';
-                flake.style.left = (Math.random() * 100) + 'vw';
-                flake.style.animationDuration = (Math.random() * 8 + 10) + 's, ' + (Math.random() * 4 + 4) + 's';
-                flake.style.animationDelay = (Math.random() * 5) + 's, ' + (Math.random() * 5) + 's';
-                flake.style.fontSize = (Math.random() * 12 + 10) + 'px'; flake.style.opacity = Math.random() * 0.8 + 0.2; 
-                wrapper.appendChild(flake);
-            }
-
-            const snowman = document.getElementById('snowman');
-            if (snowman) {
-                snowman.addEventListener('click', async () => {
-                    showToast("Đang đồng bộ dữ liệu mới nhất...", false);
-                    snowman.style.pointerEvents = 'none'; snowman.innerHTML = '⏳'; snowman.style.transform = 'scale(1.1)';
-
-                    try {
-                        const snapshot = await get(ref(database, 'visnam_data'));
-                        allData = snapshot.val() || {};
-                        loadDataForDate(currentSelectedDate); updateGlobalStats(); updateAllReports();
-                        showToast("Đã làm mới bảng điều khiển!", false);
-                    } catch (error) {
-                        showToast("Lỗi kết nối khi làm mới!", true);
-                    } finally {
-                        snowman.innerHTML = '⛄'; snowman.style.transform = 'scale(1)'; snowman.style.pointerEvents = 'auto';
-                    }
-                });
-            }
-        }
-        document.addEventListener("DOMContentLoaded", () => { initWinterEffects(); });
 
         function exportHTMLToDoc(elementId, filename) {
             var preHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Export HTML To Doc</title><style>body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; } table { border-collapse: collapse; width: 100%; margin-top: 10pt; margin-bottom: 15pt; border: 1px solid black;} th, td { border: 1px solid black; padding: 6pt; text-align: left; vertical-align: middle; } th { font-weight: bold; text-align: center; } h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;} p, ul { margin-top: 5pt; margin-bottom: 5pt; } ul li { margin-bottom: 4pt; }</style></head><body>`;
