@@ -184,7 +184,7 @@
             border-radius: 8px; font-weight: 600; background-color: var(--card-bg); color: var(--text-main); 
             outline: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 12px; cursor: pointer;
         }
-        input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--secondary); transform: translateY(-1.5px); box-shadow: 0 6px 12px rgba(243,156,18,0.25); }
+        input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--secondary); transform: translateY(-1.5px); box-shadow: 0 6px 12px rgba(243,156,18,0.2); }
         :root[data-theme="dark"] input[type="date"], :root[data-theme="dark"] select, :root[data-theme="dark"] input[type="month"] { border-color: #64748b; background-color: #1e293b; }
 
         .btn-import-excel { background: #38a169; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
@@ -268,7 +268,6 @@
         .frm-input { width: 100%; padding: 6px 10px; border: 1.5px solid #94a3b8; border-radius: 8px; font-size: 12px; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); outline: none; height: 32px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
         :root[data-theme="dark"] .frm-input { border-color: #64748b; background-color: #1e293b; }
         .frm-input:focus { border-color: var(--secondary); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(243,156,18,0.25); }
-        .frm-input:disabled { background-color: var(--bg-color); cursor: not-allowed; opacity: 0.8; }
         
         .custom-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat !important; background-position: right 6px center !important; background-size: 16px !important; padding-right: 25px; cursor: pointer; }
         .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
@@ -278,7 +277,6 @@
         .input-with-btn { display: flex; gap: 6px; }
         .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; transition: 0.2s; height: 32px;}
         .btn-lookup:hover { background: #113c7a; }
-        .btn-lookup:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-submit { color: white; width: 100%; padding: 6px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px;}
         .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(243,156,18,0.3); }
 
@@ -973,7 +971,6 @@
         let autoSaveTimer = null; 
         let exportWeekFilename = ""; let exportMonthFilename = "";
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
-        let isReadOnly = false;
 
         // HÀNG RÀO BẢO MẬT PHÒNG THỦ KHÓA F12 / INSPECT (BYPASS NẾU URL CÓ ?debug=true)
         function initSourceSecurity() {
@@ -990,7 +987,7 @@
             document.addEventListener('keydown', e => {
                 if (
                     e.key === 'F12' ||
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'H' || e.key === 'h' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
                     (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
                 ) {
                     e.preventDefault();
@@ -1173,8 +1170,7 @@
                     { id: 'TNCN', color: '#a78bfa' }
                 ];
                 slTypes.forEach(t => {
-                    let mapId = t.id === 'TNCN' ? 'Chứng từ' : t.id;
-                    let count = salesServiceCounts[mapId] || 0;
+                    let count = salesServiceCounts[t.id] || 0;
                     let pct = ((count / totalSales) * 100).toFixed(1);
                     salesHtml += `<tr>
                         <td style="font-weight: 600;">${t.id}</td>
@@ -1213,79 +1209,6 @@
             document.getElementById('terminalSalesSearch').addEventListener('input', debounce(renderSalesTerminal, 300));
         });
 
-        // HÀM CẬP NHẬT GIAO DIỆN PHÂN QUYỀN VIEW-ONLY VÀ BLOCK TÍNH NĂNG
-        function updateUIByRole(user) {
-            const greeting = document.querySelector('.user-greeting');
-            if (greeting) {
-                greeting.innerHTML = isReadOnly 
-                    ? `<i class="fas fa-eye"></i> Quyền: Chỉ Xem (${user.email})`
-                    : `<i class="fas fa-user-check"></i> Xin chào Phan Viết Hưng`;
-            }
-
-            const ind = document.getElementById('saveStatusIndicator');
-            if (ind) {
-                ind.className = 'save-status';
-                ind.innerHTML = isReadOnly 
-                    ? `<i class="fas fa-eye"></i> Tài khoản chỉ xem` 
-                    : `<i class="fas fa-cloud"></i> Hệ thống sẵn sàng`;
-            }
-
-            // VÔ HIỆU HÓA form nhập ngoại trừ MST (để Viewer có thể thực hiện tra cứu MST)
-            const formInputs = document.querySelectorAll('#inputForm input, #inputForm select, #inputSalesForm input, #inputSalesForm select');
-            formInputs.forEach(input => {
-                if (input.id === 'frm-mst' || input.id === 'frm-sales-mst') {
-                    input.disabled = false; // Cho phép nhập MST
-                } else {
-                    input.disabled = isReadOnly; // Khóa các trường khác
-                }
-            });
-
-            // Ẩn hoàn toàn các nút Submit (Lưu) khi tài khoản chỉ xem
-            const btnSubmit = document.getElementById('btnSubmitForm');
-            if (btnSubmit) btnSubmit.style.display = isReadOnly ? 'none' : '';
-
-            const btnSubmitSales = document.getElementById('btnSubmitSalesForm');
-            if (btnSubmitSales) btnSubmitSales.style.display = isReadOnly ? 'none' : '';
-
-            // Ẩn nút Import file excel
-            const btnImport = document.querySelector('.btn-import-excel');
-            if (btnImport) btnImport.style.display = isReadOnly ? 'none' : '';
-
-            // Luôn mở nút Tra cứu MST cho Viewer
-            const btnSearchMST = document.getElementById('btnSearchMST');
-            if (btnSearchMST) btnSearchMST.disabled = false;
-
-            const btnSearchMSTSales = document.getElementById('btnSearchMSTSales');
-            if (btnSearchMSTSales) btnSearchMSTSales.disabled = false;
-
-            // Làm mờ nút Xuất Excel & Word để chỉ báo bị khóa
-            const btnExcel = document.querySelector('.btn-export-excel');
-            if (btnExcel) {
-                if (isReadOnly) {
-                    btnExcel.style.opacity = '0.5';
-                    btnExcel.style.cursor = 'not-allowed';
-                    btnExcel.title = 'Tính năng xuất file bị khóa với Viewer!';
-                } else {
-                    btnExcel.style.opacity = '1';
-                    btnExcel.style.cursor = 'pointer';
-                    btnExcel.title = '';
-                }
-            }
-
-            const btnWords = document.querySelectorAll('.btn-export');
-            btnWords.forEach(btn => {
-                if (isReadOnly) {
-                    btn.style.opacity = '0.5';
-                    btn.style.cursor = 'not-allowed';
-                    btn.title = 'Tính năng xuất báo cáo bị khóa với Viewer!';
-                } else {
-                    btn.style.opacity = '1';
-                    btn.style.cursor = 'pointer';
-                    btn.title = '';
-                }
-            });
-        }
-
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const lastActive = localStorage.getItem(ACTIVITY_KEY);
@@ -1293,8 +1216,6 @@
                     logout(); 
                 } else { 
                     localStorage.setItem(ACTIVITY_KEY, Date.now().toString()); 
-                    isReadOnly = (user.email === 'viewer@gmail.com');
-                    updateUIByRole(user);
                     await loadDataFromCloud(); 
                 }
             } else {
@@ -1419,11 +1340,6 @@
         }
 
         window.importExcelData = function(event) {
-            if (isReadOnly) { 
-                showToast("Tính năng Import dữ liệu bị khóa đối với tài khoản Xem!", true); 
-                event.target.value = ""; 
-                return; 
-            }
             const file = event.target.files[0];
             if (!file) return;
             const ext = file.name.split('.').pop().toLowerCase();
@@ -1485,11 +1401,7 @@
             renderTerminal();
             renderSalesTerminal();
             cancelEdit(); cancelSalesEdit();
-            if (isReadOnly) {
-                updateStatusIndicator("Tài khoản chỉ xem", "");
-            } else {
-                updateStatusIndicator("Hệ thống sẵn sàng", "");
-            }
+            updateStatusIndicator("Hệ thống sẵn sàng", "");
         }
 
         async function fetchCompanyName(mstInput) {
@@ -1515,7 +1427,6 @@
             return foundName;
         }
 
-        // TÍNH NĂNG TRA CỨU MST: ĐƯỢC PHÉP CHO TẤT CẢ TÀI KHOẢN (KỂ CẢ VIEWER)
         window.searchMSTForm = async function() {
             let mstInput = document.getElementById('frm-mst').value.replace(/[^0-9-]/g, '');
             document.getElementById('frm-mst').value = mstInput;
@@ -1525,10 +1436,7 @@
 
             try {
                 let foundName = await fetchCompanyName(mstInput);
-                if (foundName) { 
-                    document.getElementById('frm-company').value = foundName; 
-                    showToast("Tra cứu thành công!", false); 
-                } 
+                if (foundName) { document.getElementById('frm-company').value = foundName; showToast("Tra cứu thành công!", false); } 
                 else { showToast("Không tìm thấy Tên Cty!", true); }
             } catch (error) { showToast("Lỗi kết nối mạng!", true); } 
             finally { btn.innerHTML = originalIcon; btn.disabled = false; }
@@ -1543,17 +1451,13 @@
 
             try {
                 let foundName = await fetchCompanyName(mstInput);
-                if (foundName) { 
-                    document.getElementById('frm-sales-company').value = foundName; 
-                    showToast("Tra cứu thành công!", false); 
-                } 
+                if (foundName) { document.getElementById('frm-sales-company').value = foundName; showToast("Tra cứu thành công!", false); } 
                 else { showToast("Không tìm thấy Tên Cty!", true); }
             } catch (error) { showToast("Lỗi kết nối mạng!", true); } 
             finally { btn.innerHTML = originalIcon; btn.disabled = false; }
         }
 
         window.submitForm = function() {
-            if (isReadOnly) { showToast("Tài khoản của bạn chỉ có quyền xem dữ liệu!", true); return; }
             const mst = document.getElementById('frm-mst').value.trim();
             const company = document.getElementById('frm-company').value.trim();
             const issue = document.getElementById('frm-issue').value.trim();
@@ -1578,7 +1482,6 @@
         }
 
         window.editRecord = function(idx) {
-            if (isReadOnly) { showToast("Tài khoản của bạn chỉ có quyền xem dữ liệu!", true); return; }
             let data = allData[currentSelectedDate][idx];
             if(!data) return;
             document.getElementById('frm-idx').value = idx;
@@ -1608,7 +1511,6 @@
         }
 
         window.deleteRecord = function(idx) {
-            if (isReadOnly) { showToast("Tài khoản của bạn chỉ có quyền xem dữ liệu!", true); return; }
             showConfirm("Xóa dòng hỗ trợ này khỏi hệ thống?", () => {
                 allData[currentSelectedDate].splice(idx, 1);
                 renderTerminal(); triggerAutoSave(); updateGlobalStats();
@@ -1618,7 +1520,6 @@
         }
 
         window.submitSalesForm = function() {
-            if (isReadOnly) { showToast("Tài khoản của bạn chỉ có quyền xem dữ liệu!", true); return; }
             const mst = document.getElementById('frm-sales-mst').value.trim();
             const company = document.getElementById('frm-sales-company').value.trim();
             const sdt = document.getElementById('frm-sales-sdt').value.trim();
@@ -1646,7 +1547,6 @@
         }
 
         window.editSalesRecord = function(dateStr, idx) {
-            if (isReadOnly) { showToast("Tài khoản của bạn chỉ có quyền xem dữ liệu!", true); return; }
             let data = allData[dateStr][idx];
             if(!data) return;
             document.getElementById('frm-sales-idx').value = idx;
@@ -1678,7 +1578,6 @@
         }
 
         window.deleteSalesRecord = function(dateStr, idx) {
-            if (isReadOnly) { showToast("Tài khoản của bạn chỉ có quyền xem dữ liệu!", true); return; }
             showConfirm("Xóa yêu cầu mua/gia hạn này khỏi hệ thống?", () => {
                 allData[dateStr].splice(idx, 1);
                 renderSalesTerminal(); updateGlobalStats(); saveDataToCloudSpecificDate(dateStr);
@@ -1714,12 +1613,6 @@
                     const d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
                     const d_issue = item.issue ? "> " + item.issue : "<span style='color:#475569'>—</span>";
 
-                    // KHÓA CỘT THAO TÁC CỦA VIEWER BẰNG ICON KHÓA
-                    const actionHtml = isReadOnly 
-                        ? `<i class="fas fa-lock" style="color: #cbd5e1;" title="Bị khóa với tài khoản Xem"></i>` 
-                        : `<button class="action-btn-sm edit-btn" onclick="editRecord(${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
-                           <button class="action-btn-sm del-btn" onclick="deleteRecord(${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>`;
-
                     html += `<tr>
                         <td class="t-stt">[${stt++}]</td>
                         <td class="t-mst">${d_mst}</td>
@@ -1727,7 +1620,10 @@
                         <td class="t-ten">${d_company}</td>
                         <td class="t-loai">${item.type}</td>
                         <td class="t-vd">${d_issue}</td>
-                        <td class="t-action">${actionHtml}</td>
+                        <td class="t-action">
+                            <button class="action-btn-sm edit-btn" onclick="editRecord(${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn-sm del-btn" onclick="deleteRecord(${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                        </td>
                     </tr>`;
                     matchCount++;
                 }
@@ -1775,12 +1671,6 @@
                         let d_sdt = item.sdt ? item.sdt : "<span style='color:#475569'>—</span>";
                         let d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
                         
-                        // KHÓA CỘT THAO TÁC CỦA VIEWER TRÊN BẢNG SALES
-                        const actionHtml = isReadOnly 
-                            ? `<i class="fas fa-lock" style="color: #cbd5e1;" title="Bị khóa với tài khoản Xem"></i>` 
-                            : `<button class="action-btn-sm edit-btn" onclick="editSalesRecord('${item.date}', ${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
-                               <button class="action-btn-sm del-btn" onclick="deleteSalesRecord('${item.date}', ${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>`;
-
                         html += `<tr>
                             <td class="t-stt">[${stt++}]</td>
                             <td style="font-weight: bold; color: #fbbf24;">${displayDate}</td>
@@ -1789,7 +1679,10 @@
                             <td><div style="width: 100%; white-space: normal; font-weight: bold;">${d_company}</div></td>
                             <td style="color: #38bdf8; white-space: nowrap; padding-right: 15px;">${item.loai_mua}</td>
                             <td style="color: #f472b6; white-space: nowrap; padding-right: 15px;">${item.dich_vu}</td>
-                            <td class="t-action">${actionHtml}</td>
+                            <td class="t-action">
+                                <button class="action-btn-sm edit-btn" onclick="editSalesRecord('${item.date}', ${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn-sm del-btn" onclick="deleteSalesRecord('${item.date}', ${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                            </td>
                         </tr>`;
                         firstRow = false; 
                     });
@@ -1823,24 +1716,17 @@
         }
 
         function updateStatusIndicator(msg, typeClass) {
-            const ind = document.getElementById('saveStatusIndicator'); 
-            if (!ind) return;
-            ind.className = `save-status ${typeClass}`;
+            const ind = document.getElementById('saveStatusIndicator'); ind.className = `save-status ${typeClass}`;
             ind.innerHTML = `${typeClass === 'saving' ? '<i class="fas fa-spinner fa-spin"></i>' : typeClass === 'saved' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-cloud"></i>'} ${msg}`;
         }
 
         function triggerAutoSave() {
-            if (isReadOnly) return;
             updateStatusIndicator("Đang đợi lưu ngầm...", "saving");
             clearTimeout(autoSaveTimer);
             autoSaveTimer = setTimeout(() => { saveDataToCloudSpecificDate(currentSelectedDate); }, 1500); 
         }
 
         function saveDataToCloudSpecificDate(dateStr) {
-            if (isReadOnly) {
-                updateStatusIndicator("Chế độ chỉ xem", "");
-                return;
-            }
             const dataToSave = allData[dateStr] || [];
             updateStatusIndicator("Đồng bộ Đám mây...", "saving");
 
@@ -1980,12 +1866,7 @@
             document.getElementById('monthlyTableBody').innerHTML = monthHtml;
         }
 
-        // CHẶN EXCEL EXPORT CHO TÀI KHOẢN VIEWER
         window.exportDataToExcel = function() {
-            if (isReadOnly) {
-                showToast("Tính năng xuất file Excel bị khóa đối với tài khoản Xem!", true);
-                return;
-            }
             const filterVal = document.getElementById('exportMonthSelect').value; 
             if(!filterVal) return showToast("Vui lòng chọn tháng!", true);
             const year = filterVal.substring(0, 4); const month = filterVal.substring(5, 7);
@@ -2208,23 +2089,8 @@
             saveAs(converted, filename + '.docx');
         }
 
-        // CHẶN WORD EXPORT CHO TÀI KHOẢN VIEWER
-        window.downloadWeeklyReport = function() { 
-            if (isReadOnly) {
-                showToast("Tính năng xuất báo cáo Word bị khóa đối với tài khoản Xem!", true);
-                return;
-            }
-            exportHTMLToDoc('preview-tuan', exportWeekFilename); 
-        }
-        
-        window.downloadMonthlyReport = function() { 
-            if (isReadOnly) {
-                showToast("Tính năng xuất báo cáo Word bị khóa đối với tài khoản Xem!", true);
-                return;
-            }
-            exportHTMLToDoc('preview-thang', exportMonthFilename); 
-        }
-        
+        window.downloadWeeklyReport = function() { exportHTMLToDoc('preview-tuan', exportWeekFilename); }
+        window.downloadMonthlyReport = function() { exportHTMLToDoc('preview-thang', exportMonthFilename); }
         window.updateWeekSelect = updateWeekSelect;
         window.exportDataToExcel = exportDataToExcel;
         window.renderWeeklyReport = renderWeeklyReport;
