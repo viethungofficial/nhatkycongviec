@@ -16,14 +16,14 @@
             --text-main: #1e293b; --text-muted: #475569; --border-color: #cbd5e1; --input-bg: #ffffff; 
             --border-radius: 10px; --transition-fast: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             --transition-smooth: 0.4s cubic-bezier(0.25, 1, 0.5, 1); --terminal-bg: #0f172a; --terminal-text: #10b981;
-            --title-color-bright: #1a56a6; /* Màu sáng chế độ thường */
+            --title-color-bright: #1a56a6; 
         }
 
         :root[data-theme="dark"] {
             --bg-color: #0f172a; --card-bg: #1e293b; --text-main: #f1f5f9; --text-muted: #94a3b8; 
             --border-color: #334155; --input-bg: #334155; --terminal-bg: #020617;
-            --primary: #3b82f6; /* Nâng sáng tone xanh dương chủ đạo */
-            --title-color-bright: #38bdf8; /* Màu xanh ngọc rực rỡ nổi bật trên nền tối */
+            --primary: #3b82f6; 
+            --title-color-bright: #38bdf8; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
@@ -83,7 +83,6 @@
 
         #mainApp { display: none; }
         
-        /* THU NHỎ HEADER */
         header { background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-bottom: 3px solid #ffc107 !important; border-top: 4px solid #da251d !important; position: sticky; top: 0; z-index: 1000; padding: 4px 0; transition: 0.3s; }
         .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1500px; margin: 0 auto; padding: 0 15px; }
         .save-status { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; font-weight: 600; width: 180px;}
@@ -117,9 +116,8 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
-        /* THAY ĐỔI MÀU SẮC ĐẸP HƠN CHO CÁC NÚT ĐIỀU HƯỚNG NHANH */
         .btn-bhxh-lookup {
-            background: linear-gradient(135deg, #0ea5e9, #0284c7); /* Sky blue / ocean blue theme */
+            background: linear-gradient(135deg, #0ea5e9, #0284c7); 
             color: white !important;
             padding: 6px 14px;
             border-radius: 6px;
@@ -143,7 +141,7 @@
         }
 
         .btn-night-shift {
-            background: linear-gradient(135deg, #6366f1, #4f46e5); /* Deep purple / Indigo night theme */
+            background: linear-gradient(135deg, #6366f1, #4f46e5); 
             color: white !important;
             padding: 6px 14px;
             border-radius: 6px;
@@ -384,7 +382,6 @@
         :root[data-theme="dark"] .icon-glow-card { border-color: #334155; background-color: #1e293b; }
         :root[data-theme="dark"] .icon-glow-card span { color: #94a3b8; }
 
-        /* HIỆU ỨNG GLOW CHO TỔNG THỐNG KÊ HỖ TRỢ */
         .icon-glow-card.glow-hd:hover {
             border-color: #3b82f6;
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
@@ -413,7 +410,6 @@
         }
         .icon-glow-card.glow-dl:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.5)); }
 
-        /* HIỆU ỨNG GLOW CHO TỔNG THỐNG KÊ TIẾP NHẬN YÊU CẦU MUA HÀNG (MỚI) */
         .icon-glow-card.glow-sales-cks:hover {
             border-color: #38bdf8;
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
@@ -598,12 +594,10 @@
                         <i class="fas fa-file-import"></i> Import File Excel
                     </button>
                     
-                    <!-- Tra cứu cơ quan BHXH Button (Sleek Ocean Blue) -->
                     <a href="https://viethungofficial.github.io/tra-cuu-co-quan-bhxh/" target="_blank" class="btn-bhxh-lookup">
                         <i class="fas fa-search-location"></i> Tra cứu Cơ quan BHXH
                     </a>
                     
-                    <!-- Lịch trực đêm Button (Deep Purple / Indigo Shift) -->
                     <a href="https://phandong28.github.io/truc-dem/truc-dem.html" target="_blank" class="btn-night-shift">
                         <i class="fas fa-moon"></i> Lịch trực đêm
                     </a>
@@ -831,7 +825,6 @@
                             </div>
                         </div>
 
-                        <!-- THAY BIỂU ĐỒ TRÒN BẰNG BỘ 4 THẺ ICON PHÁT SÁNG CHO PHẦN TIẾP NHẬN YÊU CẦU MUA HÀNG -->
                         <div class="stats-wrapper-outer">
                             <div class="dash-card">
                                 <div class="dash-card-header sales-header">
@@ -947,7 +940,7 @@
                         </div>
                     </div>
                 </div>
-            </div>         
+            </div>
         </div>
     </div>
     
@@ -978,6 +971,40 @@
         let autoSaveTimer = null; 
         let exportWeekFilename = ""; let exportMonthFilename = "";
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
+
+        // HÀNG RÀO BẢO MẬT PHÒNG THỦ KHÓA F12 / INSPECT (BYPASS NẾU URL CÓ ?debug=true)
+        function initSourceSecurity() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('debug') === 'true') {
+                console.log("🔓 [Hệ Thống] Kích hoạt chế độ gỡ lỗi (Debug Mode). Tạm khóa bảo mật nguồn.");
+                return;
+            }
+
+            // Lớp 1: Khóa chuột phải để ngăn chặn Inspect
+            document.addEventListener('contextmenu', e => e.preventDefault());
+
+            // Lớp 2: Khóa F12 và các phím tắt xem nguồn trang của các trình duyệt thông dụng
+            document.addEventListener('keydown', e => {
+                if (
+                    e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+                    (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
+                ) {
+                    e.preventDefault();
+                    showToast("Lưu ý: Thao tác này bị khóa để bảo mật hệ thống!", true);
+                    return false;
+                }
+            });
+
+            // Lớp 3: Liên tục bẫy debugger để làm đứng DevTools nếu cố lách luật mở qua menu trình duyệt
+            setInterval(function() {
+                try {
+                    (function() {
+                        return function(a) {}
+                    })().constructor("debugger")();
+                } catch(e) {}
+            }, 100);
+        }
 
         function formatEmptyField(val) {
             if (val === null || val === undefined) return "—";
@@ -1094,13 +1121,11 @@
                 });
             }
 
-            // Cập nhật số liệu các loại hỗ trợ kỹ thuật
             document.getElementById('count-glow-hd').innerText = supportCounts['HĐ'] || 0;
             document.getElementById('count-glow-cks').innerText = supportCounts['CKS'] || 0;
             document.getElementById('count-glow-bhxh').innerText = supportCounts['BHXH'] || 0;
             document.getElementById('count-glow-dl').innerText = supportCounts['ĐL/CTV'] || 0;
 
-            // Cập nhật số liệu các loại dịch vụ tiếp nhận mua mới / gia hạn
             document.getElementById('count-sales-cks').innerText = salesServiceCounts['CKS'] || 0;
             document.getElementById('count-sales-hd').innerText = salesServiceCounts['HĐ'] || 0;
             document.getElementById('count-sales-bhxh').innerText = salesServiceCounts['BHXH'] || 0;
@@ -1142,7 +1167,7 @@
                     { id: 'CKS', color: '#38bdf8' },
                     { id: 'HĐ', color: '#f472b6' },
                     { id: 'BHXH', color: '#34d399' },
-                    { id: 'Chứng từ', color: '#a78bfa' }
+                    { id: 'TNCN', color: '#a78bfa' }
                 ];
                 slTypes.forEach(t => {
                     let count = salesServiceCounts[t.id] || 0;
@@ -1172,6 +1197,8 @@
         function showLoader() { loader.style.display = 'flex'; void loader.offsetWidth; loader.style.opacity = '1'; loader.style.visibility = 'visible'; }
 
         document.addEventListener("DOMContentLoaded", () => {
+            initSourceSecurity(); // Khởi tạo lớp phòng thủ chống soi code F12
+
             const savedTheme = localStorage.getItem('visnam_theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             if(savedTheme === 'dark') document.querySelector('#btn-theme i').className = 'fas fa-sun';
