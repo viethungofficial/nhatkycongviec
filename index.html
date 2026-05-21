@@ -53,7 +53,7 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         #loginScreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color); display: none; justify-content: center; align-items: center; z-index: 9000; padding: 20px; }
-        .login-box { background: var(--card-bg); padding: 30px 25px; border-radius: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); width: 100%; max-width: 380px; text-align: center; border-top: 5px solid var(--primary); color: var(--text-main); }
+        .login-box { background: var(--card-bg); padding: 35px 25px; border-radius: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); width: 100%; max-width: 380px; text-align: center; border-top: 5px solid var(--primary); color: var(--text-main); }
         .login-logo { font-size: 40px; color: var(--primary); margin-bottom: 15px; }
         .login-box h2 { margin-bottom: 25px; font-size: 20px; }
         .input-group { position: relative; margin-bottom: 15px; }
@@ -109,7 +109,6 @@
             border-radius: 8px; font-weight: 600; background-color: var(--card-bg); color: var(--text-main); 
             outline: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 12px; cursor: pointer;
         }
-        /* Hiệu ứng focus viền sáng vàng cho các Input controls */
         input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--secondary); transform: translateY(-1.5px); box-shadow: 0 6px 12px rgba(243,156,18,0.2); }
         :root[data-theme="dark"] input[type="date"], :root[data-theme="dark"] select, :root[data-theme="dark"] input[type="month"] { border-color: #64748b; background-color: #1e293b; }
 
@@ -193,7 +192,6 @@
         
         .frm-input { width: 100%; padding: 6px 10px; border: 1.5px solid #94a3b8; border-radius: 8px; font-size: 12px; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); outline: none; height: 32px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
         :root[data-theme="dark"] .frm-input { border-color: #64748b; background-color: #1e293b; }
-        /* HIỆU ỨNG SÁNG VÀNG KHI CLICK VÀO Ô NHẬP DỮ LIỆU */
         .frm-input:focus { border-color: var(--secondary); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(243,156,18,0.25); }
         
         .custom-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat !important; background-position: right 6px center !important; background-size: 16px !important; padding-right: 25px; cursor: pointer; }
@@ -267,12 +265,90 @@
         .dash-table tr:hover td { background-color: rgba(0,0,0,0.01); }
         .dash-totalbadge { background-color: var(--secondary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
 
-        /* Biểu đồ tròn (Pie Chart) CSS */
-        .pie-chart-container { display: flex; align-items: center; justify-content: center; gap: 15px; padding: 10px 15px; border-top: 1px dashed var(--border-color); margin-top: auto; background-color: rgba(0,0,0,0.01);}
-        .pie-chart { width: 70px; height: 70px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
-        .pie-legend { display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: var(--text-main);}
-        .legend-item { display: flex; align-items: center; gap: 6px; }
-        .legend-color { width: 12px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 2px rgba(0,0,0,0.2);}
+        .pie-chart-container { 
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-start; 
+            gap: 15px; 
+            padding: 8px 15px; 
+            border-top: 1px dashed var(--border-color); 
+            margin-top: auto; 
+            background-color: rgba(0,0,0,0.01); 
+            flex-shrink: 0; 
+            min-height: 95px;
+            height: auto;
+        }
+        .pie-chart { width: 55px; height: 55px; border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.1); flex-shrink: 0;}
+        
+        .pie-legend { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            font-size: 11px; 
+            color: var(--text-main);
+            flex: 1;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; min-width: 0;}
+        .legend-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .legend-color { width: 12px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 2px rgba(0,0,0,0.2); flex-shrink: 0; }
+
+        /* Custom Glowing Support Icons CSS */
+        .icon-glow-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 8px 4px;
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            border: 1.5px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+        }
+        .icon-glow-card i {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+        .icon-glow-card span {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+        :root[data-theme="dark"] .icon-glow-card { border-color: #334155; background-color: #1e293b; }
+        :root[data-theme="dark"] .icon-glow-card span { color: #94a3b8; }
+
+        /* Custom hover focus glow effects */
+        .icon-glow-card.glow-hd:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+            transform: translateY(-4px);
+        }
+        .icon-glow-card.glow-hd:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.5)); }
+        
+        .icon-glow-card.glow-cks:hover {
+            border-color: #f59e0b;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+            transform: translateY(-4px);
+        }
+        .icon-glow-card.glow-cks:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.5)); }
+        
+        .icon-glow-card.glow-bhxh:hover {
+            border-color: #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+            transform: translateY(-4px);
+        }
+        .icon-glow-card.glow-bhxh:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5)); }
+        
+        .icon-glow-card.glow-dl:hover {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.6);
+            transform: translateY(-4px);
+        }
+        .icon-glow-card.glow-dl:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.5)); }
 
         .report-wrapper { background: var(--card-bg); border-radius: var(--border-radius); padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.02); border: 1px solid var(--border-color);}
         .stats-section { margin-bottom: 20px; }
@@ -326,7 +402,7 @@
             .split-row { flex-direction: column; align-items: stretch; }
             .form-panel, .terminal-wrapper-outer, .stats-wrapper-outer { width: 100%; flex: none; }
             .terminal-wrapper-outer { height: 400px; }
-            .stats-wrapper-outer { height: 350px; }
+            .stats-wrapper-outer { height: 420px; }
             .report-split-layout { flex-direction: column; }
             .filter-col { width: 100%; flex: none; }
             .header-content { flex-wrap: wrap; gap: 8px; justify-content: center;}
@@ -350,7 +426,6 @@
     </style>
 </head>
 <body>
-    <!-- Giữ lại hiệu ứng tuyết rơi nhẹ nhàng -->
     <div id="winter-wrapper"></div>
     
     <div id="loader" class="pro-loader-wrapper">
@@ -385,9 +460,12 @@
             <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="password" placeholder="Mật khẩu"></div>
             <button id="btnLoginBtn" class="btn-login btn-gradient-animate" onclick="verifyLogin()">ĐĂNG NHẬP</button>
             <p id="loginError"><i class="fas fa-exclamation-triangle"></i> Thông tin không chính xác!</p>
-            <div style="margin-top: 30px; padding-top: 15px; border-top: 1px dashed var(--border-color); font-size: 11px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="VN" style="width: 18px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
-                <span style="font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Tự hào trí tuệ Việt Nam</span>
+            
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-color); font-size: 11px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="VN" style="width: 18px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+                    <span style="font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Tự hào trí tuệ Việt Nam</span>
+                </div>
             </div>
         </div>
     </div>
@@ -399,7 +477,7 @@
                 <div class="header-titles">
                     <h1>
                         <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ VN" style="width: 24px; height: 16px; margin-right: 8px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">                     
-                        <span>HỖ TRỢ KỸ THUẬT </span>         
+                        <span>HỖ TRỢ KỸ THUẬT</span>          
                         <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ VN" style="width: 24px; height: 16px; margin-left: 8px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
                     </h1>
                     <p>Công ty Cổ phần thương mại Visnam</p>
@@ -437,13 +515,13 @@
                 <div id="tab-nhaplieu" class="main-tab-content active">
                     
                     <div class="split-row">
-                        <!-- Form -->
+                        <!-- Form Hỗ Trợ -->
                         <div class="form-panel">
                             <div class="form-header">
                                 <span><i class="fas fa-tools"></i> THÔNG TIN HỖ TRỢ</span>
-                                <span id="formModeBadge" style="font-size: 10px; background: #ebf4ff; color: #fcd603; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
+                                <span id="formModeBadge" style="font-size: 10px; background: #ebf4ff; color: #1a56a6; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
                             </div>
-                            <form id="inputForm" style="display: flex; flex-direction: column;">
+                            <form id="inputForm" style="display: flex; flex-direction: column;" onsubmit="event.preventDefault();">
                                 <input type="hidden" id="frm-idx" value="-1">
                                 <div class="form-row">
                                     <div class="form-group" style="flex: 1.2;">
@@ -488,11 +566,11 @@
                             </form>
                         </div>
 
-                        <!-- Terminal -->
+                        <!-- Terminal Hỗ Trợ -->
                         <div class="terminal-wrapper-outer">
                             <div class="terminal-panel">
                                 <div class="terminal-header">
-                                    <div class="terminal-title"><i class="fas fa-terminal"></i> BẢNG DỮ LIỆU HỖ TRỢ </div>
+                                    <div class="terminal-title"><i class="fas fa-terminal"></i> BẢNG DỮ LIỆU HỖ TRỢ</div>
                                     <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
                                         <div class="terminal-search-box">
                                             <i class="fas fa-search"></i>
@@ -520,14 +598,14 @@
                             </div>
                         </div>
 
-                        <!-- Stats -->
+                        <!-- Stats Hỗ Trợ -->
                         <div class="stats-wrapper-outer">
                             <div class="dash-card">
                                 <div class="dash-card-header">
-                                    <div><i class="fas fa-chart-pie"></i>TỶ LỆ HỖ TRỢ KỸ THUẬT (All-time)</div>
+                                    <div><i class="fas fa-chart-line"></i>TỶ LỆ HỖ TRỢ KỸ THUẬT (All-time)</div>
                                     <div class="dash-totalbadge" title="Tổng số yêu cầu">Tổng: <span id="gs-total-badge">0</span></div>
                                 </div>
-                                <div class="dash-table-wrapper">
+                                <div class="dash-table-wrapper" style="max-height: 200px;">
                                     <table class="dash-table">
                                         <thead>
                                             <tr>
@@ -538,6 +616,29 @@
                                         </thead>
                                         <tbody id="gs-ratio-body"></tbody>
                                     </table>
+                                </div>
+                                <!-- Thùng chứa Icon phát sáng nằm ngang cho Hỗ Trợ Kỹ Thuật (Thay thế Pie Chart) -->
+                                <div class="pie-chart-container" id="gs-support-icons-container" style="justify-content: space-around; padding: 12px 10px;">
+                                    <div class="icon-glow-card glow-hd" title="Hóa đơn điện tử">
+                                        <i class="fas fa-file-invoice-dollar" style="color: #3b82f6;"></i>
+                                        <span>HÓA ĐƠN</span>
+                                        <b id="count-glow-hd" style="font-size: 11px; margin-top: 2px;">0</b>
+                                    </div>
+                                    <div class="icon-glow-card glow-cks" title="Chữ ký số">
+                                        <i class="fas fa-key" style="color: #f59e0b;"></i>
+                                        <span>TOKEN</span>
+                                        <b id="count-glow-cks" style="font-size: 11px; margin-top: 2px;">0</b>
+                                    </div>
+                                    <div class="icon-glow-card glow-bhxh" title="Bảo hiểm xã hội">
+                                        <i class="fas fa-shield-alt" style="color: #10b981;"></i>
+                                        <span>BHXH</span>
+                                        <b id="count-glow-bhxh" style="font-size: 11px; margin-top: 2px;">0</b>
+                                    </div>
+                                    <div class="icon-glow-card glow-dl" title="Đại lý / Cộng tác viên">
+                                        <i class="fas fa-users" style="color: #8b5cf6;"></i>
+                                        <span>ĐL / CTV</span>
+                                        <b id="count-glow-dl" style="font-size: 11px; margin-top: 2px;">0</b>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -551,7 +652,7 @@
                                 <span><i class="fas fa-shopping-cart"></i> THÔNG TIN MUA / GIA HẠN</span>
                                 <span id="formSalesModeBadge" style="font-size: 10px; background: #fdf2f8; color: #db2777; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
                             </div>
-                            <form id="inputSalesForm" style="display: flex; flex-direction: column;">
+                            <form id="inputSalesForm" style="display: flex; flex-direction: column;" onsubmit="event.preventDefault();">
                                 <input type="hidden" id="frm-sales-idx" value="-1">
                                 <input type="hidden" id="frm-sales-date" value="">
                                 <div class="form-row">
@@ -637,7 +738,7 @@
                                     <div><i class="fas fa-shopping-cart"></i>TỶ LỆ TIẾP NHẬN YÊU CẦU MUA HÀNG</div>
                                     <div class="dash-totalbadge" style="background:#be185d;" title="Tổng số yêu cầu">Tổng: <span id="gs-sales-total-badge">0</span></div>
                                 </div>
-                                <div class="dash-table-wrapper" style="overflow: hidden;">
+                                <div class="dash-table-wrapper" style="overflow: hidden; max-height: 200px;">
                                     <table class="dash-table">
                                         <thead>
                                             <tr>
@@ -649,9 +750,9 @@
                                         <tbody id="gs-sales-service-body"></tbody>
                                     </table>
                                 </div>
-                                <!-- Thùng chứa biểu đồ Pie Chart -->
-                                <div class="pie-chart-container" id="gs-sales-pie-container">
-                                    <!-- Biểu đồ sẽ được vẽ bằng JS CSS Conic Gradient -->
+                                <!-- Thùng chứa biểu đồ Pie Chart hàng dọc cho đỡ mất chữ -->
+                                <div class="pie-chart-container" id="gs-sales-pie-container" style="padding: 10px 15px;">
+                                    <!-- Biểu đồ được vẽ bằng CSS conic gradient và chú thích dạng cột dọc -->
                                 </div>
                             </div>
                         </div>
@@ -731,6 +832,7 @@
             </div>
         </div>
     </div>
+    
     <div id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg"></span></div>
 
     <script type="module">
@@ -772,7 +874,6 @@
             };
         }
 
-        // Custom Confirm Logic
         function showConfirm(msg, callback) {
             const modal = document.getElementById('customConfirm');
             document.getElementById('confirmMsg').innerText = msg;
@@ -877,14 +978,20 @@
                 });
             }
 
-            // Render Support Stats
+            // Cập nhật số liệu vào các thẻ phát sáng nằm ngang (Glow support cards)
+            document.getElementById('count-glow-hd').innerText = supportCounts['HĐ'] || 0;
+            document.getElementById('count-glow-cks').innerText = supportCounts['CKS'] || 0;
+            document.getElementById('count-glow-bhxh').innerText = supportCounts['BHXH'] || 0;
+            document.getElementById('count-glow-dl').innerText = supportCounts['ĐL/CTV'] || 0;
+
+            // Render Support Stats Table (Hỗ trợ kỹ thuật)
             let supportHtml = "";
             if(totalSupport > 0) {
                 let sTypes = [
-                    { id: 'HĐ', name: 'Hóa đơn ĐT (HĐ)' },
-                    { id: 'CKS', name: 'Chữ ký số (CKS)' },
-                    { id: 'BHXH', name: 'Bảo hiểm XH (BHXH)' },
-                    { id: 'ĐL/CTV', name: 'Đại lý / CTV' }
+                    { id: 'HĐ', name: 'Hóa đơn ĐT (HĐ)', color: '#3b82f6' },
+                    { id: 'CKS', name: 'Chữ ký số (CKS)', color: '#f59e0b' },
+                    { id: 'BHXH', name: 'Bảo hiểm (BHXH)', color: '#10b981' },
+                    { id: 'ĐL/CTV', name: 'Đại lý / CTV', color: '#8b5cf6' }
                 ];
                 sTypes.forEach(t => {
                     let count = supportCounts[t.id] || 0;
@@ -894,12 +1001,12 @@
                         <td>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div style="flex: 1; background-color: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
-                                    <div style="width: ${pct}%; background-color: var(--primary); height: 100%; border-radius: 4px; box-shadow: 0 0 5px var(--primary);"></div>
+                                    <div style="width: ${pct}%; background-color: ${t.color}; height: 100%; border-radius: 4px; box-shadow: 0 0 5px ${t.color};"></div>
                                 </div>
                                 <span style="font-weight: bold; width: 45px; text-align: right;">${pct}%</span>
                             </div>
                         </td>
-                        <td style="text-align: center; font-weight: bold; color: var(--primary);">${count}</td>
+                        <td style="text-align: center; font-weight: bold; color: ${t.color};">${count}</td>
                     </tr>`;
                 });
             } else {
@@ -908,24 +1015,29 @@
             document.getElementById('gs-ratio-body').innerHTML = supportHtml;
             document.getElementById('gs-total-badge').innerText = totalSupport;
 
-            // Render Sales Stats (Services Table)
+            // Render Sales Stats Table (Dịch vụ mua hàng)
             let salesHtml = "";
             if(totalSales > 0) {
-                let slTypes = ['CKS', 'HĐ', 'BHXH', 'Chứng từ'];
-                slTypes.forEach(dv => {
-                    let count = salesServiceCounts[dv] || 0;
+                let slTypes = [
+                    { id: 'CKS', color: '#38bdf8' },
+                    { id: 'HĐ', color: '#f472b6' },
+                    { id: 'BHXH', color: '#34d399' },
+                    { id: 'Chứng từ', color: '#a78bfa' }
+                ];
+                slTypes.forEach(t => {
+                    let count = salesServiceCounts[t.id] || 0;
                     let pct = ((count / totalSales) * 100).toFixed(1);
                     salesHtml += `<tr>
-                        <td style="font-weight: 600;">${dv}</td>
+                        <td style="font-weight: 600;">${t.id}</td>
                         <td>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div style="flex: 1; background-color: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
-                                    <div style="width: ${pct}%; background-color: #db2777; height: 100%; border-radius: 4px; box-shadow: 0 0 5px #db2777;"></div>
+                                    <div style="width: ${pct}%; background-color: ${t.color}; height: 100%; border-radius: 4px; box-shadow: 0 0 5px ${t.color};"></div>
                                 </div>
                                 <span style="font-weight: bold; width: 45px; text-align: right;">${pct}%</span>
                             </div>
                         </td>
-                        <td style="text-align: center; font-weight: bold; color: #db2777;">${count}</td>
+                        <td style="text-align: center; font-weight: bold; color: ${t.color};">${count}</td>
                     </tr>`;
                 });
             } else {
@@ -934,7 +1046,7 @@
             document.getElementById('gs-sales-service-body').innerHTML = salesHtml;
             document.getElementById('gs-sales-total-badge').innerText = totalSales;
 
-            // Render Pie Chart for Sales (Mua Mới vs Gia Hạn)
+            // Render Pie Chart for Sales (Mua Mới vs Gia Hạn) - Chú thích dạng hàng dọc không lo mất chữ
             let pieContainer = document.getElementById('gs-sales-pie-container');
             if(totalSales > 0) {
                 let muaMoi = salesTypeCounts['Mua mới'] || 0;
@@ -942,10 +1054,10 @@
                 let pctMuaMoi = Math.round((muaMoi / totalSales) * 100);
                 
                 let chartHtml = `
-                    <div class="pie-chart" style="background: conic-gradient(#38bdf8 0% ${pctMuaMoi}%, #f472b6 ${pctMuaMoi}% 100%);"></div>
-                    <div class="pie-legend">
-                        <div class="legend-item"><div class="legend-color" style="background: #38bdf8;"></div> Mua mới: <b>${muaMoi}</b> (${pctMuaMoi}%)</div>
-                        <div class="legend-item"><div class="legend-color" style="background: #f472b6;"></div> Gia hạn: <b>${giaHan}</b> (${100 - pctMuaMoi}%)</div>
+                    <div class="pie-chart" style="background: conic-gradient(#38bdf8 0% ${pctMuaMoi}%, #f472b6 ${pctMuaMoi}% 100%); margin-right: 15px;"></div>
+                    <div class="pie-legend" style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="legend-item"><div class="legend-color" style="background: #38bdf8;"></div> <span>Mua mới: <b>${muaMoi}</b> (${pctMuaMoi}%)</span></div>
+                        <div class="legend-item"><div class="legend-color" style="background: #f472b6;"></div> <span>Gia hạn: <b>${giaHan}</b> (${100 - pctMuaMoi}%)</span></div>
                     </div>
                 `;
                 pieContainer.innerHTML = chartHtml;
@@ -988,6 +1100,7 @@
                 const snapshot = await get(ref(database, 'visnam_data'));
                 allData = snapshot.val() || {}; 
                 initApp();
+                updateAllReports();
                 updateGlobalStats(); 
                 
                 document.getElementById('loginScreen').style.display = 'none'; 
@@ -1470,6 +1583,7 @@
             data.forEach((item) => {
                 allText.push(`${formatEmptyField(item.mst)}\t${formatEmptyField(item.sdt)}\t${formatEmptyField(item.company)}\t${formatEmptyField(item.type)}\t${formatEmptyField(item.tech)}\t${formatEmptyField(item.issue)}`);
             });
+            document.execCommand('copy');
             navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${data.length} dòng dữ liệu!`, false));
         }
 
@@ -1507,10 +1621,12 @@
             Promise.all([firebasePromise, sheetPromise]).then(() => {
                 updateStatusIndicator("Đã lưu an toàn", "saved");
                 updateAllReports(); 
+                updateGlobalStats();
             }).catch(err => { updateStatusIndicator("Lỗi đồng bộ", "saving"); });
         }
 
         function formatVN(dateStr) { return dateStr.split('-').reverse().join('/'); }
+        
         function showToast(msg, isError) { 
             const toast = document.getElementById("toast");
             document.getElementById("toast-msg").innerText = msg; 
@@ -1750,7 +1866,6 @@
                 }
             });
 
-            // Báo cáo đã được chỉnh sửa để chuyên nghiệp hơn trong việc "Tiếp nhận và chuyển giao"
             let html = `
                 <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 20pt 40pt; text-align: justify;">
                     <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
@@ -1827,19 +1942,17 @@
         function initWinterEffects() {
             const wrapper = document.getElementById('winter-wrapper');
             if (!wrapper) return;
-            // Tăng số lượng tuyết rơi lên nhiều hơn (150 bông)
             const numFlakes = 150; 
             for (let i = 0; i < numFlakes; i++) {
                 let flake = document.createElement('div'); flake.className = 'snowflake'; flake.innerHTML = '❄';
                 flake.style.left = (Math.random() * 100) + 'vw';
-                // Giảm tốc độ tuyết rơi (Tăng số giây animation)
                 flake.style.animationDuration = (Math.random() * 8 + 8) + 's, ' + (Math.random() * 4 + 4) + 's';
                 flake.style.animationDelay = (Math.random() * 3) + 's, ' + (Math.random() * 3) + 's';
                 flake.style.fontSize = (Math.random() * 12 + 10) + 'px'; flake.style.opacity = Math.random() * 0.8 + 0.2; 
                 wrapper.appendChild(flake);
             }
         }
-        document.addEventListener("DOMContentLoaded", () => { initWinterEffects(); });
+        initWinterEffects();
 
         function exportHTMLToDoc(elementId, filename) {
             var preHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Export HTML To Doc</title><style>body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; } table { border-collapse: collapse; width: 100%; margin-top: 10pt; margin-bottom: 15pt; border: 1px solid black;} th, td { border: 1px solid black; padding: 6pt; text-align: left; vertical-align: middle; } th { font-weight: bold; text-align: center; } h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;} p, ul { margin-top: 5pt; margin-bottom: 5pt; } ul li { margin-bottom: 4pt; }</style></head><body>`;
@@ -1851,6 +1964,10 @@
 
         window.downloadWeeklyReport = function() { exportHTMLToDoc('preview-tuan', exportWeekFilename); }
         window.downloadMonthlyReport = function() { exportHTMLToDoc('preview-thang', exportMonthFilename); }
+        window.updateWeekSelect = updateWeekSelect;
+        window.exportDataToExcel = exportDataToExcel;
+        window.renderWeeklyReport = renderWeeklyReport;
+        window.renderMonthlyReport = renderMonthlyReport;
 
     </script>
 </body>
