@@ -16,11 +16,14 @@
             --text-main: #1e293b; --text-muted: #475569; --border-color: #cbd5e1; --input-bg: #ffffff; 
             --border-radius: 10px; --transition-fast: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             --transition-smooth: 0.4s cubic-bezier(0.25, 1, 0.5, 1); --terminal-bg: #0f172a; --terminal-text: #10b981;
+            --title-color-bright: #1a56a6; /* Màu sáng chế độ thường */
         }
 
         :root[data-theme="dark"] {
             --bg-color: #0f172a; --card-bg: #1e293b; --text-main: #f1f5f9; --text-muted: #94a3b8; 
             --border-color: #334155; --input-bg: #334155; --terminal-bg: #020617;
+            --primary: #3b82f6; /* Nâng sáng tone xanh dương chủ đạo */
+            --title-color-bright: #38bdf8; /* Màu xanh ngọc rực rỡ nổi bật trên nền tối */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
@@ -80,15 +83,89 @@
 
         #mainApp { display: none; }
         
-        header { background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-bottom: 3px solid #ffc107 !important; border-top: 4px solid #da251d !important; position: sticky; top: 0; z-index: 1000; padding: 8px 0; transition: 0.3s; }
+        /* THU NHỎ HEADER */
+        header { background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-bottom: 3px solid #ffc107 !important; border-top: 4px solid #da251d !important; position: sticky; top: 0; z-index: 1000; padding: 4px 0; transition: 0.3s; }
         .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1500px; margin: 0 auto; padding: 0 15px; }
-        .save-status { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; font-weight: 600; width: 180px;}
+        .save-status { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; font-weight: 600; width: 180px;}
         .save-status.saving { color: #d69e2e; } .save-status.saved { color: #38a169; }
-        .header-titles { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center;}
-        header h1 { color: var(--primary); font-size: 17px; text-transform: uppercase; gap: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 2px;}
-        header p { color: var(--text-muted); font-size: 11px; font-weight: 500; }
-        .header-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end;}
+        :root[data-theme="dark"] .save-status.saved { color: #10b981; }
+        :root[data-theme="dark"] .save-status { color: #e2e8f0; }
         
+        .header-titles { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center;}
+        header h1 { color: var(--title-color-bright); font-size: 15px; text-transform: uppercase; gap: 5px; display: flex; align-items: center; justify-content: center; margin-bottom: 0px; transition: color 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        header p { color: var(--text-muted); font-size: 10px; font-weight: 500; }
+        .header-right { display: flex; align-items: center; gap: 8px; justify-content: flex-end;}
+        
+        .hotline-badge {
+            background: linear-gradient(135deg, #e53e3e, #dd6b20);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 0 10px rgba(229, 62, 62, 0.4);
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        :root[data-theme="dark"] .hotline-badge {
+            background: linear-gradient(135deg, #ff4d4d, #ff9900);
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* THAY ĐỔI MÀU SẮC ĐẸP HƠN CHO CÁC NÚT ĐIỀU HƯỚNG NHANH */
+        .btn-bhxh-lookup {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7); /* Sky blue / ocean blue theme */
+            color: white !important;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none !important;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
+            cursor: pointer;
+        }
+        .btn-bhxh-lookup:hover {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            transform: translateY(-1.5px);
+            box-shadow: 0 6px 15px rgba(2, 132, 199, 0.45);
+        }
+        :root[data-theme="dark"] .btn-bhxh-lookup {
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.35);
+        }
+
+        .btn-night-shift {
+            background: linear-gradient(135deg, #6366f1, #4f46e5); /* Deep purple / Indigo night theme */
+            color: white !important;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none !important;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 2px 5px rgba(99, 102, 241, 0.25);
+            cursor: pointer;
+        }
+        .btn-night-shift:hover {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            transform: translateY(-1.5px);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.45);
+        }
+        :root[data-theme="dark"] .btn-night-shift {
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
+        }
+
         .user-greeting { font-weight: bold; color: var(--primary); font-size: 12px; display: flex; align-items: center; gap: 5px; }
         .time-box { background-color: var(--input-bg); border-color: var(--border-color); padding: 4px 8px; border-radius: 6px; border: 1px solid; font-size: 12px; font-weight: bold; color: var(--secondary); white-space: nowrap;}
         
@@ -185,7 +262,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
-        .form-header { font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 8px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center;}
+        .form-header { font-size: 13px; font-weight: bold; color: var(--title-color-bright); margin-bottom: 8px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; transition: color 0.3s; }
         .form-row { display: flex; gap: 12px; margin-bottom: 6px; }
         .form-group { flex: 1; margin-bottom: 6px; }
         .form-group label { display: block; margin-bottom: 3px; font-size: 11px; font-weight: 600; color: var(--text-main); }
@@ -256,8 +333,8 @@
         .dash-card-header { background: linear-gradient(90deg, var(--primary), #2b6cb0); padding: 10px 15px; font-weight: bold; color: #ffffff; font-size: 11px; border-bottom: none; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; flex-shrink: 0; }
         .dash-card-header.sales-header { background: linear-gradient(90deg, #db2777, #be185d); }
         .dash-card-header i { margin-right: 6px; color: #fbd38d; font-size: 13px;}
-        :root[data-theme="dark"] .dash-card-header { background: linear-gradient(90deg, #1e3a8a, #1d4ed8); color: #ffffff;}
-        :root[data-theme="dark"] .dash-card-header.sales-header { background: linear-gradient(90deg, #831843, #9d174d); }
+        :root[data-theme="dark"] .dash-card-header { background: linear-gradient(90deg, #1d4ed8, #3b82f6); color: #ffffff;}
+        :root[data-theme="dark"] .dash-card-header.sales-header { background: linear-gradient(90deg, #db2777, #be185d); }
         
         .dash-table { width: 100%; border-collapse: collapse; font-size: 11px; }
         .dash-table th { background-color: rgba(0,0,0,0.02); color: var(--text-muted); text-align: left; padding: 6px 12px; font-weight: 600; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
@@ -278,21 +355,7 @@
             min-height: 95px;
             height: auto;
         }
-        .pie-chart { width: 55px; height: 55px; border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.1); flex-shrink: 0;}
         
-        .pie-legend { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 6px; 
-            font-size: 11px; 
-            color: var(--text-main);
-            flex: 1;
-        }
-        .legend-item { display: flex; align-items: center; gap: 6px; min-width: 0;}
-        .legend-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .legend-color { width: 12px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 2px rgba(0,0,0,0.2); flex-shrink: 0; }
-
-        /* Custom Glowing Support Icons CSS */
         .icon-glow-card {
             display: flex;
             flex-direction: column;
@@ -321,7 +384,7 @@
         :root[data-theme="dark"] .icon-glow-card { border-color: #334155; background-color: #1e293b; }
         :root[data-theme="dark"] .icon-glow-card span { color: #94a3b8; }
 
-        /* Custom hover focus glow effects */
+        /* HIỆU ỨNG GLOW CHO TỔNG THỐNG KÊ HỖ TRỢ */
         .icon-glow-card.glow-hd:hover {
             border-color: #3b82f6;
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
@@ -350,14 +413,43 @@
         }
         .icon-glow-card.glow-dl:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.5)); }
 
+        /* HIỆU ỨNG GLOW CHO TỔNG THỐNG KÊ TIẾP NHẬN YÊU CẦU MUA HÀNG (MỚI) */
+        .icon-glow-card.glow-sales-cks:hover {
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+            transform: translateY(-4px);
+        }
+        .icon-glow-card.glow-sales-cks:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.5)); }
+
+        .icon-glow-card.glow-sales-hd:hover {
+            border-color: #f472b6;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.6);
+            transform: translateY(-4px);
+        }
+        .icon-glow-card.glow-sales-hd:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(244, 114, 182, 0.5)); }
+
+        .icon-glow-card.glow-sales-bhxh:hover {
+            border-color: #34d399;
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.6);
+            transform: translateY(-4px);
+        }
+        .icon-glow-card.glow-sales-bhxh:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.5)); }
+
+        .icon-glow-card.glow-sales-ct:hover {
+            border-color: #a78bfa;
+            box-shadow: 0 0 15px rgba(167, 139, 250, 0.6);
+            transform: translateY(-4px);
+        }
+        .icon-glow-card.glow-sales-ct:hover i { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(167, 139, 250, 0.5)); }
+
         .report-wrapper { background: var(--card-bg); border-radius: var(--border-radius); padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.02); border: 1px solid var(--border-color);}
         .stats-section { margin-bottom: 20px; }
-        .stats-title { font-size: 13px; color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: bold; }
+        .stats-title { font-size: 13px; color: var(--title-color-bright); border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: bold; transition: color 0.3s; }
         .stats-title span { color: var(--text-muted); font-size: 11px; font-weight: normal; margin-left: auto; background-color: var(--input-bg); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border-color);}
         
         .table-responsive { overflow-x: auto; width: 100%; border-radius: 6px; border: 1px solid var(--border-color); }
         .stats-table { width: 100%; min-width: 600px; border-collapse: collapse;}
-        .stats-table th { background-color: var(--input-bg); color: var(--primary); text-align: center; font-size: 11px; padding: 6px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color);}
+        .stats-table th { background-color: var(--input-bg); color: var(--title-color-bright); text-align: center; font-size: 11px; padding: 6px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); transition: color 0.3s; }
         .stats-table th:first-child { text-align: left; color: var(--text-muted); width: 22%; }
         .stats-table td { text-align: center; font-size: 11px; font-weight: 500; color: var(--text-main); padding: 6px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color);}
         .stats-table td:first-child { text-align: left; font-weight: 600; }
@@ -464,7 +556,7 @@
             <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-color); font-size: 11px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="VN" style="width: 18px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
-                    <span style="font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Tự hào trí tuệ Việt Nam</span>
+                    <span style="font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Hệ Thống Visnam Nội Bộ</span>
                 </div>
             </div>
         </div>
@@ -476,11 +568,14 @@
                 <div class="save-status" id="saveStatusIndicator"><i class="fas fa-cloud"></i>Hệ thống sẵn sàng</div>
                 <div class="header-titles">
                     <h1>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ VN" style="width: 24px; height: 16px; margin-right: 8px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">                     
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ VN" style="width: 20px; height: 13px; margin-right: 6px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">                     
                         <span>HỖ TRỢ KỸ THUẬT</span>          
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ VN" style="width: 24px; height: 16px; margin-left: 8px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg" alt="Cờ VN" style="width: 20px; height: 13px; margin-left: 6px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
                     </h1>
-                    <p>Công ty Cổ phần thương mại Visnam</p>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
+                        <p>Công ty Cổ phần thương mại Visnam</p>
+                        <span class="hotline-badge"><i class="fas fa-phone-alt"></i> Hotline: 19006134</span>
+                    </div>
                 </div>
                 <div class="header-right">
                     <span class="user-greeting"><i class="fas fa-user-check"></i>Xin chào Phan Viết Hưng</span>
@@ -502,6 +597,16 @@
                     <button class="btn-import-excel" onclick="document.getElementById('importExcelFile').click()">
                         <i class="fas fa-file-import"></i> Import File Excel
                     </button>
+                    
+                    <!-- Tra cứu cơ quan BHXH Button (Sleek Ocean Blue) -->
+                    <a href="https://viethungofficial.github.io/tra-cuu-co-quan-bhxh/" target="_blank" class="btn-bhxh-lookup">
+                        <i class="fas fa-search-location"></i> Tra cứu Cơ quan BHXH
+                    </a>
+                    
+                    <!-- Lịch trực đêm Button (Deep Purple / Indigo Shift) -->
+                    <a href="https://phandong28.github.io/truc-dem/truc-dem.html" target="_blank" class="btn-night-shift">
+                        <i class="fas fa-moon"></i> Lịch trực đêm
+                    </a>
                 </div>
                 
                 <div class="tabs">
@@ -566,7 +671,6 @@
                             </form>
                         </div>
 
-                        <!-- Terminal Hỗ Trợ -->
                         <div class="terminal-wrapper-outer">
                             <div class="terminal-panel">
                                 <div class="terminal-header">
@@ -598,7 +702,6 @@
                             </div>
                         </div>
 
-                        <!-- Stats Hỗ Trợ -->
                         <div class="stats-wrapper-outer">
                             <div class="dash-card">
                                 <div class="dash-card-header">
@@ -617,7 +720,6 @@
                                         <tbody id="gs-ratio-body"></tbody>
                                     </table>
                                 </div>
-                                <!-- Thùng chứa Icon phát sáng nằm ngang cho Hỗ Trợ Kỹ Thuật (Thay thế Pie Chart) -->
                                 <div class="pie-chart-container" id="gs-support-icons-container" style="justify-content: space-around; padding: 12px 10px;">
                                     <div class="icon-glow-card glow-hd" title="Hóa đơn điện tử">
                                         <i class="fas fa-file-invoice-dollar" style="color: #3b82f6;"></i>
@@ -626,7 +728,7 @@
                                     </div>
                                     <div class="icon-glow-card glow-cks" title="Chữ ký số">
                                         <i class="fas fa-key" style="color: #f59e0b;"></i>
-                                        <span>TOKEN</span>
+                                        <span>CKS</span>
                                         <b id="count-glow-cks" style="font-size: 11px; margin-top: 2px;">0</b>
                                     </div>
                                     <div class="icon-glow-card glow-bhxh" title="Bảo hiểm xã hội">
@@ -646,7 +748,6 @@
                     </div> 
                     
                     <div class="split-row">
-                        <!-- Form Mua Hàng -->
                         <div class="form-panel">
                             <div class="form-header">
                                 <span><i class="fas fa-shopping-cart"></i> THÔNG TIN MUA / GIA HẠN</span>
@@ -699,7 +800,6 @@
                             </form>
                         </div>
 
-                        <!-- Terminal Mua Hàng -->
                         <div class="terminal-wrapper-outer">
                             <div class="terminal-panel">
                                 <div class="terminal-header">
@@ -731,11 +831,11 @@
                             </div>
                         </div>
 
-                        <!-- Stats Mua Hàng & Pie Chart -->
+                        <!-- THAY BIỂU ĐỒ TRÒN BẰNG BỘ 4 THẺ ICON PHÁT SÁNG CHO PHẦN TIẾP NHẬN YÊU CẦU MUA HÀNG -->
                         <div class="stats-wrapper-outer">
                             <div class="dash-card">
                                 <div class="dash-card-header sales-header">
-                                    <div><i class="fas fa-shopping-cart"></i>TỶ LỆ TIẾP NHẬN YÊU CẦU MUA HÀNG</div>
+                                    <div><i class="fas fa-shopping-cart"></i>TIẾP NHẬN YÊU CẦU MUA HÀNG</div>
                                     <div class="dash-totalbadge" style="background:#be185d;" title="Tổng số yêu cầu">Tổng: <span id="gs-sales-total-badge">0</span></div>
                                 </div>
                                 <div class="dash-table-wrapper" style="overflow: hidden; max-height: 200px;">
@@ -750,9 +850,27 @@
                                         <tbody id="gs-sales-service-body"></tbody>
                                     </table>
                                 </div>
-                                <!-- Thùng chứa biểu đồ Pie Chart hàng dọc cho đỡ mất chữ -->
-                                <div class="pie-chart-container" id="gs-sales-pie-container" style="padding: 10px 15px;">
-                                    <!-- Biểu đồ được vẽ bằng CSS conic gradient và chú thích dạng cột dọc -->
+                                <div class="pie-chart-container" id="gs-sales-icons-container" style="justify-content: space-around; padding: 12px 10px;">
+                                    <div class="icon-glow-card glow-sales-cks" title="Chữ ký số (CKS)">
+                                        <i class="fas fa-key" style="color: #38bdf8;"></i>
+                                        <span>CKS</span>
+                                        <b id="count-sales-cks" style="font-size: 11px; margin-top: 2px;">0</b>
+                                    </div>
+                                    <div class="icon-glow-card glow-sales-hd" title="Hóa đơn">
+                                        <i class="fas fa-file-invoice-dollar" style="color: #f472b6;"></i>
+                                        <span>HÓA ĐƠN</span>
+                                        <b id="count-sales-hd" style="font-size: 11px; margin-top: 2px;">0</b>
+                                    </div>
+                                    <div class="icon-glow-card glow-sales-bhxh" title="Bảo hiểm xã hội">
+                                        <i class="fas fa-shield-alt" style="color: #34d399;"></i>
+                                        <span>BHXH</span>
+                                        <b id="count-sales-bhxh" style="font-size: 11px; margin-top: 2px;">0</b>
+                                    </div>
+                                    <div class="icon-glow-card glow-sales-ct" title="Chứng từ khấu trừ">
+                                        <i class="fas fa-file-signature" style="color: #a78bfa;"></i>
+                                        <span>TNCN</span>
+                                        <b id="count-sales-ct" style="font-size: 11px; margin-top: 2px;">0</b>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -829,7 +947,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>         
         </div>
     </div>
     
@@ -954,11 +1072,9 @@
         }
 
         function updateGlobalStats() {
-            // Stats cho Hỗ Trợ Kỹ Thuật
             let supportCounts = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0, 'ĐL/CTV': 0 };
             let totalSupport = 0;
             
-            // Stats cho Yêu Cầu Bán Hàng
             let salesServiceCounts = { 'CKS': 0, 'HĐ': 0, 'BHXH': 0, 'Chứng từ': 0 };
             let salesTypeCounts = { 'Mua mới': 0, 'Gia hạn': 0 };
             let totalSales = 0;
@@ -978,13 +1094,18 @@
                 });
             }
 
-            // Cập nhật số liệu vào các thẻ phát sáng nằm ngang (Glow support cards)
+            // Cập nhật số liệu các loại hỗ trợ kỹ thuật
             document.getElementById('count-glow-hd').innerText = supportCounts['HĐ'] || 0;
             document.getElementById('count-glow-cks').innerText = supportCounts['CKS'] || 0;
             document.getElementById('count-glow-bhxh').innerText = supportCounts['BHXH'] || 0;
             document.getElementById('count-glow-dl').innerText = supportCounts['ĐL/CTV'] || 0;
 
-            // Render Support Stats Table (Hỗ trợ kỹ thuật)
+            // Cập nhật số liệu các loại dịch vụ tiếp nhận mua mới / gia hạn
+            document.getElementById('count-sales-cks').innerText = salesServiceCounts['CKS'] || 0;
+            document.getElementById('count-sales-hd').innerText = salesServiceCounts['HĐ'] || 0;
+            document.getElementById('count-sales-bhxh').innerText = salesServiceCounts['BHXH'] || 0;
+            document.getElementById('count-sales-ct').innerText = salesServiceCounts['Chứng từ'] || 0;
+
             let supportHtml = "";
             if(totalSupport > 0) {
                 let sTypes = [
@@ -1015,7 +1136,6 @@
             document.getElementById('gs-ratio-body').innerHTML = supportHtml;
             document.getElementById('gs-total-badge').innerText = totalSupport;
 
-            // Render Sales Stats Table (Dịch vụ mua hàng)
             let salesHtml = "";
             if(totalSales > 0) {
                 let slTypes = [
@@ -1045,25 +1165,6 @@
             }
             document.getElementById('gs-sales-service-body').innerHTML = salesHtml;
             document.getElementById('gs-sales-total-badge').innerText = totalSales;
-
-            // Render Pie Chart for Sales (Mua Mới vs Gia Hạn) - Chú thích dạng hàng dọc không lo mất chữ
-            let pieContainer = document.getElementById('gs-sales-pie-container');
-            if(totalSales > 0) {
-                let muaMoi = salesTypeCounts['Mua mới'] || 0;
-                let giaHan = salesTypeCounts['Gia hạn'] || 0;
-                let pctMuaMoi = Math.round((muaMoi / totalSales) * 100);
-                
-                let chartHtml = `
-                    <div class="pie-chart" style="background: conic-gradient(#38bdf8 0% ${pctMuaMoi}%, #f472b6 ${pctMuaMoi}% 100%); margin-right: 15px;"></div>
-                    <div class="pie-legend" style="display: flex; flex-direction: column; gap: 6px;">
-                        <div class="legend-item"><div class="legend-color" style="background: #38bdf8;"></div> <span>Mua mới: <b>${muaMoi}</b> (${pctMuaMoi}%)</span></div>
-                        <div class="legend-item"><div class="legend-color" style="background: #f472b6;"></div> <span>Gia hạn: <b>${giaHan}</b> (${100 - pctMuaMoi}%)</span></div>
-                    </div>
-                `;
-                pieContainer.innerHTML = chartHtml;
-            } else {
-                pieContainer.innerHTML = `<div style="font-style:italic; color:var(--text-muted); font-size: 11px;">Chưa có dữ liệu biểu đồ</div>`;
-            }
         }
 
         const loader = document.getElementById('loader');
@@ -1853,7 +1954,6 @@
                 tHD += s['HĐ']; tCKS += s['CKS']; tBHXH += s['BHXH']; tDL += s['ĐL/CTV']; tTotal += s['Total'];
             });
 
-            // TÍNH TOÁN DOANH SỐ BÁN HÀNG
             let totalGiaHan = 0, totalMuaMoi = 0;
             Object.keys(allData).forEach(d => {
                 if (d.startsWith(`${year}-${String(month).padStart(2,'0')}`)) {
