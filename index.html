@@ -56,7 +56,6 @@
             }
         }
 
-        /* Hoạt ảnh lắc lư tinh tế, êm ái hơn, chu kỳ 2.5s, giảm đáng kể biên độ quay và dịch chuyển */
         @keyframes gentleWiggle {
             0%, 70%, 100% { transform: scale(1) rotate(0deg) translateY(0); }
             75% { transform: scale(1.04) rotate(-1.5deg) translateY(-0.3px); }
@@ -124,7 +123,7 @@
             transition: transform 0.3s ease;
         }
         .btn-zalo-oa:hover .zalo-icon-badge {
-            transform: scale(1.1); /* Phóng to nhẹ nhàng, hoàn toàn không xoay 360 độ */
+            transform: scale(1.1);
         }
         :root[data-theme="dark"] .btn-zalo-oa {
             box-shadow: 0 0 12px rgba(0, 104, 255, 0.35);
@@ -264,7 +263,7 @@
         .tab-btn { padding: 6px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition-fast); }
         .tab-btn.active { background-color: var(--card-bg); color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
-        .sub-tabs { display: flex; gap: 12px; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; align-items: center;}
+        .sub-tabs { display: flex; gap: 12px; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; align-items: center; flex-wrap: wrap; }
         .sub-tab-btn { background: none; border: none; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; padding: 4px 8px; position: relative; transition: color 0.2s; white-space: nowrap;}
         .sub-tab-btn:hover, .sub-tab-btn.active { color: var(--primary); }
         .sub-tab-btn.active::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 2px; background-color: var(--primary); border-radius: 2px 2px 0 0; }
@@ -555,6 +554,23 @@
         #toast { visibility: hidden; min-width: 220px; background: #10b981; color: #fff; text-align: center; border-radius: 6px; padding: 8px 12px; position: fixed; z-index: 2000; left: 50%; bottom: 25px; transform: translate(-50%, 20px); opacity: 0; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: bold; font-size: 11px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);}
         #toast.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
         #toast.error { background: #ef4444; box-shadow: 0 4px 12px rgba(239,68,68,0.3);}
+
+        /* CSS KPI Customization */
+        .kpi-score-input {
+            width: 70px;
+            padding: 4px 6px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--secondary) !important;
+            border: 1.5px solid var(--border-color);
+            background-color: var(--input-bg);
+        }
+        .kpi-score-input:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
 
         @media (max-width: 1200px) {
             .split-row { flex-direction: column; align-items: stretch; }
@@ -958,6 +974,7 @@
                         <button class="sub-tab-btn active" onclick="switchSubTab('thongke')"><i class="fas fa-chart-line"></i> Tổng quan Thống kê</button>
                         <button class="sub-tab-btn" onclick="switchSubTab('bctuan')"><i class="fas fa-file-alt"></i> Báo cáo Tuần</button>
                         <button class="sub-tab-btn" onclick="switchSubTab('bcthang')"><i class="fas fa-file-signature"></i> Báo cáo Tháng</button>
+                        <button class="sub-tab-btn" onclick="switchSubTab('kpi')"><i class="fas fa-award"></i> Bảng KPI tháng</button>
                         <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
                             <input type="month" id="exportMonthSelect" title="Chọn tháng xuất Excel">
                             <button class="btn-export-excel" onclick="exportDataToExcel()"><i class="fas fa-file-excel"></i> Xuất Excel</button>
@@ -1023,6 +1040,52 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Subtab Bảng KPI tháng (MỚI TÍCH HỢP) -->
+                        <div id="sub-kpi" class="sub-tab-content">
+                            <div class="report-split-layout">
+                                <div class="filter-col" style="flex: 0 0 250px;">
+                                    <div style="margin-bottom: 12px;">
+                                        <label>Chọn tháng KPI:</label>
+                                        <select id="kpiMonthSelect" onchange="changeKpiMonth()" class="frm-input custom-select"></select>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 15px; padding: 10px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; font-size: 11px;">
+                                        <span style="font-weight: bold; color: var(--primary); display: block; margin-bottom: 5px;"><i class="fas fa-info-circle"></i> THỰC TẾ TRONG THÁNG</span>
+                                        <p style="margin-bottom: 4px;">Đã hỗ trợ: <b id="kpi-actual-count" style="color: var(--secondary);">0 ca</b></p>
+                                        <p>Mục tiêu (450 ca): <b id="kpi-target-status" style="color: #10b981;">Đạt</b></p>
+                                    </div>
+
+                                    <div style="margin-bottom: 15px; padding: 12px 10px; background-color: var(--card-bg); border: 1.5px solid var(--primary); border-radius: 8px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                                        <span style="font-size: 11px; font-weight: 800; color: var(--text-muted); display: block; text-transform: uppercase; letter-spacing: 0.5px;">KẾT QUẢ ĐÁNH GIÁ</span>
+                                        <div id="kpi-overall-score" style="font-size: 28px; font-weight: 900; color: var(--primary); margin: 6px 0;">0 <span style="font-size: 14px; font-weight: normal; color: var(--text-muted);">/ 100</span></div>
+                                        <div id="kpi-overall-rank" style="font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 9999px; display: inline-block; background-color: #ef4444; color: white; text-transform: uppercase; letter-spacing: 0.5px;">Không đạt</div>
+                                        <p style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Hiệu suất hoàn thành: <span id="kpi-overall-percent" style="font-weight: 800; color: var(--primary);">0%</span></p>
+                                    </div>
+
+                                    <button class="btn-export" onclick="saveKpiData()" style="margin-bottom: 8px; background: linear-gradient(135deg, #10b981, #059669); border: none;"><i class="fas fa-cloud-upload-alt"></i> Lưu bảng KPI</button>
+                                    <button class="btn-export" onclick="downloadKpiReport()"><i class="fas fa-file-word"></i> Tải file Word (.docx)</button>
+                                </div>
+                                
+                                <div class="report-preview-container" style="padding: 10px; display: block; background-color: var(--card-bg);">
+                                    <div style="overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color);">
+                                        <table class="stats-table" style="min-width: 850px;">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 25%; text-align: left; padding: 10px;">Tiêu chí đánh giá</th>
+                                                    <th style="width: 15%; padding: 10px;">Mục tiêu</th>
+                                                    <th style="width: 10%; padding: 10px;">Điểm tối đa</th>
+                                                    <th style="width: 38%; text-align: left; padding: 10px;">Cách chấm điểm</th>
+                                                    <th style="width: 12%; padding: 10px;">Điểm số đạt</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="kpiTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -1052,10 +1115,32 @@
         const GOOGLE_SHEETS_API = "https://script.google.com/macros/s/AKfycbx8DSQqm7DwH_jIFNwH8_f9pcecoK4j4NUT7u226IHZPTpCBJ-b9--N2cH3WotvupEdbA/exec";
         
         let allData = {}; 
+        let allKpiData = {}; // Bộ nhớ đệm KPI
         let currentSelectedDate = ''; 
         let autoSaveTimer = null; 
         let exportWeekFilename = ""; let exportMonthFilename = "";
         const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY'; const TIMEOUT_LIMIT = 60 * 60 * 1000; 
+
+        // Khai báo tiêu chí KPI theo file DOCX mẫu
+        const kpiCriteria = [
+            // Category 1: Hiệu suất công việc (40 điểm)
+            { id: "c1", category: "hs", name: "Số lượng các yêu cầu được xử lý", target: "450 team/Tháng", maxScore: 10, method: "Đủ = 10đ. Thiếu trừ theo % số lượng" },
+            { id: "c2", category: "hs", name: "Tỉ lệ team xử lý thành công cho khách", target: "≥ 90%", maxScore: 10, method: "Tốt = 8-10đ, Hoàn thành= 5–7đ, Không tốt = 1-4" },
+            { id: "c3", category: "hs", name: "Thời gian nhận team hỗ trợ", target: "<20 phút", maxScore: 10, method: "Kiểm tra theo gr hỗ trợ và phản ánh từ khách hàng. Tốt = 8-10đ, Hoàn thành = 5–7đ, Không tốt : 1-3 điểm" },
+            { id: "c4", category: "hs", name: "Thời gian xử lý trung bình 1 yêu cầu hỗ trợ", target: "BHXH <15 phút, Hóa đơn <10 phút, PMBH <20 phút", maxScore: 10, method: "Kiểm tra ngẫu nhiên . Trừ điểm khi có phản ánh trên gr hoặc khách hàng liên hệ tổng đài phản ánh" },
+            
+            // Category 2: Chất lượng hỗ trợ (40 điểm)
+            { id: "c5", category: "cl", name: "Tỷ lệ team xử lý ngay lần đầu, không cần chuyển cấp trên hoặc nhờ bạn khác xử lý", target: ">90%", maxScore: 10, method: "Đạt = 10đ, Không đạt thì trừ theo %" },
+            { id: "c6", category: "cl", name: "Tỷ lệ team xử lý dứt điểm , khách không bị lặp lại lỗi đó", target: "≥ 90%", maxScore: 10, method: "Xem lại danh sách team và phản ánh trên các gr" },
+            { id: "c7", category: "cl", name: "Tỷ lệ khách hàng hài lòng khi được hỗ trợ và kỹ năng giao tiếp", target: "100%", maxScore: 10, method: "Nghe lại ngẫu nhiên cuộc gọi hỗ trợ và theo dõi team xử lý. Trừ điểm theo số lượng cuộc gọi bị phản ánh và team bị phản ánh" },
+            { id: "c8", category: "cl", name: "Số lượng khách đồng ý đánh giá 5 sao dịch vụ", target: "1 tháng ít nhất 15 đánh giá", maxScore: 10, method: "Trừ điểm theo số lượng thiếu" },
+            
+            // Category 3: Báo cáo - Kỷ luật - Chủ động (20 điểm)
+            { id: "c9", category: "bc", name: "Cập nhật báo cáo công việc đầy đủ", target: "100%", maxScore: 5, method: "Kiểm tra thiếu báo cáo : trừ điểm theo mức độ thiếu" },
+            { id: "c10", category: "bc", name: "Phối hợp phòng ban, thái độ & tinh thần trách nhiệm", target: "Tốt", maxScore: 5, method: "Review Trưởng phòng/BGĐ" },
+            { id: "c11", category: "bc", name: "Tinh thần học hỏi, cập nhật kiến thức mới phục vụ công việc", target: "Chủ động", maxScore: 5, method: "Xem xét trong quá trình làm việc" },
+            { id: "c12", category: "bc", name: "Tuân thủ quy trình, nội quy của công ty", target: "100%", maxScore: 5, method: "Vi phạm = trừ điểm" }
+        ];
 
         // HÀNG RÀO BẢO MẬT PHÒNG THỦ KHÓA F12 / INSPECT (BYPASS NẾU URL CÓ ?debug=true)
         function initSourceSecurity() {
@@ -1065,10 +1150,8 @@
                 return;
             }
 
-            // Lớp 1: Khóa chuột phải để ngăn chặn Inspect
             document.addEventListener('contextmenu', e => e.preventDefault());
 
-            // Lớp 2: Khóa F12 và các phím tắt xem nguồn trang của các trình duyệt thông dụng
             document.addEventListener('keydown', e => {
                 if (
                     e.key === 'F12' ||
@@ -1081,7 +1164,6 @@
                 }
             });
 
-            // Lớp 3: Liên tục bẫy debugger để làm đứng DevTools nếu cố lách luật mở qua menu trình duyệt
             setInterval(function() {
                 try {
                     (function() {
@@ -1252,13 +1334,13 @@
                     { id: 'CKS', color: '#38bdf8' },
                     { id: 'HĐ', color: '#f472b6' },
                     { id: 'BHXH', color: '#34d399' },
-                    { id: 'TNCN', color: '#a78bfa' }
+                    { id: 'Chứng từ', color: '#a78bfa' }
                 ];
                 slTypes.forEach(t => {
                     let count = salesServiceCounts[t.id] || 0;
                     let pct = ((count / totalSales) * 100).toFixed(1);
                     salesHtml += `<tr>
-                        <td style="font-weight: 600;">${t.id}</td>
+                        <td style="font-weight: 600;">${t.id === 'Chứng từ' ? 'TNCN' : t.id}</td>
                         <td>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div style="flex: 1; background-color: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;">
@@ -1312,6 +1394,11 @@
             try {
                 const snapshot = await get(ref(database, 'visnam_data'));
                 allData = snapshot.val() || {}; 
+
+                // Tải thêm cấu hình dữ liệu chấm điểm KPI đã lưu từ trước
+                const kpiSnapshot = await get(ref(database, 'visnam_data_kpi'));
+                allKpiData = kpiSnapshot.val() || {};
+                
                 initApp();
                 updateAllReports();
                 updateGlobalStats(); 
@@ -1372,6 +1459,7 @@
         function initMonthSelectors() {
             const select1 = document.getElementById('filterWeekMonth');
             const select2 = document.getElementById('filterMonthSelect');
+            const selectKpi = document.getElementById('kpiMonthSelect');
             const todayStr = getVNTimeDateString();
             const year = todayStr.substring(0, 4);
             const currentMonth = parseInt(todayStr.substring(5, 7));
@@ -1382,7 +1470,9 @@
                 let isSelected = (m === currentMonth) ? 'selected' : '';
                 optionsHTML += `<option value="${monthVal}" ${isSelected}>Tháng ${String(m).padStart(2, '0')}/${year}</option>`;
             }
-            select1.innerHTML = optionsHTML; select2.innerHTML = optionsHTML;
+            select1.innerHTML = optionsHTML; 
+            select2.innerHTML = optionsHTML;
+            if(selectKpi) selectKpi.innerHTML = optionsHTML;
             document.getElementById('exportMonthSelect').value = `${year}-${String(currentMonth).padStart(2, '0')}`;
         }
 
@@ -1421,7 +1511,12 @@
             document.querySelectorAll('.sub-tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('sub-' + subId).classList.add('active'); event.currentTarget.classList.add('active');
-            updateAllReports();
+            
+            if (subId === 'kpi') {
+                renderKpiBoard();
+            } else {
+                updateAllReports();
+            }
         }
 
         window.importExcelData = function(event) {
@@ -1796,8 +1891,15 @@
             data.forEach((item) => {
                 allText.push(`${formatEmptyField(item.mst)}\t${formatEmptyField(item.sdt)}\t${formatEmptyField(item.company)}\t${formatEmptyField(item.type)}\t${formatEmptyField(item.tech)}\t${formatEmptyField(item.issue)}`);
             });
+            
+            // Sao chép sử dụng document.execCommand làm giải pháp bảo mật trong iframe
+            const el = document.createElement('textarea');
+            el.value = allText.join('\n');
+            document.body.appendChild(el);
+            el.select();
             document.execCommand('copy');
-            navigator.clipboard.writeText(allText.join('\n')).then(() => showToast(`Đã copy ${data.length} dòng dữ liệu!`, false));
+            document.body.removeChild(el);
+            showToast(`Đã copy ${data.length} dòng dữ liệu!`, false);
         }
 
         function updateStatusIndicator(msg, typeClass) {
@@ -2150,6 +2252,324 @@
             `;
             document.getElementById('preview-thang').innerHTML = html;
         }
+
+        // ==================== CÁC HÀM XỬ LÝ CHO TAB BẢNG KPI (MỚI TÍCH HỢP) ====================
+        
+        function getMonthSupportCount(monthKey) {
+            let count = 0;
+            Object.keys(allData).forEach(dateStr => {
+                if (dateStr.startsWith(monthKey)) {
+                    allData[dateStr].forEach(item => {
+                        if (item.is_sales !== true) count++;
+                    });
+                }
+            });
+            return count;
+        }
+
+        window.autofillC1Score = function(actualLogs) {
+            let input = document.getElementById('kpi-input-c1');
+            if(!input) return;
+            let score = 0;
+            if (actualLogs >= 450) {
+                score = 10;
+            } else {
+                score = Math.max(0, parseFloat((actualLogs / 450 * 10).toFixed(1)));
+            }
+            input.value = score;
+            validateAndRecalcKpi('c1', 10);
+            showToast(`Gợi ý điểm: ${score}đ dựa trên thực tế ${actualLogs} ca hỗ trợ.`, false);
+        }
+
+        window.validateAndRecalcKpi = function(id, maxVal) {
+            let input = document.getElementById(`kpi-input-${id}`);
+            if (!input) return;
+            let val = parseFloat(input.value);
+            if (isNaN(val)) {
+                val = 0;
+            } else if (val < 0) {
+                input.value = 0;
+                val = 0;
+            } else if (val > maxVal) {
+                input.value = maxVal;
+                val = maxVal;
+            }
+            
+            const mVal = document.getElementById('kpiMonthSelect').value;
+            if (!allKpiData[mVal]) allKpiData[mVal] = {};
+            allKpiData[mVal][id] = val;
+            
+            recalculateAllKpiTotals();
+        }
+
+        function recalculateAllKpiTotals() {
+            const mVal = document.getElementById('kpiMonthSelect').value;
+            if (!mVal) return;
+            
+            const scores = allKpiData[mVal] || {};
+            
+            // Tính phân mục 1: Hiệu suất (c1 - c4)
+            let sumHS = 0;
+            kpiCriteria.slice(0, 4).forEach(item => { sumHS += parseFloat(scores[item.id]) || 0; });
+            document.getElementById('kpi-subtotal-hs').innerText = sumHS.toFixed(1);
+            
+            // Tính phân mục 2: Chất lượng (c5 - c8)
+            let sumCL = 0;
+            kpiCriteria.slice(4, 8).forEach(item => { sumCL += parseFloat(scores[item.id]) || 0; });
+            document.getElementById('kpi-subtotal-cl').innerText = sumCL.toFixed(1);
+            
+            // Tính phân mục 3: Kỷ luật (c9 - c12)
+            let sumBC = 0;
+            kpiCriteria.slice(8, 12).forEach(item => { sumBC += parseFloat(scores[item.id]) || 0; });
+            document.getElementById('kpi-subtotal-bc').innerText = sumBC.toFixed(1);
+            
+            // Tính tổng điểm đạt được
+            let grandTotal = sumHS + sumCL + sumBC;
+            document.getElementById('kpi-grandtotal').innerText = grandTotal.toFixed(1);
+            
+            // Cập nhật Sidebar chỉ số nhanh
+            let actualLogs = getMonthSupportCount(mVal);
+            document.getElementById('kpi-actual-count').innerText = `${actualLogs} ca`;
+            document.getElementById('kpi-target-status').innerText = actualLogs >= 450 ? "ĐẠT MỤC TIÊU" : "CHƯA ĐẠT";
+            document.getElementById('kpi-target-status').style.color = actualLogs >= 450 ? "#10b981" : "#ef4444";
+            
+            document.getElementById('kpi-overall-score').innerHTML = `${grandTotal.toFixed(1)} <span style="font-size: 14px; font-weight: normal; color: var(--text-muted);">/ 100</span>`;
+            document.getElementById('kpi-overall-percent').innerText = `${grandTotal.toFixed(1)}%`;
+            
+            // Phân loại kết quả xếp hạng
+            let rank = "Không đạt";
+            let rankColor = "#ef4444";
+            if (grandTotal >= 90) { rank = "Xuất sắc"; rankColor = "#10b981"; }
+            else if (grandTotal >= 75) { rank = "Tốt"; rankColor = "#3b82f6"; }
+            else if (grandTotal >= 60) { rank = "Đạt"; rankColor = "#f59e0b"; }
+            else if (grandTotal >= 40) { rank = "Cần cải thiện"; rankColor = "#a78bfa"; }
+            
+            const rankBadge = document.getElementById('kpi-overall-rank');
+            rankBadge.innerText = rank;
+            rankBadge.style.backgroundColor = rankColor;
+        }
+
+        window.changeKpiMonth = function() {
+            renderKpiBoard();
+        }
+
+        function renderKpiBoard() {
+            const mVal = document.getElementById('kpiMonthSelect').value;
+            if (!mVal) return;
+            
+            const scores = allKpiData[mVal] || {};
+            const tbody = document.getElementById('kpiTableBody');
+            tbody.innerHTML = '';
+            
+            let categories = [
+                { name: "Hiệu suất công việc (Tối đa 40 điểm)", items: kpiCriteria.slice(0, 4), key: "hs" },
+                { name: "Chất lượng hỗ trợ (Tối đa 40 điểm)", items: kpiCriteria.slice(4, 8), key: "cl" },
+                { name: "Báo cáo – Kỷ luật – Chủ động (Tối đa 20 điểm)", items: kpiCriteria.slice(8, 12), key: "bc" }
+            ];
+            
+            categories.forEach(cat => {
+                // Header nhóm tiêu chí
+                let catRow = document.createElement('tr');
+                catRow.style.backgroundColor = 'rgba(26, 86, 166, 0.05)';
+                catRow.innerHTML = `<td colspan="5" style="text-align: left; font-weight: bold; color: var(--primary); font-size: 12px; padding: 8px 10px;">${cat.name}</td>`;
+                tbody.appendChild(catRow);
+                
+                cat.items.forEach(item => {
+                    let row = document.createElement('tr');
+                    let scoreVal = scores[item.id] !== undefined ? scores[item.id] : "";
+                    
+                    let helpText = "";
+                    if(item.id === "c1") {
+                        let actualLogs = getMonthSupportCount(mVal);
+                        helpText = `<br/><span style="font-size: 10px; color: var(--secondary); font-weight: bold; cursor: pointer; text-decoration: underline;" onclick="autofillC1Score(${actualLogs})" title="Click để tự điền điểm dựa trên logs">Thực tế: ${actualLogs} ca (Bấm điền nhanh)</span>`;
+                    }
+                    
+                    row.innerHTML = `
+                        <td style="text-align: left; font-size: 11px; padding: 8px 10px;">
+                            <span style="font-weight: 600;">${item.name}</span>
+                            ${helpText}
+                        </td>
+                        <td style="font-size: 11px; padding: 8px 10px; font-weight: 500;">${item.target}</td>
+                        <td style="font-size: 11px; padding: 8px 10px; font-weight: bold; color: var(--primary);">${item.maxScore}</td>
+                        <td style="text-align: left; font-size: 11px; color: var(--text-muted); padding: 8px 10px; line-height: 1.4;">${item.method}</td>
+                        <td style="padding: 4px 10px;">
+                            <input type="number" id="kpi-input-${item.id}" class="kpi-score-input" 
+                                   min="0" max="${item.maxScore}" step="0.5" value="${scoreVal}" placeholder="0"
+                                   oninput="validateAndRecalcKpi('${item.id}', ${item.maxScore})">
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+                // Hàng tổng điểm phụ lục lớn
+                let subtotalRow = document.createElement('tr');
+                subtotalRow.style.fontWeight = 'bold';
+                subtotalRow.className = 'row-total';
+                subtotalRow.innerHTML = `
+                    <td colspan="2" style="text-align: left; padding: 8px 10px;">Tổng điểm đạt được danh mục:</td>
+                    <td style="color: var(--primary); text-align: center;">${cat.key === "bc" ? 20 : 40}</td>
+                    <td></td>
+                    <td id="kpi-subtotal-${cat.key}" style="color: var(--secondary); text-align: center; font-size: 12px;">0</td>
+                `;
+                tbody.appendChild(subtotalRow);
+            });
+            
+            // Hàng Tổng Điểm Toàn Bộ
+            let grandTotalRow = document.createElement('tr');
+            grandTotalRow.style.fontWeight = 'bold';
+            grandTotalRow.style.fontSize = '12px';
+            grandTotalRow.style.backgroundColor = 'rgba(243, 156, 18, 0.1)';
+            grandTotalRow.innerHTML = `
+                <td colspan="2" style="text-align: left; padding: 10px; color: var(--primary);">TỔNG ĐIỂM ĐẠT ĐƯỢC TOÀN BỘ KPI (Thang 100):</td>
+                <td style="color: var(--primary); text-align: center;">100</td>
+                <td></td>
+                <td id="kpi-grandtotal" style="font-size: 14px; color: var(--secondary); text-shadow: 0 1px 2px rgba(0,0,0,0.1); text-align: center;">0</td>
+            `;
+            tbody.appendChild(grandTotalRow);
+            
+            recalculateAllKpiTotals();
+        }
+
+        window.saveKpiData = async function() {
+            const mVal = document.getElementById('kpiMonthSelect').value;
+            if(!mVal) return;
+            
+            if(!allKpiData[mVal]) allKpiData[mVal] = {};
+            
+            kpiCriteria.forEach(item => {
+                let input = document.getElementById(`kpi-input-${item.id}`);
+                if(input) {
+                    allKpiData[mVal][item.id] = parseFloat(input.value) || 0;
+                }
+            });
+            
+            updateStatusIndicator("Đang lưu KPI lên mây...", "saving");
+            try {
+                await set(ref(database, 'visnam_data_kpi/' + mVal), allKpiData[mVal]);
+                updateStatusIndicator("Đã lưu an toàn", "saved");
+                showToast(`Đã lưu bảng KPI Tháng ${mVal.substring(5,7)}/${mVal.substring(0,4)} lên Đám mây thành công!`, false);
+            } catch(err) {
+                updateStatusIndicator("Lỗi lưu KPI", "saving");
+                showToast("Lỗi khi lưu bảng KPI lên Đám mây!", true);
+            }
+        }
+
+        window.downloadKpiReport = function() {
+            const mVal = document.getElementById('kpiMonthSelect').value;
+            if(!mVal) return;
+            const year = mVal.substring(0,4);
+            const month = mVal.substring(5,7);
+            const scores = allKpiData[mVal] || {};
+            
+            let sumHS = 0; kpiCriteria.slice(0, 4).forEach(item => { sumHS += parseFloat(scores[item.id]) || 0; });
+            let sumCL = 0; kpiCriteria.slice(4, 8).forEach(item => { sumCL += parseFloat(scores[item.id]) || 0; });
+            let sumBC = 0; kpiCriteria.slice(8, 12).forEach(item => { sumBC += parseFloat(scores[item.id]) || 0; });
+            let grandTotal = sumHS + sumCL + sumBC;
+            
+            let rank = "Không đạt";
+            if (grandTotal >= 90) rank = "Xuất sắc";
+            else if (grandTotal >= 75) rank = "Tốt";
+            else if (grandTotal >= 60) rank = "Đạt";
+            else if (grandTotal >= 40) rank = "Cần cải thiện";
+            
+            let percentage = grandTotal.toFixed(1);
+
+            let wordHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Bao Cao KPI</title>
+            <style>
+                body { font-family: 'Times New Roman', serif; font-size: 11.5pt; line-height: 1.4; color: black; }
+                .title { text-align: center; font-size: 15pt; font-weight: bold; text-transform: uppercase; margin-bottom: 2px;}
+                .subtitle { text-align: center; font-size: 13pt; font-weight: bold; text-transform: uppercase; color: #1a56a6; margin-bottom: 15px;}
+                .info-table { width: 100%; border: none; margin-bottom: 12px; }
+                .info-table td { border: none; padding: 2px; font-size: 11pt; }
+                .kpi-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+                .kpi-table th, .kpi-table td { border: 1px solid black; padding: 6px; font-size: 10pt; text-align: left; vertical-align: middle; }
+                .kpi-table th { background-color: #f2f2f2; text-align: center; font-weight: bold; }
+                .total-row { font-weight: bold; background-color: #fafafa; }
+                .center { text-align: center !important; }
+                .scale-table { width: 220px; border-collapse: collapse; margin: 15px 0; }
+                .scale-table th, .scale-table td { border: 1px solid black; padding: 4px; font-size: 9.5pt; text-align: center; }
+                .scale-table th { background-color: #f2f2f2; }
+                .conclusion-box { margin-top: 15px; border-top: 1.5px dashed #444; padding-top: 10px; font-size: 11.5pt; line-height: 1.6; }
+            </style>
+            </head><body>
+                <div class="title">BẢNG KPI NHÂN VIÊN THÁNG ${month}</div>
+                <div class="subtitle">HỖ TRỢ KỸ THUẬT - VISNAM</div>
+                
+                <table class="info-table">
+                    <tr><td style="width: 55%;"><b>Họ và tên:</b> Phan Viết Hưng</td><td><b>Bộ phận:</b> Kỹ thuật</td></tr>
+                    <tr><td><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td></td></tr>
+                </table>
+
+                <div style="font-weight: bold; font-size: 11pt; margin-bottom: 5px; margin-top: 10px;">Hiệu suất công việc (40 điểm):</div>
+                <table class="kpi-table">
+                    <thead>
+                        <tr><th style="width: 30%;">Tiêu chí</th><th style="width: 15%;">Mục tiêu</th><th style="width: 10%;">Điểm tối đa</th><th style="width: 35%;">Cách chấm</th><th style="width: 10%;">Điểm</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Số lượng các yêu cầu được xử lý</td><td>450 team/Tháng</td><td class="center">10</td><td>Đủ = 10đ, Thiếu trừ theo % số lượng</td><td class="center">${scores['c1'] !== undefined ? scores['c1'] : '0'}</td></tr>
+                        <tr><td>Tỉ lệ team xử lý thành công cho khách</td><td>≥ 90%</td><td class="center">10</td><td>Tốt = 8-10đ, Hoàn thành= 5–7đ, Không tốt = 1-4</td><td class="center">${scores['c2'] !== undefined ? scores['c2'] : '0'}</td></tr>
+                        <tr><td>Thời gian nhận team hỗ trợ</td><td>&lt;20 phút</td><td class="center">10</td><td>Kiểm tra theo gr hỗ trợ và phản ánh từ khách hàng. Tốt = 8-10đ, Hoàn thành = 5–7đ, Không tốt : 1-3 điểm</td><td class="center">${scores['c3'] !== undefined ? scores['c3'] : '0'}</td></tr>
+                        <tr><td>Thời gian xử lý trung bình 1 yêu cầu hỗ trợ</td><td>BHXH &lt;15 phút, Hóa đơn &lt;10 phút, PMBH &lt;20 phút</td><td class="center">10</td><td>Kiểm tra ngẫu nhiên . Trừ điểm khi có phản ánh trên gr hoặc khách hàng liên hệ tổng đài phản ánh</td><td class="center">${scores['c4'] !== undefined ? scores['c4'] : '0'}</td></tr>
+                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">40</td><td></td><td class="center"><b>${sumHS.toFixed(1)}</b></td></tr>
+                    </tbody>
+                </table>
+
+                <div style="font-weight: bold; font-size: 11pt; margin-bottom: 5px; margin-top: 15px;">Chất lượng hỗ trợ (40 điểm):</div>
+                <table class="kpi-table">
+                    <thead>
+                        <tr><th style="width: 30%;">Tiêu chí</th><th style="width: 15%;">Mục tiêu</th><th style="width: 10%;">Điểm tối đa</th><th style="width: 35%;">Cách chấm</th><th style="width: 10%;">Điểm</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Tỷ lệ team xử lý ngay lần đầu, không cần chuyển cấp trên hoặc nhờ bạn khác xử lý</td><td>&gt;90%</td><td class="center">10</td><td>Đạt = 10đ, Không đạt thì trừ theo %</td><td class="center">${scores['c5'] !== undefined ? scores['c5'] : '0'}</td></tr>
+                        <tr><td>Tỷ lệ team xử lý dứt điểm , khách không bị lặp lại lỗi đó</td><td>≥ 90%</td><td class="center">10</td><td>Xem lại danh sách team và phản ánh trên các gr</td><td class="center">${scores['c6'] !== undefined ? scores['c6'] : '0'}</td></tr>
+                        <tr><td>Tỷ lệ khách hàng hài lòng khi được hỗ trợ và kỹ năng giao tiếp</td><td>100%</td><td class="center">10</td><td>Nghe lại ngẫu nhiên cuộc gọi hỗ trợ và theo dõi team xử lý. Trừ điểm theo số lượng cuộc gọi bị phản ánh và team bị phản ánh</td><td class="center">${scores['c7'] !== undefined ? scores['c7'] : '0'}</td></tr>
+                        <tr><td>Số lượng khách đồng ý đánh giá 5 sao dịch vụ</td><td>1 tháng ít nhất 15 đánh giá</td><td class="center">10</td><td>Trừ điểm theo số lượng thiếu</td><td class="center">${scores['c8'] !== undefined ? scores['c8'] : '0'}</td></tr>
+                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">40</td><td></td><td class="center"><b>${sumCL.toFixed(1)}</b></td></tr>
+                    </tbody>
+                </table>
+
+                <div style="font-weight: bold; font-size: 11pt; margin-bottom: 5px; margin-top: 15px;">Báo cáo – Kỷ luật – Chủ động (20 điểm):</div>
+                <table class="kpi-table">
+                    <thead>
+                        <tr><th style="width: 30%;">Tiêu chí</th><th style="width: 15%;">Mục tiêu</th><th style="width: 10%;">Điểm tối đa</th><th style="width: 35%;">Cách chấm</th><th style="width: 10%;">Điểm</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Cập nhật báo cáo công việc đầy đủ</td><td>100%</td><td class="center">5</td><td>Kiểm tra thiếu báo cáo : trừ điểm theo mức độ thiếu</td><td class="center">${scores['c9'] !== undefined ? scores['c9'] : '0'}</td></tr>
+                        <tr><td>Phối hợp phòng ban, thái độ & tinh thần trách nhiệm</td><td>Tốt</td><td class="center">5</td><td>Review Trưởng phòng/BGĐ</td><td class="center">${scores['c10'] !== undefined ? scores['c10'] : '0'}</td></tr>
+                        <tr><td>Tinh thần học hỏi, cập nhật kiến thức mới phục vụ công việc</td><td>Chủ động</td><td class="center">5</td><td>Xem xét trong quá trình làm việc</td><td class="center">${scores['c11'] !== undefined ? scores['c11'] : '0'}</td></tr>
+                        <tr><td>Tuân thủ quy trình, nội quy của công ty</td><td>100%</td><td class="center">5</td><td>Vi phạm = trừ điểm</td><td class="center">${scores['c12'] !== undefined ? scores['c12'] : '0'}</td></tr>
+                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">20</td><td></td><td class="center"><b>${sumBC.toFixed(1)}</b></td></tr>
+                    </tbody>
+                </table>
+
+                <div style="font-weight: bold; font-size: 11pt; margin-top: 20px; text-transform: uppercase;">Thang xếp loại kết quả:</div>
+                <table class="scale-table">
+                    <thead>
+                        <tr><th>Tổng điểm</th><th>Xếp loại</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>90 – 100</td><td>Xuất sắc</td></tr>
+                        <tr><td>75 – 89</td><td>Tốt</td></tr>
+                        <tr><td>60 – 74</td><td>Đạt</td></tr>
+                        <tr><td>40 – 59</td><td>Cần cải thiện</td></tr>
+                        <tr><td>&lt; 40</td><td>Không đạt</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="conclusion-box">
+                    <div style="font-weight: bold; font-size: 12.5pt; text-transform: uppercase; margin-bottom: 5px;">Kết luận đánh giá KPI tháng ${month}:</div>
+                    <div>- <b>Tổng điểm đạt được:</b> ${percentage} / 100 điểm</div>
+                    <div>- <b>Xếp loại:</b> ${rank}</div>
+                    <div>- <b>Mức độ hoàn thành:</b> ${percentage}%</div>
+                </div>
+            </body></html>`;
+
+            const converted = htmlDocx.asBlob(wordHtml, { orientation: 'portrait' });
+            saveAs(converted, `BẢNG KPI NHÂN VIÊN THÁNG ${month} - Phan Viết Hưng.docx`);
+            showToast("Đã xuất và tải file KPI Word thành công!", false);
+        }
+
+        // =====================================================================================
 
         function initWinterEffects() {
             const wrapper = document.getElementById('winter-wrapper');
