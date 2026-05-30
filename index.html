@@ -341,7 +341,7 @@
         .custom-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat !important; background-position: right 6px center !important; background-size: 16px !important; padding-right: 25px; cursor: pointer; }
         .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
         :root[data-theme="dark"] .custom-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
-        :root[data-theme="dark"] .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
+        :root[data-theme="dark"] .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http:///www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
 
         .input-with-btn { display: flex; gap: 6px; }
         .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; transition: 0.2s; height: 32px;}
@@ -2274,7 +2274,7 @@
             if (actualLogs >= 450) {
                 score = 10;
             } else {
-                score = Math.max(0, parseFloat((actualLogs / 450 * 10).toFixed(1)));
+                score = Math.max(0, Math.round(actualLogs / 450 * 10)); // Sử dụng Math.round để lấy số nguyên tròn
             }
             input.value = score;
             validateAndRecalcKpi('c1', 10);
@@ -2284,7 +2284,7 @@
         window.validateAndRecalcKpi = function(id, maxVal) {
             let input = document.getElementById(`kpi-input-${id}`);
             if (!input) return;
-            let val = parseFloat(input.value);
+            let val = parseInt(input.value, 10); // Đổi thành parseInt để buộc phải là số nguyên
             if (isNaN(val)) {
                 val = 0;
             } else if (val < 0) {
@@ -2294,6 +2294,9 @@
                 input.value = maxVal;
                 val = maxVal;
             }
+            
+            // Thiết lập lại giá trị thuộc tính value của thẻ input thành số nguyên vừa kiểm tra
+            input.value = val;
             
             const mVal = document.getElementById('kpiMonthSelect').value;
             if (!allKpiData[mVal]) allKpiData[mVal] = {};
@@ -2310,22 +2313,22 @@
             
             // Tính phân mục 1: Hiệu suất (c1 - c4)
             let sumHS = 0;
-            kpiCriteria.slice(0, 4).forEach(item => { sumHS += parseFloat(scores[item.id]) || 0; });
-            document.getElementById('kpi-subtotal-hs').innerText = sumHS.toFixed(1);
+            kpiCriteria.slice(0, 4).forEach(item => { sumHS += parseInt(scores[item.id], 10) || 0; });
+            document.getElementById('kpi-subtotal-hs').innerText = sumHS.toString(); // Chuyển thành số nguyên
             
             // Tính phân mục 2: Chất lượng (c5 - c8)
             let sumCL = 0;
-            kpiCriteria.slice(4, 8).forEach(item => { sumCL += parseFloat(scores[item.id]) || 0; });
-            document.getElementById('kpi-subtotal-cl').innerText = sumCL.toFixed(1);
+            kpiCriteria.slice(4, 8).forEach(item => { sumCL += parseInt(scores[item.id], 10) || 0; });
+            document.getElementById('kpi-subtotal-cl').innerText = sumCL.toString(); // Chuyển thành số nguyên
             
             // Tính phân mục 3: Kỷ luật (c9 - c12)
             let sumBC = 0;
-            kpiCriteria.slice(8, 12).forEach(item => { sumBC += parseFloat(scores[item.id]) || 0; });
-            document.getElementById('kpi-subtotal-bc').innerText = sumBC.toFixed(1);
+            kpiCriteria.slice(8, 12).forEach(item => { sumBC += parseInt(scores[item.id], 10) || 0; });
+            document.getElementById('kpi-subtotal-bc').innerText = sumBC.toString(); // Chuyển thành số nguyên
             
             // Tính tổng điểm đạt được
             let grandTotal = sumHS + sumCL + sumBC;
-            document.getElementById('kpi-grandtotal').innerText = grandTotal.toFixed(1);
+            document.getElementById('kpi-grandtotal').innerText = grandTotal.toString(); // Chuyển thành số nguyên
             
             // Cập nhật Sidebar chỉ số nhanh
             let actualLogs = getMonthSupportCount(mVal);
@@ -2333,8 +2336,8 @@
             document.getElementById('kpi-target-status').innerText = actualLogs >= 450 ? "ĐẠT MỤC TIÊU" : "CHƯA ĐẠT";
             document.getElementById('kpi-target-status').style.color = actualLogs >= 450 ? "#10b981" : "#ef4444";
             
-            document.getElementById('kpi-overall-score').innerHTML = `${grandTotal.toFixed(1)} <span style="font-size: 14px; font-weight: normal; color: var(--text-muted);">/ 100</span>`;
-            document.getElementById('kpi-overall-percent').innerText = `${grandTotal.toFixed(1)}%`;
+            document.getElementById('kpi-overall-score').innerHTML = `${grandTotal} <span style="font-size: 14px; font-weight: normal; color: var(--text-muted);">/ 100</span>`;
+            document.getElementById('kpi-overall-percent').innerText = `${grandTotal}%`;
             
             // Phân loại kết quả xếp hạng
             let rank = "Không đạt";
@@ -2394,7 +2397,7 @@
                         <td style="text-align: left; font-size: 11px; color: var(--text-muted); padding: 8px 10px; line-height: 1.4;">${item.method}</td>
                         <td style="padding: 4px 10px;">
                             <input type="number" id="kpi-input-${item.id}" class="kpi-score-input" 
-                                   min="0" max="${item.maxScore}" step="0.5" value="${scoreVal}" placeholder="0"
+                                   min="0" max="${item.maxScore}" step="1" value="${scoreVal}" placeholder="0"
                                    oninput="validateAndRecalcKpi('${item.id}', ${item.maxScore})">
                         </td>
                     `;
@@ -2439,7 +2442,7 @@
             kpiCriteria.forEach(item => {
                 let input = document.getElementById(`kpi-input-${item.id}`);
                 if(input) {
-                    allKpiData[mVal][item.id] = parseFloat(input.value) || 0;
+                    allKpiData[mVal][item.id] = parseInt(input.value, 10) || 0;
                 }
             });
             
@@ -2461,9 +2464,9 @@
             const month = mVal.substring(5,7);
             const scores = allKpiData[mVal] || {};
             
-            let sumHS = 0; kpiCriteria.slice(0, 4).forEach(item => { sumHS += parseFloat(scores[item.id]) || 0; });
-            let sumCL = 0; kpiCriteria.slice(4, 8).forEach(item => { sumCL += parseFloat(scores[item.id]) || 0; });
-            let sumBC = 0; kpiCriteria.slice(8, 12).forEach(item => { sumBC += parseFloat(scores[item.id]) || 0; });
+            let sumHS = 0; kpiCriteria.slice(0, 4).forEach(item => { sumHS += parseInt(scores[item.id], 10) || 0; });
+            let sumCL = 0; kpiCriteria.slice(4, 8).forEach(item => { sumCL += parseInt(scores[item.id], 10) || 0; });
+            let sumBC = 0; kpiCriteria.slice(8, 12).forEach(item => { sumBC += parseInt(scores[item.id], 10) || 0; });
             let grandTotal = sumHS + sumCL + sumBC;
             
             let rank = "Không đạt";
@@ -2472,7 +2475,7 @@
             else if (grandTotal >= 60) rank = "Đạt";
             else if (grandTotal >= 40) rank = "Cần cải thiện";
             
-            let percentage = grandTotal.toFixed(1);
+            let percentage = grandTotal;
 
             let wordHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Bao Cao KPI</title>
             <style>
@@ -2510,7 +2513,7 @@
                         <tr><td>Tỉ lệ team xử lý thành công cho khách</td><td>≥ 90%</td><td class="center">10</td><td>Tốt = 8-10đ, Hoàn thành= 5–7đ, Không tốt = 1-4</td><td class="center">${scores['c2'] !== undefined ? scores['c2'] : '0'}</td></tr>
                         <tr><td>Thời gian nhận team hỗ trợ</td><td>&lt;20 phút</td><td class="center">10</td><td>Kiểm tra theo gr hỗ trợ và phản ánh từ khách hàng. Tốt = 8-10đ, Hoàn thành = 5–7đ, Không tốt : 1-3 điểm</td><td class="center">${scores['c3'] !== undefined ? scores['c3'] : '0'}</td></tr>
                         <tr><td>Thời gian xử lý trung bình 1 yêu cầu hỗ trợ</td><td>BHXH &lt;15 phút, Hóa đơn &lt;10 phút, PMBH &lt;20 phút</td><td class="center">10</td><td>Kiểm tra ngẫu nhiên . Trừ điểm khi có phản ánh trên gr hoặc khách hàng liên hệ tổng đài phản ánh</td><td class="center">${scores['c4'] !== undefined ? scores['c4'] : '0'}</td></tr>
-                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">40</td><td></td><td class="center"><b>${sumHS.toFixed(1)}</b></td></tr>
+                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">40</td><td></td><td class="center"><b>${sumHS}</b></td></tr>
                     </tbody>
                 </table>
 
@@ -2524,7 +2527,7 @@
                         <tr><td>Tỷ lệ team xử lý dứt điểm , khách không bị lặp lại lỗi đó</td><td>≥ 90%</td><td class="center">10</td><td>Xem lại danh sách team và phản ánh trên các gr</td><td class="center">${scores['c6'] !== undefined ? scores['c6'] : '0'}</td></tr>
                         <tr><td>Tỷ lệ khách hàng hài lòng khi được hỗ trợ và kỹ năng giao tiếp</td><td>100%</td><td class="center">10</td><td>Nghe lại ngẫu nhiên cuộc gọi hỗ trợ và theo dõi team xử lý. Trừ điểm theo số lượng cuộc gọi bị phản ánh và team bị phản ánh</td><td class="center">${scores['c7'] !== undefined ? scores['c7'] : '0'}</td></tr>
                         <tr><td>Số lượng khách đồng ý đánh giá 5 sao dịch vụ</td><td>1 tháng ít nhất 15 đánh giá</td><td class="center">10</td><td>Trừ điểm theo số lượng thiếu</td><td class="center">${scores['c8'] !== undefined ? scores['c8'] : '0'}</td></tr>
-                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">40</td><td></td><td class="center"><b>${sumCL.toFixed(1)}</b></td></tr>
+                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">40</td><td></td><td class="center"><b>${sumCL}</b></td></tr>
                     </tbody>
                 </table>
 
@@ -2538,7 +2541,7 @@
                         <tr><td>Phối hợp phòng ban, thái độ & tinh thần trách nhiệm</td><td>Tốt</td><td class="center">5</td><td>Review Trưởng phòng/BGĐ</td><td class="center">${scores['c10'] !== undefined ? scores['c10'] : '0'}</td></tr>
                         <tr><td>Tinh thần học hỏi, cập nhật kiến thức mới phục vụ công việc</td><td>Chủ động</td><td class="center">5</td><td>Xem xét trong quá trình làm việc</td><td class="center">${scores['c11'] !== undefined ? scores['c11'] : '0'}</td></tr>
                         <tr><td>Tuân thủ quy trình, nội quy của công ty</td><td>100%</td><td class="center">5</td><td>Vi phạm = trừ điểm</td><td class="center">${scores['c12'] !== undefined ? scores['c12'] : '0'}</td></tr>
-                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">20</td><td></td><td class="center"><b>${sumBC.toFixed(1)}</b></td></tr>
+                        <tr class="total-row"><td colspan="2">Tổng điểm đạt được / Tổng tối đa:</td><td class="center">20</td><td></td><td class="center"><b>${sumBC}</b></td></tr>
                     </tbody>
                 </table>
 
