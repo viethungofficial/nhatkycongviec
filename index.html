@@ -87,48 +87,6 @@
             animation: glowHotlineDark 2s infinite ease-in-out, gentleWiggle 2.5s infinite ease-in-out;
         }
 
-        .btn-zalo-oa {
-            background: linear-gradient(135deg, #0068ff, #0050c8);
-            color: white !important;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none !important;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 2px 5px rgba(0, 104, 255, 0.25);
-            cursor: pointer;
-        }
-        .btn-zalo-oa:hover {
-            background: linear-gradient(135deg, #0050c8, #003ca0);
-            transform: translateY(-1.5px);
-            box-shadow: 0 6px 15px rgba(0, 104, 255, 0.45);
-        }
-        .btn-zalo-oa .zalo-icon-badge {
-            font-weight: 900;
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            background: white;
-            color: #0068ff;
-            border-radius: 50%;
-            width: 17px;
-            height: 17px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease;
-        }
-        .btn-zalo-oa:hover .zalo-icon-badge {
-            transform: scale(1.1);
-        }
-        :root[data-theme="dark"] .btn-zalo-oa {
-            box-shadow: 0 0 12px rgba(0, 104, 255, 0.35);
-        }
-
         #loader.pro-loader-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #030712; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; overflow: hidden; }
         .loader-light-effect { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(26,86,166,0.1) 0%, rgba(243,156,18,0.05) 30%, transparent 60%); animation: pulseBg 6s ease-in-out infinite alternate; z-index: 0; }
         .pro-loader { position: relative; width: 100px; height: 100px; display: flex; justify-content: center; align-items: center; margin-bottom: 30px; z-index: 1; }
@@ -184,54 +142,6 @@
         header h1 { color: var(--title-color-bright); font-size: 15px; text-transform: uppercase; gap: 5px; display: flex; align-items: center; justify-content: center; margin-bottom: 0px; transition: color 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         header p { color: var(--text-muted); font-size: 10px; font-weight: 500; }
         .header-right { display: flex; align-items: center; gap: 8px; justify-content: flex-end;}
-
-        .btn-bhxh-lookup {
-            background: linear-gradient(135deg, #0ea5e9, #0284c7); 
-            color: white !important;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none !important;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
-            cursor: pointer;
-        }
-        .btn-bhxh-lookup:hover {
-            background: linear-gradient(135deg, #0284c7, #0369a1);
-            transform: translateY(-1.5px);
-            box-shadow: 0 6px 15px rgba(2, 132, 199, 0.45);
-        }
-        :root[data-theme="dark"] .btn-bhxh-lookup {
-            box-shadow: 0 0 12px rgba(2, 132, 199, 0.35);
-        }
-
-        .btn-night-shift {
-            background: linear-gradient(135deg, #6366f1, #4f46e5); 
-            color: white !important;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none !important;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 2px 5px rgba(99, 102, 241, 0.25);
-            cursor: pointer;
-        }
-        .btn-night-shift:hover {
-            background: linear-gradient(135deg, #4f46e5, #4338ca);
-            transform: translateY(-1.5px);
-            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.45);
-        }
-        :root[data-theme="dark"] .btn-night-shift {
-            box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
-        }
 
         .user-greeting { font-weight: bold; color: var(--primary); font-size: 12px; display: flex; align-items: center; gap: 5px; }
         .time-box { background-color: var(--input-bg); border-color: var(--border-color); padding: 4px 8px; border-radius: 6px; border: 1px solid; font-size: 12px; font-weight: bold; color: var(--secondary); white-space: nowrap;}
@@ -341,7 +251,7 @@
         .custom-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat !important; background-position: right 6px center !important; background-size: 16px !important; padding-right: 25px; cursor: pointer; }
         .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
         :root[data-theme="dark"] .custom-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
-        :root[data-theme="dark"] .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http:///www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
+        :root[data-theme="dark"] .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
 
         .input-with-btn { display: flex; gap: 6px; }
         .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; transition: 0.2s; height: 32px;}
@@ -572,6 +482,128 @@
             outline: none;
         }
 
+        /* --- CSS LỚP THIẾT KẾ CÔNG CỤ MỚI --- */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .tool-card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none !important;
+            color: var(--text-main);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+        .tool-card-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 24px;
+            transition: all 0.35s ease;
+        }
+        .tool-card:hover .tool-card-icon-wrapper {
+            transform: scale(1.12) rotate(6deg);
+        }
+        .tool-card-title {
+            font-size: 13.5px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .tool-card-desc {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .tool-card-btn {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 6px 18px;
+            border-radius: 20px;
+            color: white !important;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .tool-card:hover .tool-card-btn {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* Hiệu ứng phát sáng tương ứng từng loại công cụ */
+        .tool-card.glow-bhxh:hover {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+        }
+        .tool-card.glow-bhxh .tool-card-icon-wrapper {
+            background: rgba(14, 165, 233, 0.1);
+            color: #0ea5e9;
+        }
+        .tool-card.glow-bhxh .tool-card-btn {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+
+        .tool-card.glow-night:hover {
+            border-color: #6366f1;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+        .tool-card.glow-night .tool-card-icon-wrapper {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+        .tool-card.glow-night .tool-card-btn {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+
+        .tool-card.glow-zalo:hover {
+            border-color: #0068ff;
+            box-shadow: 0 0 20px rgba(0, 104, 255, 0.4);
+        }
+        .tool-card.glow-zalo .tool-card-icon-wrapper {
+            background: rgba(0, 104, 255, 0.1);
+            color: #0068ff;
+        }
+        .tool-card.glow-zalo .tool-card-btn {
+            background: linear-gradient(135deg, #0068ff, #0050c8);
+        }
+
+        .tool-card.glow-resources:hover {
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+        .tool-card.glow-resources .tool-card-icon-wrapper {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        .tool-card.glow-resources .tool-card-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
         @media (max-width: 1200px) {
             .split-row { flex-direction: column; align-items: stretch; }
             .form-panel, .terminal-wrapper-outer, .stats-wrapper-outer { width: 100%; flex: none; }
@@ -679,24 +711,12 @@
                     <button class="btn-import-excel" onclick="document.getElementById('importExcelFile').click()">
                         <i class="fas fa-file-import"></i> Import File Excel
                     </button>
-                    
-                    <a href="https://viethungofficial.github.io/tra-cuu-co-quan-bhxh/" target="_blank" class="btn-bhxh-lookup">
-                        <i class="fas fa-search-location"></i> Tra cứu Cơ quan BHXH
-                    </a>
-                    
-                    <a href="https://phandong28.github.io/truc-dem/truc-dem.html" target="_blank" class="btn-night-shift">
-                        <i class="fas fa-moon"></i> Lịch trực đêm
-                    </a>
-
-                    <!-- Nút liên kết Zalo OA -->
-                    <a href="https://oa.zalo.me/chat" target="_blank" class="btn-zalo-oa" title="Trò chuyện qua Zalo OA">
-                        <span class="zalo-icon-badge">Z</span> Zalo OA Chat
-                    </a>
                 </div>
                 
                 <div class="tabs">
                     <button class="tab-btn active" onclick="switchMainTab('nhaplieu')"><i class="fas fa-edit"></i>Form Nhập Liệu</button>
                     <button class="tab-btn" onclick="switchMainTab('baocao')"><i class="fas fa-chart-pie"></i>Báo cáo & Thống kê</button>
+                    <button class="tab-btn" onclick="switchMainTab('congcu')"><i class="fas fa-toolbox"></i>Công cụ hỗ trợ</button>
                 </div>
             </div>
 
@@ -1041,7 +1061,7 @@
                             </div>
                         </div>
 
-                        <!-- Subtab Bảng KPI tháng (MỚI TÍCH HỢP) -->
+                        <!-- Subtab Bảng KPI tháng -->
                         <div id="sub-kpi" class="sub-tab-content">
                             <div class="report-split-layout">
                                 <div class="filter-col" style="flex: 0 0 250px;">
@@ -1088,6 +1108,59 @@
 
                     </div>
                 </div>
+
+                <!-- TAB CÔNG CỤ (MỚI TÍCH HỢP) -->
+                <div id="tab-congcu" class="main-tab-content">
+                    <div class="report-wrapper" style="padding: 25px;">
+                        <div class="stats-title" style="font-size: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 20px;">
+                            <i class="fas fa-toolbox"></i> TIỆN ÍCH & TÀI NGUYÊN NỘI BỘ VISNAM
+                            <span style="font-size: 11px; font-weight: normal; margin-left: auto; background-color: var(--input-bg); padding: 2px 10px; border-radius: 12px; border: 1px solid var(--border-color);">Hệ thống lưu trữ & liên kết nhanh</span>
+                        </div>
+                        
+                        <div class="tools-grid">
+                            <!-- Tra cứu BHXH -->
+                            <a href="https://viethungofficial.github.io/tra-cuu-co-quan-bhxh/" target="_blank" class="tool-card glow-bhxh">
+                                <div class="tool-card-icon-wrapper">
+                                    <i class="fas fa-search-location"></i>
+                                </div>
+                                <div class="tool-card-title">Tra cứu cơ quan BHXH</div>
+                                <div class="tool-card-desc">Công cụ hỗ trợ tìm kiếm địa chỉ, thông tin liên hệ và mã cơ quan Bảo hiểm xã hội toàn quốc.</div>
+                                <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
+                            </a>
+
+                            <!-- Lịch trực đêm -->
+                            <a href="https://phandong28.github.io/truc-dem/truc-dem.html" target="_blank" class="tool-card glow-night">
+                                <div class="tool-card-icon-wrapper">
+                                    <i class="fas fa-moon"></i>
+                                </div>
+                                <div class="tool-card-title">Lịch trực đêm</div>
+                                <div class="tool-card-desc">Bảng phân công và quản lý ca trực tối/đêm của đội ngũ kỹ thuật Visnam.</div>
+                                <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
+                            </a>
+
+                            <!-- Zalo OA Chat -->
+                            <a href="https://oa.zalo.me/chat" target="_blank" class="tool-card glow-zalo">
+                                <div class="tool-card-icon-wrapper">
+                                    <i class="fab fa-rocketchat"></i>
+                                </div>
+                                <div class="tool-card-title">Zalo OA Chat</div>
+                                <div class="tool-card-desc">Cổng kết nối quản lý các cuộc trò chuyện và CSKH trên kênh Zalo Official Account.</div>
+                                <div class="tool-card-btn">MỞ CHAT <i class="fas fa-external-link-alt"></i></div>
+                            </a>
+
+                            <!-- Tài nguyên (Transfer.it) -->
+                            <a href="https://transfer.it/t/bGeeGr5nHbLB" target="_blank" class="tool-card glow-resources">
+                                <div class="tool-card-icon-wrapper">
+                                    <img src="https://www.google.com/s2/favicons?domain=transfer.it&sz=64" alt="Transfer" style="width: 32px; height: 32px; border-radius: 6px;" onerror="this.onerror=null; this.src='https://img.icons8.com/color/48/download.png';">
+                                </div>
+                                <div class="tool-card-title">Kho tài nguyên file</div>
+                                <div class="tool-card-desc">Hệ thống lưu trữ, chia sẻ nhanh các file cài đặt phần mềm, văn bản và tài liệu nội bộ.</div>
+                                <div class="tool-card-btn">TẢI FILE <i class="fas fa-download"></i></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -2236,7 +2309,7 @@
                             <tbody>
                                 <tr><td style="border: 1px solid black; padding: 6pt;">Yêu cầu Mua mới dịch vụ (CKS, HĐ, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${totalMuaMoi}</td></tr>
                                 <tr><td style="border: 1px solid black; padding: 6pt;">Yêu cầu Gia hạn dịch vụ (CKS, HĐ, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${totalGiaHan}</td></tr>
-                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG SỐ YÊU CẦU ĐÃ CHUYỂN GIAO CSKH</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; color: red;">${totalMuaMoi + totalGiaHan}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG SỐ YÊU CẦU ĐÃ CHUYỂO GIAO CSKH</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; color: red;">${totalMuaMoi + totalGiaHan}</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -2253,7 +2326,7 @@
             document.getElementById('preview-thang').innerHTML = html;
         }
 
-        // ==================== CÁC HÀM XỬ LÝ CHO TAB BẢNG KPI (MỚI TÍCH HỢP) ====================
+        // ==================== CÁC HÀM XỬ LÝ CHO TAB BẢNG KPI ====================
         
         function getMonthSupportCount(monthKey) {
             let count = 0;
@@ -2274,7 +2347,7 @@
             if (actualLogs >= 450) {
                 score = 10;
             } else {
-                score = Math.max(0, Math.round(actualLogs / 450 * 10)); // Sử dụng Math.round để lấy số nguyên tròn
+                score = Math.max(0, Math.round(actualLogs / 450 * 10)); 
             }
             input.value = score;
             validateAndRecalcKpi('c1', 10);
@@ -2284,7 +2357,7 @@
         window.validateAndRecalcKpi = function(id, maxVal) {
             let input = document.getElementById(`kpi-input-${id}`);
             if (!input) return;
-            let val = parseInt(input.value, 10); // Đổi thành parseInt để buộc phải là số nguyên
+            let val = parseInt(input.value, 10); 
             if (isNaN(val)) {
                 val = 0;
             } else if (val < 0) {
@@ -2295,7 +2368,6 @@
                 val = maxVal;
             }
             
-            // Thiết lập lại giá trị thuộc tính value của thẻ input thành số nguyên vừa kiểm tra
             input.value = val;
             
             const mVal = document.getElementById('kpiMonthSelect').value;
@@ -2314,21 +2386,21 @@
             // Tính phân mục 1: Hiệu suất (c1 - c4)
             let sumHS = 0;
             kpiCriteria.slice(0, 4).forEach(item => { sumHS += parseInt(scores[item.id], 10) || 0; });
-            document.getElementById('kpi-subtotal-hs').innerText = sumHS.toString(); // Chuyển thành số nguyên
+            document.getElementById('kpi-subtotal-hs').innerText = sumHS.toString(); 
             
             // Tính phân mục 2: Chất lượng (c5 - c8)
             let sumCL = 0;
             kpiCriteria.slice(4, 8).forEach(item => { sumCL += parseInt(scores[item.id], 10) || 0; });
-            document.getElementById('kpi-subtotal-cl').innerText = sumCL.toString(); // Chuyển thành số nguyên
+            document.getElementById('kpi-subtotal-cl').innerText = sumCL.toString(); 
             
             // Tính phân mục 3: Kỷ luật (c9 - c12)
             let sumBC = 0;
             kpiCriteria.slice(8, 12).forEach(item => { sumBC += parseInt(scores[item.id], 10) || 0; });
-            document.getElementById('kpi-subtotal-bc').innerText = sumBC.toString(); // Chuyển thành số nguyên
+            document.getElementById('kpi-subtotal-bc').innerText = sumBC.toString(); 
             
             // Tính tổng điểm đạt được
             let grandTotal = sumHS + sumCL + sumBC;
-            document.getElementById('kpi-grandtotal').innerText = grandTotal.toString(); // Chuyển thành số nguyên
+            document.getElementById('kpi-grandtotal').innerText = grandTotal.toString(); 
             
             // Cập nhật Sidebar chỉ số nhanh
             let actualLogs = getMonthSupportCount(mVal);
