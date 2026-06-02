@@ -28,7 +28,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         html { scroll-behavior: smooth; font-size: 14px; }
-        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; overflow-y: scroll; transition: background-color 0.3s, color 0.3s; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; overflow-y: scroll; transition: background-color 0.3s ease, color 0.3s ease; }
         
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -108,9 +108,9 @@
         .login-logo { font-size: 40px; color: var(--primary); margin-bottom: 15px; }
         .login-box h2 { margin-bottom: 25px; font-size: 20px; }
         .input-group { position: relative; margin-bottom: 15px; }
-        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; z-index: 10; pointer-events: none; transition: 0.3s; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; z-index: 10; pointer-events: none; transition: 0.3s ease; }
         .input-group:focus-within i { color: var(--secondary); }
-        .input-group input { width: 100%; padding: 12px 15px 12px 40px; border: 2px solid var(--border-color); border-radius: 16px; font-size: 13px; outline: none; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .input-group input { width: 100%; padding: 12px 15px 12px 40px; border: 2px solid var(--border-color); border-radius: 16px; font-size: 13px; outline: none; background-color: var(--input-bg); color: var(--text-main); transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
         .input-group input:focus { border-color: var(--secondary); transform: translateY(-1.5px); box-shadow: 0 8px 15px rgba(243,156,18,0.25); }
         .btn-login { width: 100%; padding: 12px; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: var(--transition-fast); }
         .btn-login:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(243,156,18,0.4); }
@@ -131,7 +131,7 @@
 
         #mainApp { display: none; }
         
-        header { background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-bottom: 3px solid #ffc107 !important; border-top: 4px solid #da251d !important; position: sticky; top: 0; z-index: 1000; padding: 4px 0; transition: 0.3s; }
+        header { background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-bottom: 3px solid #ffc107 !important; border-top: 4px solid #da251d !important; position: sticky; top: 0; z-index: 1000; padding: 4px 0; transition: background-color 0.3s ease, border-color 0.3s ease; }
         .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1500px; margin: 0 auto; padding: 0 15px; }
         .save-status { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; font-weight: 600; width: 180px;}
         .save-status.saving { color: #d69e2e; } .save-status.saved { color: #38a169; }
@@ -139,14 +139,14 @@
         :root[data-theme="dark"] .save-status { color: #e2e8f0; }
         
         .header-titles { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center;}
-        header h1 { color: var(--title-color-bright); font-size: 15px; text-transform: uppercase; gap: 5px; display: flex; align-items: center; justify-content: center; margin-bottom: 0px; transition: color 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        header h1 { color: var(--title-color-bright); font-size: 15px; text-transform: uppercase; gap: 5px; display: flex; align-items: center; justify-content: center; margin-bottom: 0px; transition: color 0.3s ease; text-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         header p { color: var(--text-muted); font-size: 10px; font-weight: 500; }
         .header-right { display: flex; align-items: center; gap: 8px; justify-content: flex-end;}
 
         .user-greeting { font-weight: bold; color: var(--primary); font-size: 12px; display: flex; align-items: center; gap: 5px; }
         .time-box { background-color: var(--input-bg); border-color: var(--border-color); padding: 4px 8px; border-radius: 6px; border: 1px solid; font-size: 12px; font-weight: bold; color: var(--secondary); white-space: nowrap;}
         
-        .btn-theme { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 8px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 12px;}
+        .btn-theme { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 8px; border-radius: 6px; cursor: pointer; transition: 0.2s ease; font-size: 12px;}
         .btn-theme:hover { background-color: var(--input-bg); }
         .btn-logout { background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: var(--transition-fast); font-size: 11px; display: flex; align-items: center; gap: 5px; white-space: nowrap;}
         .btn-logout:hover { background: #e53e3e; color: white; transform: scale(1.05); }
@@ -161,12 +161,12 @@
         input[type="date"], select, input[type="month"] { 
             padding: 4px 8px; border: 1.5px solid #94a3b8; 
             border-radius: 8px; font-weight: 600; background-color: var(--card-bg); color: var(--text-main); 
-            outline: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 12px; cursor: pointer;
+            outline: none; transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; font-size: 12px; cursor: pointer;
         }
         input[type="date"]:focus, select:focus, input[type="month"]:focus { border-color: var(--secondary); transform: translateY(-1.5px); box-shadow: 0 6px 12px rgba(243,156,18,0.2); }
         :root[data-theme="dark"] input[type="date"], :root[data-theme="dark"] select, :root[data-theme="dark"] input[type="month"] { border-color: #64748b; background-color: #1e293b; }
 
-        .btn-import-excel { background: #38a169; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
+        .btn-import-excel { background: #38a169; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s ease; }
         .btn-import-excel:hover { background: #2f855a; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(56,161,105,0.3);}
 
         /* THIẾT KẾ MỚI CHO CONTAINER TÌM KIẾM TRÊN THANH ĐIỀU KHIỂN */
@@ -189,7 +189,7 @@
             background-color: var(--input-bg);
             color: var(--text-main);
             outline: none;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
         }
         #globalSearchInput:focus {
             border-color: var(--secondary) !important;
@@ -202,7 +202,7 @@
         .tab-btn.active { background-color: var(--card-bg); color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
         .sub-tabs { display: flex; gap: 12px; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; align-items: center; flex-wrap: wrap; }
-        .sub-tab-btn { background: none; border: none; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; padding: 4px 8px; position: relative; transition: color 0.2s; white-space: nowrap;}
+        .sub-tab-btn { background: none; border: none; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; padding: 4px 8px; position: relative; transition: color 0.2s ease; white-space: nowrap;}
         .sub-tab-btn:hover, .sub-tab-btn.active { color: var(--primary); }
         .sub-tab-btn.active::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 100%; height: 2px; background-color: var(--primary); border-radius: 2px 2px 0 0; }
         
@@ -264,15 +264,15 @@
             border: 1px solid var(--border-color); 
             box-shadow: 0 3px 10px rgba(0,0,0,0.02); 
             overflow: hidden; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease; 
         }
 
-        .form-header { font-size: 13px; font-weight: bold; color: var(--title-color-bright); margin-bottom: 8px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; transition: color 0.3s; }
+        .form-header { font-size: 13px; font-weight: bold; color: var(--title-color-bright); margin-bottom: 8px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; display: flex; justify-content: space-between; align-items: center; transition: color 0.3s ease; }
         .form-row { display: flex; gap: 12px; margin-bottom: 6px; }
         .form-group { flex: 1; margin-bottom: 6px; }
         .form-group label { display: block; margin-bottom: 3px; font-size: 11px; font-weight: 600; color: var(--text-main); }
         
-        .frm-input { width: 100%; padding: 6px 10px; border: 1.5px solid #94a3b8; border-radius: 8px; font-size: 12px; background-color: var(--input-bg); color: var(--text-main); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); outline: none; height: 32px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+        .frm-input { width: 100%; padding: 6px 10px; border: 1.5px solid #94a3b8; border-radius: 8px; font-size: 12px; background-color: var(--input-bg); color: var(--text-main); transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; outline: none; height: 32px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
         :root[data-theme="dark"] .frm-input { border-color: #64748b; background-color: #1e293b; }
         .frm-input:focus { border-color: var(--secondary); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(243,156,18,0.25); }
         
@@ -282,9 +282,9 @@
         :root[data-theme="dark"] .custom-select:focus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f39c12'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); }
 
         .input-with-btn { display: flex; gap: 6px; }
-        .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; transition: 0.2s; height: 32px;}
+        .btn-lookup { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0 10px; cursor: pointer; transition: 0.2s ease; height: 32px;}
         .btn-lookup:hover { background: #113c7a; }
-        .btn-submit { color: white; width: 100%; padding: 6px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px;}
+        .btn-submit { color: white; width: 100%; padding: 6px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s ease; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; height: 34px;}
         .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(243,156,18,0.3); }
 
         .autocomplete-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1.5px solid var(--secondary); border-radius: 6px; box-shadow: 0 6px 15px rgba(243,156,18,0.15); max-height: 150px; overflow-y: auto; z-index: 1000; display: none; margin-top: 2px; }
@@ -296,11 +296,11 @@
         .terminal-title { color: #fff; font-family: 'Courier New', monospace; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px;}
         .terminal-title i { color: var(--terminal-text); }
         .terminal-search-box { position: relative; display: flex; align-items: center; flex: 1; max-width: 200px;}
-        .terminal-search-box i { position: absolute; left: 10px; color: #94a3b8; font-size: 11px; }
-        .terminal-search-box input { width: 100%; padding: 4px 10px 4px 25px; border-radius: 4px; border: 1px solid #334155; background-color: rgba(255,255,255,0.05); color: #fff; font-size: 11px; outline: none; transition: 0.2s;}
+        .terminal-search-box i { position: absolute; left: 10px; color: #94a3b8; font-size: 11px; z-index: 10; }
+        .terminal-search-box input { width: 100%; padding: 4px 10px 4px 25px; border-radius: 4px; border: 1px solid #334155; background-color: rgba(255,255,255,0.05); color: #fff; font-size: 11px; outline: none; transition: 0.2s ease;}
         .terminal-search-box input:focus { border-color: var(--secondary); background-color: rgba(255,255,255,0.1); }
         
-        .btn-copy-terminal { background-color: #334155; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.2s; display: flex; gap: 4px; align-items: center; white-space: nowrap;}
+        .btn-copy-terminal { background-color: #334155; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.2s ease; display: flex; gap: 4px; align-items: center; white-space: nowrap;}
         .btn-copy-terminal:hover { background-color: #475569; }
 
         .terminal-content, .dash-table-wrapper { 
@@ -331,7 +331,7 @@
         .t-vd { color: #94a3b8; font-style: italic; }
         .t-action { width: 55px; text-align: right; white-space: nowrap;}
         
-        .action-btn-sm { background: none; border: none; cursor: pointer; padding: 2px 4px; border-radius: 3px; font-size: 11px; transition: 0.2s;}
+        .action-btn-sm { background: none; border: none; cursor: pointer; padding: 2px 4px; border-radius: 3px; font-size: 11px; transition: 0.2s ease;}
         .edit-btn { color: #38bdf8; } .edit-btn:hover { background-color: rgba(56,189,248,0.1); }
         .del-btn { color: #f87171; } .del-btn:hover { background-color: rgba(248,113,113,0.1); }
         .empty-terminal { text-align: center; color: #475569; margin-top: 20px; font-style: italic; }
@@ -372,7 +372,7 @@
             border-radius: 8px;
             background-color: var(--input-bg);
             border: 1.5px solid var(--border-color);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
             cursor: pointer;
             flex: 1;
             text-align: center;
@@ -448,12 +448,12 @@
 
         .report-wrapper { background: var(--card-bg); border-radius: var(--border-radius); padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.02); border: 1px solid var(--border-color);}
         .stats-section { margin-bottom: 20px; }
-        .stats-title { font-size: 13px; color: var(--title-color-bright); border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: bold; transition: color 0.3s; }
+        .stats-title { font-size: 13px; color: var(--title-color-bright); border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: bold; transition: color 0.3s ease; }
         .stats-title span { color: var(--text-muted); font-size: 11px; font-weight: normal; margin-left: auto; background-color: var(--input-bg); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--border-color);}
         
         .table-responsive { overflow-x: auto; width: 100%; border-radius: 6px; border: 1px solid var(--border-color); }
         .stats-table { width: 100%; min-width: 600px; border-collapse: collapse;}
-        .stats-table th { background-color: var(--input-bg); color: var(--title-color-bright); text-align: center; font-size: 11px; padding: 6px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); transition: color 0.3s; }
+        .stats-table th { background-color: var(--input-bg); color: var(--title-color-bright); text-align: center; font-size: 11px; padding: 6px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); transition: color 0.3s ease; }
         .stats-table th:first-child { text-align: left; color: var(--text-muted); width: 22%; }
         .stats-table td { text-align: center; font-size: 11px; font-weight: 500; color: var(--text-main); padding: 6px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color);}
         .stats-table td:first-child { text-align: left; font-weight: 600; }
@@ -462,6 +462,7 @@
         .highlight-current { background-color: rgba(26, 86, 166, 0.08) !important; box-shadow: inset 4px 0 0 var(--primary); }
         .highlight-current td { color: var(--primary) !important; font-weight: bold !important; }
         .term-table tr[title] { cursor: pointer; }
+        .theme-transitioning * { transition: none !important; }
         :root[data-theme="dark"] .highlight-current { background-color: rgba(243, 156, 18, 0.15) !important; box-shadow: inset 4px 0 0 var(--secondary); }
         :root[data-theme="dark"] .highlight-current td { color: var(--secondary) !important; }
         
@@ -471,7 +472,7 @@
         :root[data-theme="dark"] .daily-card.total { background-color: #0f172a; border-color: var(--secondary); }
 
         .daily-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
-        .daily-card { background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; text-align: center; transition: var(--transition-smooth); }
+        .daily-card { background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; text-align: center; transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
         .daily-card:hover { transform: translateY(-1.5px); box-shadow: 0 6px 12px rgba(0,0,0,0.04); }
         .daily-card.total { background-color: #fffaf0; border-color: #fbd38d; }
         .daily-card.total:hover { border-color: var(--secondary); }
@@ -483,9 +484,9 @@
         .filter-col { flex: 0 0 200px; background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; }
         .filter-col label { font-weight: bold; color: var(--text-main); font-size: 11px; display: block; margin-bottom: 4px;}
         .filter-col select { width: 100%; margin-bottom: 10px;}
-        .btn-export { background: #1a56a6; color: white; width: 100%; font-size: 11px; padding: 6px 10px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;}
+        .btn-export { background: #1a56a6; color: white; width: 100%; font-size: 11px; padding: 6px 10px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s ease;}
         .btn-export:hover { background: #113c7a; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(26,86,166,0.3);}
-        .btn-export-excel { background: #10b981; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.2s;}
+        .btn-export-excel { background: #10b981; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.2s ease;}
         .btn-export-excel:hover { background: #059669; }
 
         .report-preview-container { flex: 1; overflow-x: auto; background-color: var(--input-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); display: flex; justify-content: center; }
@@ -530,7 +531,7 @@
             text-align: center;
             text-decoration: none !important;
             color: var(--text-main);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
             position: relative;
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             cursor: pointer;
@@ -574,7 +575,7 @@
             padding: 6px 18px;
             border-radius: 20px;
             color: white !important;
-            transition: 0.25s;
+            transition: 0.25s ease;
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -745,12 +746,12 @@
                     </button>
                 </div>
 
-                <!-- THANH TÌM KIẾM TOÀN CẦU (ĐÃ DI CHUYỂN NẰM GIỮA NGÀY LÀM VIỆC & CÁC TAB) -->
+                <!-- THANH TÌM KIẾM TOÀN CẦU (ĐÃ DI CHUYỂN NẰM GIỮA NGÀY LÀM VIỆC & CÁC TAB - THÊM Z-INDEX CHO ICON TRÁNH BỊ ẨN) -->
                 <div class="global-search-container">
                     <div style="position: relative; flex: 1; display: flex; align-items: center;">
-                        <i class="fas fa-search" style="position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; pointer-events: none;"></i>
+                        <i class="fas fa-search" style="position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; pointer-events: none; z-index: 10;"></i>
                         <input type="text" id="globalSearchInput" placeholder="Tìm kiếm lịch sử" oninput="onGlobalSearchChange()">
-                        <button id="btnResetGlobalSearch" onclick="resetGlobalSearch()" style="position: absolute; right: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; display: none; padding: 4px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-times-circle" style="font-size: 14px;"></i></button>
+                        <button id="btnResetGlobalSearch" onclick="resetGlobalSearch()" style="position: absolute; right: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; display: none; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10;"><i class="fas fa-times-circle" style="font-size: 14px;"></i></button>
                     </div>
                     <div id="globalSearchStatus" style="font-size: 11px; font-weight: 700; color: var(--secondary); white-space: nowrap; display: none; align-items: center; gap: 4px;">
                         <i class="fas fa-filter"></i> Lịch sử
@@ -829,7 +830,7 @@
                                     <div class="terminal-title"><i class="fas fa-terminal"></i> BẢNG DỮ LIỆU HỖ TRỢ</div>
                                     <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
                                         <div class="terminal-search-box">
-                                            <i class="fas fa-search"></i>
+                                            <i class="fas fa-search" style="z-index: 10;"></i>
                                             <input type="text" id="terminalSearch" placeholder="Tìm MST, Tên, Lỗi...">
                                         </div>
                                         <button class="btn-copy-terminal" onclick="copyTerminalData()"><i class="fas fa-copy"></i> Copy</button>
@@ -858,7 +859,7 @@
                         <div class="stats-wrapper-outer">
                             <div class="dash-card">
                                 <div class="dash-card-header">
-                                    <div><i class="fas fa-chart-line"></i>TỶ LỆ HỖ TRỢ KỸ THUẬT (All-time)</div>
+                                    <div><i class="fas fa-dash-cube"></i>TỶ LỆ HỖ TRỢ KỸ THUẬT (All-time)</div>
                                     <div class="dash-totalbadge" title="Tổng số yêu cầu">Tổng: <span id="gs-total-badge">0</span></div>
                                 </div>
                                 <div class="dash-table-wrapper" style="max-height: 200px;">
@@ -961,7 +962,7 @@
                                     <div class="terminal-title"><i class="fas fa-list-alt" style="color: #db2777;"></i> BẢNG YÊU CẦU MUA / GIA HẠN (Toàn bộ)</div>
                                     <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
                                         <div class="terminal-search-box">
-                                            <i class="fas fa-search"></i>
+                                            <i class="fas fa-search" style="z-index: 10;"></i>
                                             <input type="text" id="terminalSalesSearch" placeholder="Tìm MST, Tên, SĐT...">
                                         </div>
                                     </div>
@@ -1568,10 +1569,20 @@
             const root = document.documentElement;
             const currentTheme = root.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Thêm class tạm thời để tắt transition các phần tử kích thước, tránh nhúc nhích
+            document.body.classList.add('theme-transitioning');
+            
             root.setAttribute('data-theme', newTheme);
             localStorage.setItem('visnam_theme', newTheme);
+            
             const icon = document.querySelector('#btn-theme i');
             icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            
+            // Xóa class tạm thời sau khi chủ đề đã áp dụng xong
+            setTimeout(() => {
+                document.body.classList.remove('theme-transitioning');
+            }, 100);
         }
 
         function initMonthSelectors() {
