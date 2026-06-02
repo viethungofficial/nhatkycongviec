@@ -169,6 +169,34 @@
         .btn-import-excel { background: #38a169; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
         .btn-import-excel:hover { background: #2f855a; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(56,161,105,0.3);}
 
+        /* THIẾT KẾ MỚI CHO CONTAINER TÌM KIẾM TRÊN THANH ĐIỀU KHIỂN */
+        .global-search-container {
+            flex: 1;
+            min-width: 240px;
+            max-width: 580px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 10px;
+        }
+        #globalSearchInput {
+            width: 100%;
+            padding: 7px 35px 7px 35px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 12px;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        #globalSearchInput:focus {
+            border-color: var(--secondary) !important;
+            box-shadow: 0 4px 10px rgba(243,156,18,0.2) !important;
+            transform: translateY(-0.5px);
+        }
+
         .tabs { display: flex; gap: 6px; background-color: var(--input-bg); padding: 4px; border-radius: 8px; flex-wrap: wrap; border: 1px solid var(--border-color);}
         .tab-btn { padding: 6px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; color: var(--text-muted); transition: var(--transition-fast); }
         .tab-btn.active { background-color: var(--card-bg); color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -292,7 +320,8 @@
         .term-table { width: 100%; border-collapse: collapse; font-family: 'Consolas', monospace; font-size: 12px; color: #e2e8f0; min-width: 700px; }
         .term-table th { position: sticky; top: 0; background-color: var(--terminal-bg); border-bottom: 1px dashed #475569; padding: 5px; text-align: left; color: #94a3b8; white-space: nowrap; font-weight: normal; z-index: 10;}
         .term-table td { padding: 5px; border-bottom: 1px solid #1e293b; vertical-align: top;}
-        .term-table tr:hover td { background-color: rgba(255,255,255,0.05); }
+        .term-table tr { transition: background-color 0.15s ease; }
+        .term-table tr:hover td { background-color: rgba(255,255,255,0.08); }
         
         .t-stt { color: #fbbf24; width: 35px; font-weight: bold;}
         .t-mst { color: #38bdf8; width: 85px; }
@@ -432,6 +461,7 @@
         
         .highlight-current { background-color: rgba(26, 86, 166, 0.08) !important; box-shadow: inset 4px 0 0 var(--primary); }
         .highlight-current td { color: var(--primary) !important; font-weight: bold !important; }
+        .term-table tr[title] { cursor: pointer; }
         :root[data-theme="dark"] .highlight-current { background-color: rgba(243, 156, 18, 0.15) !important; box-shadow: inset 4px 0 0 var(--secondary); }
         :root[data-theme="dark"] .highlight-current td { color: var(--secondary) !important; }
         
@@ -459,7 +489,7 @@
         .btn-export-excel:hover { background: #059669; }
 
         .report-preview-container { flex: 1; overflow-x: auto; background-color: var(--input-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); display: flex; justify-content: center; }
-        .report-preview { background: white; padding: 25px; border: 1px solid #cbd5e1; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); color: black; zoom: 0.75; -moz-transform: scale(0.75); -moz-transform-origin: top center; width: 850px; }
+        .report-preview { background: white; padding: 25px; border: 1px solid #cbd5e1; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); color: black; zoom: 0.75; -webkit-transform: scale(0.75); transform: scale(0.75); -webkit-transform-origin: top center; transform-origin: top center; width: 850px; }
         
         #toast { visibility: hidden; min-width: 220px; background: #10b981; color: #fff; text-align: center; border-radius: 6px; padding: 8px 12px; position: fixed; z-index: 2000; left: 50%; bottom: 25px; transform: translate(-50%, 20px); opacity: 0; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: bold; font-size: 11px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);}
         #toast.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
@@ -615,9 +645,10 @@
             .header-titles { order: -1; width: 100%; }
             .controls-card { flex-direction: column; align-items: flex-start;}
             .controls-left-group { width: 100%; flex-direction: column; align-items: flex-start;}
+            .global-search-container { width: 100%; max-width: none; margin: 5px 0; }
             .tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px;}
             .tab-btn { flex: 1; white-space: nowrap; padding: 8px; }
-            .report-preview { zoom: 0.55; -moz-transform: scale(0.55); width: 100%; min-width: 600px;}
+            .report-preview { zoom: 0.55; -webkit-transform: scale(0.55); transform: scale(0.55); width: 100%; min-width: 600px;}
             .user-greeting { display: none; }
             .terminal-search-box { width: 100%; max-width: none; }
         }
@@ -701,6 +732,7 @@
         </header>
 
         <div class="container">
+            
             <div class="controls-card">
                 <div class="controls-left-group">
                     <div class="date-picker-container">
@@ -711,6 +743,18 @@
                     <button class="btn-import-excel" onclick="document.getElementById('importExcelFile').click()">
                         <i class="fas fa-file-import"></i> Import File Excel
                     </button>
+                </div>
+
+                <!-- THANH TÌM KIẾM TOÀN CẦU (ĐÃ DI CHUYỂN NẰM GIỮA NGÀY LÀM VIỆC & CÁC TAB) -->
+                <div class="global-search-container">
+                    <div style="position: relative; flex: 1; display: flex; align-items: center;">
+                        <i class="fas fa-search" style="position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; pointer-events: none;"></i>
+                        <input type="text" id="globalSearchInput" placeholder="Tìm kiếm lịch sử" oninput="onGlobalSearchChange()">
+                        <button id="btnResetGlobalSearch" onclick="resetGlobalSearch()" style="position: absolute; right: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; display: none; padding: 4px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-times-circle" style="font-size: 14px;"></i></button>
+                    </div>
+                    <div id="globalSearchStatus" style="font-size: 11px; font-weight: 700; color: var(--secondary); white-space: nowrap; display: none; align-items: center; gap: 4px;">
+                        <i class="fas fa-filter"></i> Lịch sử
+                    </div>
                 </div>
                 
                 <div class="tabs">
@@ -735,6 +779,7 @@
                             </div>
                             <form id="inputForm" style="display: flex; flex-direction: column;" onsubmit="event.preventDefault();">
                                 <input type="hidden" id="frm-idx" value="-1">
+                                <input type="hidden" id="frm-date" value="">
                                 <div class="form-row">
                                     <div class="form-group" style="flex: 1.2;">
                                         <label>Mã số thuế</label>
@@ -1727,17 +1772,30 @@
             };
 
             let idx = parseInt(document.getElementById('frm-idx').value);
-            if(idx > -1) { allData[currentSelectedDate][idx] = record; showToast("Đã cập nhật dòng!", false); } 
-            else { allData[currentSelectedDate].push(record); showToast("Đã lưu dữ liệu!", false); }
+            let editDate = document.getElementById('frm-date').value;
+            let targetDate = (idx > -1 && editDate) ? editDate : currentSelectedDate;
 
-            renderTerminal(); cancelEdit(); triggerAutoSave(); updateGlobalStats();
+            if(idx > -1 && editDate) { 
+                allData[targetDate][idx] = record; 
+                showToast("Đã cập nhật dòng!", false); 
+                saveDataToCloudSpecificDate(targetDate);
+            } 
+            else { 
+                if(!allData[targetDate]) allData[targetDate] = [];
+                allData[targetDate].push(record); 
+                showToast("Đã lưu dữ liệu!", false); 
+                triggerAutoSave();
+            }
+
+            renderTerminal(); cancelEdit(); updateGlobalStats();
             document.getElementById('frm-mst').focus();
         }
 
-        window.editRecord = function(idx) {
-            let data = allData[currentSelectedDate][idx];
+        window.editRecord = function(dateStr, idx) {
+            let data = allData[dateStr][idx];
             if(!data) return;
             document.getElementById('frm-idx').value = idx;
+            document.getElementById('frm-date').value = dateStr;
             document.getElementById('frm-mst').value = data.mst;
             document.getElementById('frm-company').value = data.company;
             document.getElementById('frm-sdt').value = data.sdt;
@@ -1753,6 +1811,7 @@
 
         window.cancelEdit = function() {
             document.getElementById('frm-idx').value = -1;
+            document.getElementById('frm-date').value = '';
             document.getElementById('frm-mst').value = ''; document.getElementById('frm-company').value = '';
             document.getElementById('frm-sdt').value = ''; document.getElementById('frm-issue').value = '';
 
@@ -1763,11 +1822,11 @@
             document.getElementById('formModeBadge').style.color = '#1a56a6';
         }
 
-        window.deleteRecord = function(idx) {
+        window.deleteRecord = function(dateStr, idx) {
             showConfirm("Xóa dòng hỗ trợ này khỏi hệ thống?", () => {
-                allData[currentSelectedDate].splice(idx, 1);
-                renderTerminal(); triggerAutoSave(); updateGlobalStats();
-                if(parseInt(document.getElementById('frm-idx').value) === idx) cancelEdit();
+                allData[dateStr].splice(idx, 1);
+                renderTerminal(); saveDataToCloudSpecificDate(dateStr); updateGlobalStats();
+                if(document.getElementById('frm-date').value === dateStr && parseInt(document.getElementById('frm-idx').value) === idx) cancelEdit();
                 showToast("Đã xóa dữ liệu!", false);
             });
         }
@@ -1841,55 +1900,93 @@
 
         function renderTerminal() {
             const tbody = document.getElementById('terminalBody');
-            const rawData = allData[currentSelectedDate] || [];
             const searchInput = document.getElementById('terminalSearch');
             const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
             
-            let supportData = rawData.map((item, i) => ({...item, originalIndex: i})).filter(x => x.is_sales !== true);
+            const globalSearchInput = document.getElementById('globalSearchInput');
+            const globalSearchTerm = globalSearchInput ? globalSearchInput.value.toLowerCase().trim() : "";
+            
+            let supportData = [];
+
+            if (globalSearchTerm !== "") {
+                // Duyệt tìm kiếm toàn bộ lịch sử (Newest first)
+                let sortedDates = Object.keys(allData).sort((a, b) => new Date(b) - new Date(a));
+                sortedDates.forEach(dateStr => {
+                    let dayItems = allData[dateStr] || [];
+                    dayItems.forEach((item, index) => {
+                        if (item.is_sales !== true) {
+                            supportData.push({
+                                ...item,
+                                originalIndex: index,
+                                date: dateStr
+                            });
+                        }
+                    });
+                });
+                
+                // Lọc theo từ khóa toàn cầu
+                supportData = supportData.filter(item => 
+                    (item.mst || '').toLowerCase().includes(globalSearchTerm) ||
+                    (item.company || '').toLowerCase().includes(globalSearchTerm) ||
+                    (item.sdt || '').toLowerCase().includes(globalSearchTerm)
+                );
+            } else {
+                // Chế độ xem theo ngày hiện tại
+                const rawData = allData[currentSelectedDate] || [];
+                supportData = rawData.map((item, i) => ({
+                    ...item,
+                    originalIndex: i,
+                    date: currentSelectedDate
+                })).filter(x => x.is_sales !== true);
+            }
+
+            // Lọc theo ô tìm kiếm cục bộ (local search)
+            if (searchTerm !== "") {
+                supportData = supportData.filter(item => 
+                    (item.mst || '').toLowerCase().includes(searchTerm) ||
+                    (item.company || '').toLowerCase().includes(searchTerm) ||
+                    (item.issue || '').toLowerCase().includes(searchTerm) ||
+                    (item.sdt || '').toLowerCase().includes(searchTerm)
+                );
+            }
 
             if(supportData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7"><div class="empty-terminal">Chưa có dữ liệu hỗ trợ trong ngày...</div></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7"><div class="empty-terminal">Chưa có dữ liệu hỗ trợ thỏa mãn bộ lọc...</div></td></tr>`;
                 return;
             }
 
-            let html = ''; let matchCount = 0; let stt = 1;
+            let html = ''; let stt = 1;
 
             supportData.forEach((item) => {
-                const isMatch = (item.mst || '').toLowerCase().includes(searchTerm) ||
-                                (item.company || '').toLowerCase().includes(searchTerm) ||
-                                (item.issue || '').toLowerCase().includes(searchTerm) ||
-                                (item.sdt || '').toLowerCase().includes(searchTerm);
+                const d_mst = item.mst ? item.mst : "<span style='color:#475569'>—</span>";
+                const d_sdt = item.sdt ? item.sdt : "<span style='color:#475569'>—</span>";
+                const d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
+                const d_issue = item.issue ? "> " + item.issue : "<span style='color:#475569'>—</span>";
                 
-                if (isMatch) {
-                    const d_mst = item.mst ? item.mst : "<span style='color:#475569'>—</span>";
-                    const d_sdt = item.sdt ? item.sdt : "<span style='color:#475569'>—</span>";
-                    const d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
-                    const d_issue = item.issue ? "> " + item.issue : "<span style='color:#475569'>—</span>";
+                // Định dạng hiển thị ngày note khi hover
+                const dateParts = item.date.split('-');
+                const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : item.date;
 
-                    html += `<tr>
-                        <td class="t-stt">[${stt++}]</td>
-                        <td class="t-mst">${d_mst}</td>
-                        <td class="t-sdt">${d_sdt}</td>
-                        <td class="t-ten">${d_company}</td>
-                        <td class="t-loai">${item.type}</td>
-                        <td class="t-vd">${d_issue}</td>
-                        <td class="t-action">
-                            <button class="action-btn-sm edit-btn" onclick="editRecord(${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn-sm del-btn" onclick="deleteRecord(${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>`;
-                    matchCount++;
-                }
+                html += `<tr title="Ngày note: ${formattedDate}">
+                    <td class="t-stt">[${stt++}]</td>
+                    <td class="t-mst">${d_mst}</td>
+                    <td class="t-sdt">${d_sdt}</td>
+                    <td class="t-ten">${d_company}</td>
+                    <td class="t-loai">${item.type}</td>
+                    <td class="t-vd">${d_issue}</td>
+                    <td class="t-action">
+                        <button type="button" class="action-btn-sm edit-btn" onclick="editRecord('${item.date}', ${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
+                        <button type="button" class="action-btn-sm del-btn" onclick="deleteRecord('${item.date}', ${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`;
             });
 
-            if(matchCount === 0 && searchTerm !== "") {
-                tbody.innerHTML = `<tr><td colspan="7"><div class="empty-terminal">Không tìm thấy kết quả phù hợp...</div></td></tr>`;
-            } else {
-                tbody.innerHTML = html;
-                if(!searchTerm) {
-                    const container = document.querySelector('.terminal-panel:first-child .terminal-content');
-                    if(container) container.scrollTop = container.scrollHeight;
-                }
+            tbody.innerHTML = html;
+            
+            // Chỉ cuộn tự động khi không ở chế độ tìm kiếm
+            if (!searchTerm && !globalSearchTerm) {
+                const container = document.querySelector('.terminal-panel:first-child .terminal-content');
+                if(container) container.scrollTop = container.scrollHeight;
             }
         }
 
@@ -1897,9 +1994,11 @@
             let tbody = document.getElementById('terminalSalesBody');
             const searchInput = document.getElementById('terminalSalesSearch');
             const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+            
+            const globalSearchInput = document.getElementById('globalSearchInput');
+            const globalSearchTerm = globalSearchInput ? globalSearchInput.value.toLowerCase().trim() : "";
 
             let html = ''; let stt = 1;
-
             let sortedDates = Object.keys(allData).sort((a, b) => new Date(a) - new Date(b));
             
             let totalSales = 0;
@@ -1915,6 +2014,14 @@
                     );
                 }
 
+                if(globalSearchTerm) {
+                    salesItems = salesItems.filter(item => 
+                        (item.mst || '').toLowerCase().includes(globalSearchTerm) ||
+                        (item.company || '').toLowerCase().includes(globalSearchTerm) ||
+                        (item.sdt || '').toLowerCase().includes(globalSearchTerm)
+                    );
+                }
+
                 if(salesItems.length > 0) {
                     totalSales += salesItems.length;
                     let firstRow = true;
@@ -1924,7 +2031,10 @@
                         let d_sdt = item.sdt ? item.sdt : "<span style='color:#475569'>—</span>";
                         let d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
                         
-                        html += `<tr>
+                        const dateParts = item.date.split('-');
+                        const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : item.date;
+
+                        html += `<tr title="Ngày note: ${formattedDate}">
                             <td class="t-stt">[${stt++}]</td>
                             <td style="font-weight: bold; color: #fbbf24;">${displayDate}</td>
                             <td class="t-mst">${d_mst}</td>
@@ -1933,8 +2043,8 @@
                             <td style="color: #38bdf8; white-space: nowrap; padding-right: 15px;">${item.loai_mua}</td>
                             <td style="color: #f472b6; white-space: nowrap; padding-right: 15px;">${item.dich_vu}</td>
                             <td class="t-action">
-                                <button class="action-btn-sm edit-btn" onclick="editSalesRecord('${item.date}', ${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn-sm del-btn" onclick="deleteSalesRecord('${item.date}', ${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                <button type="button" class="action-btn-sm edit-btn" onclick="editSalesRecord('${item.date}', ${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="action-btn-sm del-btn" onclick="deleteSalesRecord('${item.date}', ${item.originalIndex})" title="Xóa"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>`;
                         firstRow = false; 
@@ -1943,19 +2053,40 @@
             });
 
             if(totalSales === 0) {
-                if(searchTerm !== "") {
-                    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-terminal">Không tìm thấy kết quả phù hợp...</div></td></tr>`;
-                } else {
-                    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-terminal">Chưa có dữ liệu yêu cầu mua/gia hạn nào...</div></td></tr>`;
-                }
+                tbody.innerHTML = `<tr><td colspan="8"><div class="empty-terminal">Chưa có dữ liệu yêu cầu mua/gia hạn thỏa mãn bộ lọc...</div></td></tr>`;
             } else {
                 tbody.innerHTML = html;
-                if(!searchTerm) {
+                if(!searchTerm && !globalSearchTerm) {
                     const container = document.getElementById('terminalSalesContent');
                     if(container) container.scrollTop = container.scrollHeight;
                 }
             }
         }
+
+        window.onGlobalSearchChange = function() {
+            const input = document.getElementById('globalSearchInput');
+            const btnReset = document.getElementById('btnResetGlobalSearch');
+            const statusLabel = document.getElementById('globalSearchStatus');
+            const val = input.value.trim();
+            if (val !== "") {
+                btnReset.style.display = 'block';
+                statusLabel.style.display = 'inline-flex';
+            } else {
+                btnReset.style.display = 'none';
+                statusLabel.style.display = 'none';
+            }
+            renderTerminal();
+            renderSalesTerminal();
+        };
+
+        window.resetGlobalSearch = function() {
+            const input = document.getElementById('globalSearchInput');
+            input.value = "";
+            document.getElementById('btnResetGlobalSearch').style.display = 'none';
+            document.getElementById('globalSearchStatus').style.display = 'none';
+            renderTerminal();
+            renderSalesTerminal();
+        };
 
         window.copyTerminalData = function() {
             const data = (allData[currentSelectedDate] || []).filter(x => x.is_sales !== true);
@@ -2257,7 +2388,7 @@
                 <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 20pt 40pt; text-align: justify;">
                     <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
                     <table style="width: 100%; border: none; margin-bottom: 15pt;">
-                        <tr><td style="border:none; padding: 3pt; width: 50%; text-align: left;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 3pt; text-align: left;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
+                        <tr><td style="border:none; padding: 3pt; text-align: left; width: 50%;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 3pt; text-align: left;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
                         <tr><td style="border:none; padding: 3pt; text-align: left;"><b>Chức vụ:</b> Nhân viên kỹ thuật</td><td style="border:none; padding: 3pt; text-align: left;"><b>Thời gian:</b> Từ ${startDDMM}/${year} đến ${endDDMM}/${year}</td></tr>
                     </table>
                     <div style="margin-bottom: 15pt;">
@@ -2309,7 +2440,7 @@
                             <tbody>
                                 <tr><td style="border: 1px solid black; padding: 6pt;">Yêu cầu Mua mới dịch vụ (CKS, HĐ, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${totalMuaMoi}</td></tr>
                                 <tr><td style="border: 1px solid black; padding: 6pt;">Yêu cầu Gia hạn dịch vụ (CKS, HĐ, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 6pt; text-align: center;">${totalGiaHan}</td></tr>
-                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG SỐ YÊU CẦU ĐÃ CHUYỂO GIAO CSKH</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; color: red;">${totalMuaMoi + totalGiaHan}</td></tr>
+                                <tr><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center;">TỔNG SỐ YÊU CẦU ĐÃ CHUYỂN GIAO CSKH</td><td style="border: 1px solid black; padding: 6pt; font-weight: bold; text-align: center; color: red;">${totalMuaMoi + totalGiaHan}</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -2675,6 +2806,12 @@
         window.exportDataToExcel = exportDataToExcel;
         window.renderWeeklyReport = renderWeeklyReport;
         window.renderMonthlyReport = renderMonthlyReport;
+
+        // Export functions to global scope
+        window.editRecord = editRecord;
+        window.deleteRecord = deleteRecord;
+        window.renderTerminal = renderTerminal;
+        window.renderSalesTerminal = renderSalesTerminal;
 
     </script>
 </body>
