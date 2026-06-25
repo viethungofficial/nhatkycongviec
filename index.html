@@ -767,7 +767,6 @@
       box-shadow: 0 4px 8px rgba(56, 161, 105, 0.3);
     }
 
-    /* THIẾT KẾ MỚI CHO CONTAINER TÌM KIẾM TRÊN THANH ĐIỀU KHIỂN */
     .global-search-container {
       flex: 1;
       min-width: 240px;
@@ -1013,12 +1012,16 @@
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
       background-repeat: no-repeat !important;
       background-position: right 6px center !important;
       background-size: 16px !important;
       padding-right: 25px;
       cursor: pointer;
+    }
+
+    /* Tra cứu doanh nghiệp */
+    .custom-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23718096'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
     }
 
     .custom-select:focus {
@@ -1782,30 +1785,33 @@
       background: #059669;
     }
 
+    /* ĐÃ NÂNG CẤP GIAO DIỆN XEM TRƯỚC BÁO CÁO TO RÕ, SẠCH SẼ */
     .report-preview-container {
       flex: 1;
+      overflow-y: auto;
       overflow-x: auto;
       background-color: var(--input-bg);
-      padding: 15px;
-      border-radius: 6px;
+      padding: 20px;
+      border-radius: 8px;
       border: 1px solid var(--border-color);
       display: flex;
       justify-content: center;
+      align-items: flex-start;
+      max-height: 800px;
     }
 
     .report-preview {
       background: white;
-      padding: 25px;
+      padding: 40px 45px;
       border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+      border-radius: 6px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
       color: black;
-      zoom: 0.75;
-      -webkit-transform: scale(0.75);
-      transform: scale(0.75);
-      -webkit-transform-origin: top center;
-      transform-origin: top center;
-      width: 850px;
+      width: 100%;
+      max-width: 820px;
+      box-sizing: border-box;
+      margin-bottom: 0px;
+      zoom: 0.95;
     }
 
     #toast {
@@ -1942,7 +1948,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
 
-    /* Hiệu ứng phát sáng tương ứng từng loại công cụ */
+    /* Hiệu ứng phát sáng các loại công cụ */
     .tool-card.glow-bhxh:hover {
       border-color: #0ea5e9;
       box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
@@ -1997,6 +2003,21 @@
 
     .tool-card.glow-resources .tool-card-btn {
       background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    /* Hiệu ứng đỏ-vàng hoàng gia đặc trưng Hải quan */
+    .tool-card.glow-customs:hover {
+      border-color: #ef4444;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
+    }
+
+    .tool-card.glow-customs .tool-card-icon-wrapper {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    .tool-card.glow-customs .tool-card-btn {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
     }
 
     @media (max-width: 1200px) {
@@ -2071,9 +2092,7 @@
       }
 
       .report-preview {
-        zoom: 0.55;
-        -webkit-transform: scale(0.55);
-        transform: scale(0.55);
+        zoom: 0.8;
         width: 100%;
         min-width: 600px;
       }
@@ -2232,7 +2251,6 @@
           </button>
         </div>
 
-        <!-- THANH TÌM KIẾM TOÀN CẦU (ĐÃ DI CHUYỂN NẰM GIỮA NGÀY LÀM VIỆC & CÁC TAB) -->
         <div class="global-search-container">
           <div style="position: relative; flex: 1; display: flex; align-items: center;">
             <i class="fas fa-search" style="position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; pointer-events: none;"></i>
@@ -2256,9 +2274,8 @@
         <!-- TAB NHẬP LIỆU -->
         <div id="tab-nhaplieu" class="main-tab-content active">
 
-          <!-- Phần 1: Form Hỗ trợ kĩ thuật, Bảng dữ liệu hỗ trợ & Thống kê tỷ lệ hỗ trợ -->
+          <!-- Phần 1: Form Hỗ trợ, Bảng dữ liệu & Thống kê -->
           <div class="split-row">
-            <!-- Form Hỗ Trợ -->
             <div class="form-panel">
               <div class="form-header">
                 <span><i class="fas fa-tools"></i> THÔNG TIN HỖ TRỢ</span>
@@ -2341,7 +2358,6 @@
               </div>
             </div>
 
-            <!-- Thẻ phân bổ tỷ lệ và thống kê kỹ thuật nhanh -->
             <div class="stats-wrapper-outer">
               <div class="dash-card">
                 <div class="dash-card-header">
@@ -2659,7 +2675,7 @@
           </div>
         </div>
 
-        <!-- TAB CÔNG CỤ (MỚI TÍCH HỢP) -->
+        <!-- TAB CÔNG CỤ (ĐÃ TÍCH HỢP MỤC HẢI QUAN) -->
         <div id="tab-congcu" class="main-tab-content">
           <div class="report-wrapper" style="padding: 25px;">
             <div class="stats-title" style="font-size: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 20px;">
@@ -2696,6 +2712,16 @@
                 <div class="tool-card-title">Zalo OA Chat</div>
                 <div class="tool-card-desc">Cổng kết nối quản lý các cuộc trò chuyện và CSKH trên kênh Zalo Official Account.</div>
                 <div class="tool-card-btn">MỞ CHAT <i class="fas fa-external-link-alt"></i></div>
+              </a>
+
+              <!-- Hải Quan (CÔNG CỤ MỚI THÊM) -->
+              <a href="https://viethungofficial.github.io/guimaildangkyhaiquan/" target="_blank" class="tool-card glow-customs">
+                <div class="tool-card-icon-wrapper">
+                  <i class="fas fa-anchor"></i>
+                </div>
+                <div class="tool-card-title">Hải Quan Visnam</div>
+                <div class="tool-card-desc">Hệ thống hỗ trợ soạn thảo, tự động hóa và gửi email đăng ký thông tin doanh nghiệp nhanh gọn với Cơ quan Hải Quan.</div>
+                <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
               </a>
 
               <!-- Tài nguyên (Transfer.it) -->
@@ -3194,7 +3220,6 @@
         const snapshot = await get(ref(database, 'visnam_data'));
         allData = snapshot.val() || {};
 
-        // Tải thêm cấu hình dữ liệu chấm điểm KPI đã lưu từ trước
         const kpiSnapshot = await get(ref(database, 'visnam_data_kpi'));
         allKpiData = kpiSnapshot.val() || {};
 
@@ -3521,10 +3546,15 @@
 
     window.submitForm = function() {
       const mst = document.getElementById('frm-mst').value.trim();
-      const company = document.getElementById('frm-company').value.trim();
+      let company = document.getElementById('frm-company').value.trim();
       const issue = document.getElementById('frm-issue').value.trim();
 
       if (!mst && !company && !issue) return showToast("Vui lòng điền thông tin để lưu!", true);
+
+      // ĐÃ CẬP NHẬT: Tự động thêm ký tự "🍉" vào sau tên công ty khi lưu nếu chưa có
+      if (company && !company.endsWith("🍉") && !company.endsWith("🍉 ")) {
+        company = company + " 🍉";
+      }
 
       const record = {
         mst: mst || "",
@@ -3692,7 +3722,6 @@
       let supportData = [];
 
       if (globalSearchTerm !== "") {
-        // Duyệt tìm kiếm toàn bộ lịch sử (Newest first)
         let sortedDates = Object.keys(allData).sort((a, b) => new Date(b) - new Date(a));
         sortedDates.forEach(dateStr => {
           let dayItems = allData[dateStr] || [];
@@ -3707,14 +3736,12 @@
           });
         });
 
-        // Lọc theo từ khóa toàn cầu
         supportData = supportData.filter(item =>
           (item.mst || '').toLowerCase().includes(globalSearchTerm) ||
           (item.company || '').toLowerCase().includes(globalSearchTerm) ||
           (item.sdt || '').toLowerCase().includes(globalSearchTerm)
         );
       } else {
-        // Chế độ xem theo ngày hiện tại
         const rawData = allData[currentSelectedDate] || [];
         supportData = rawData.map((item, i) => ({
           ...item,
@@ -3723,7 +3750,6 @@
         })).filter(x => x.is_sales !== true);
       }
 
-      // Lọc theo ô tìm kiếm cục bộ (local search)
       if (searchTerm !== "") {
         supportData = supportData.filter(item =>
           (item.mst || '').toLowerCase().includes(searchTerm) ||
@@ -3747,7 +3773,6 @@
         const d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
         const d_issue = item.issue ? "> " + item.issue : "<span style='color:#475569'>—</span>";
 
-        // Định dạng hiển thị ngày note khi hover
         const dateParts = item.date.split('-');
         const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : item.date;
 
@@ -3767,7 +3792,6 @@
 
       tbody.innerHTML = html;
 
-      // Chỉ cuộn tự động khi không ở chế độ tìm kiếm
       if (!searchTerm && !globalSearchTerm) {
         const container = document.querySelector('.terminal-panel:first-child .terminal-content');
         if (container) container.scrollTop = container.scrollHeight;
@@ -3885,7 +3909,6 @@
         allText.push(`${formatEmptyField(item.mst)}\t${formatEmptyField(item.sdt)}\t${formatEmptyField(item.company)}\t${formatEmptyField(item.type)}\t${formatEmptyField(item.tech)}\t${formatEmptyField(item.issue)}`);
       });
 
-      // Sao chép sử dụng document.execCommand làm giải pháp bảo mật trong iframe
       const el = document.createElement('textarea');
       el.value = allText.join('\n');
       document.body.appendChild(el);
@@ -4232,7 +4255,7 @@
       exportWeekFilename = `BÁO CÁO CÔNG VIỆC TUẦN ${String(weekNumber).padStart(2, '0')} (${startDay} - ${endDay}) - Phan Viết Hưng`;
 
       let html = `
-                <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 20pt 40pt; text-align: justify;">
+                <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 10px 15px; text-align: justify;">
                     <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC TUẦN ${String(weekNumber).padStart(2, '0')} THÁNG ${m}</div>
                     <table style="width: 100%; border: none; margin-bottom: 15pt;">
                         <tr><td style="border:none; padding: 1pt; width: 50%;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 1pt;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
@@ -4241,7 +4264,7 @@
                     <div style="margin-bottom: 15pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">1. Nội dung công việc đã thực hiện:</h3>
                         <p style="margin-top: 5pt; margin-bottom: 5pt;">Trong tuần, tôi đã tiếp nhận và thực hiện các công việc kỹ thuật sau:</p>
-                        <ul style="margin-top: 5pt; margin-bottom: 5pt;">
+                        <ul style="margin-top: 5pt; margin-bottom: 5pt; padding-left: 20px;">
                             <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng khắc phục sự cố, xử lý lỗi phần mềm liên quan đến <b>hóa đơn điện tử</b>.</li>
                             <li style="margin-bottom: 4pt;">Triển khai cài đặt, cấu hình hệ thống và khắc phục lỗi liên quan đến <b>chữ ký số</b>.</li>
                             <li style="margin-bottom: 4pt;">Hướng dẫn và hỗ trợ khách hàng kê khai, nộp hồ sơ <b>bảo hiểm xã hội (BHXH)</b>.</li>
@@ -4266,9 +4289,9 @@
                         </table>
                         <p style="margin-top: 5pt; margin-bottom: 5pt;">Các yêu cầu của khách hàng đều được <b>tiếp nhận và xử lý kịp thời</b>.</p>
                     </div>
-                    <div style="margin-bottom: 15pt;">
+                    <div style="margin-bottom: 5pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">3. Khó khăn / Vướng mắc:</h3>
-                        <ul style="margin-top: 5pt; margin-bottom: 5pt;">
+                        <ul style="margin-top: 5pt; margin-bottom: 5pt; padding-left: 20px;">
                             <li style="margin-bottom: 4pt;">Một số trường hợp khách hàng cung cấp thông tin ban đầu chưa đầy đủ dẫn đến bộ phận kỹ thuật phải liên hệ xác minh lại nhiều lần.</li>
                             <li style="margin-bottom: 4pt;">Hệ thống cổng dịch vụ công của nhà nước (Thuế, BHXH) đôi lúc quá tải.</li>
                         </ul>
@@ -4321,7 +4344,7 @@
       });
 
       let html = `
-                <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 20pt 40pt; text-align: justify;">
+                <div style="font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; padding: 10px 15px; text-align: justify;">
                     <div style="text-align: center; font-size: 18pt; font-weight: bold; margin-bottom: 20pt; color: #1a56a6;">BÁO CÁO CÔNG VIỆC THÁNG ${String(month).padStart(2,'0')}/${year}</div>
                     <table style="width: 100%; border: none; margin-bottom: 15pt;">
                         <tr><td style="border:none; padding: 3pt; text-align: left; width: 50%;"><b>Họ và tên:</b> Phan Viết Hưng</td><td style="border:none; padding: 3pt; text-align: left;"><b>Bộ phận:</b> Kỹ thuật</td></tr>
@@ -4329,7 +4352,7 @@
                     </table>
                     <div style="margin-bottom: 15pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">1. Nội dung công việc đã thực hiện:</h3>
-                        <ul style="margin-top: 5pt; margin-bottom: 5pt;">
+                        <ul style="margin-top: 5pt; margin-bottom: 5pt; padding-left: 20px;">
                             <li style="margin-bottom: 4pt;">Hỗ trợ khách hàng xử lý toàn diện các vấn đề liên quan đến <b>hóa đơn điện tử</b>.</li>
                             <li style="margin-bottom: 4pt;">Hỗ trợ thủ tục liên quan đến <b>bảo hiểm xã hội</b>.</li>
                             <li style="margin-bottom: 4pt;">Cài đặt phần mềm, gia hạn, thiết lập Token và xử lý sự cố liên quan đến <b>chữ ký số (CKS)</b>.</li>
@@ -4381,9 +4404,9 @@
                         </table>
                     </div>
 
-                    <div style="margin-bottom: 15pt;">
+                    <div style="margin-bottom: 5pt;">
                         <h3 style="font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;">4. Đánh giá và nhận xét chung:</h3>
-                        <ul style="margin-top: 5pt; margin-bottom: 5pt;">
+                        <ul style="margin-top: 5pt; margin-bottom: 5pt; padding-left: 20px;">
                             <li style="margin-bottom: 4pt;"><b>Về công tác hỗ trợ:</b> Tiếp nhận và hoàn thành 100% các yêu cầu lỗi phần mềm. Đảm bảo đúng thời gian cam kết xử lý với khách hàng.</li>
                             <li style="margin-bottom: 4pt;"><b>Về công tác phối hợp:</b> Phối hợp nhịp nhàng với bộ phận CSKH, chuyển giao thông tin mua hàng nhanh chóng, chính xác, không để khách hàng chờ đợi lâu.</li>
                         </ul>
@@ -4450,32 +4473,27 @@
 
       const scores = allKpiData[mVal] || {};
 
-      // Tính phân mục 1: Hiệu suất (c1 - c4)
       let sumHS = 0;
       kpiCriteria.slice(0, 4).forEach(item => {
         sumHS += parseInt(scores[item.id], 10) || 0;
       });
       document.getElementById('kpi-subtotal-hs').innerText = sumHS.toString();
 
-      // Tính phân mục 2: Chất lượng (c5 - c8)
       let sumCL = 0;
       kpiCriteria.slice(4, 8).forEach(item => {
         sumCL += parseInt(scores[item.id], 10) || 0;
       });
       document.getElementById('kpi-subtotal-cl').innerText = sumCL.toString();
 
-      // Tính phân mục 3: Kỷ luật (c9 - c12)
       let sumBC = 0;
       kpiCriteria.slice(8, 12).forEach(item => {
         sumBC += parseInt(scores[item.id], 10) || 0;
       });
       document.getElementById('kpi-subtotal-bc').innerText = sumBC.toString();
 
-      // Tính tổng điểm đạt được
       let grandTotal = sumHS + sumCL + sumBC;
       document.getElementById('kpi-grandtotal').innerText = grandTotal.toString();
 
-      // Cập nhật Sidebar chỉ số nhanh
       let actualLogs = getMonthSupportCount(mVal);
       document.getElementById('kpi-actual-count').innerText = `${actualLogs} ca`;
       document.getElementById('kpi-target-status').innerText = actualLogs >= 450 ? "ĐẠT MỤC TIÊU" : "CHƯA ĐẠT";
@@ -4484,7 +4502,6 @@
       document.getElementById('kpi-overall-score').innerHTML = `${grandTotal} <span style="font-size: 14px; font-weight: normal; color: var(--text-muted);">/ 100</span>`;
       document.getElementById('kpi-overall-percent').innerText = `${grandTotal}%`;
 
-      // Phân loại kết quả xếp hạng
       let rank = "Không đạt";
       let rankColor = "#ef4444";
       if (grandTotal >= 90) {
@@ -4536,7 +4553,6 @@
       ];
 
       categories.forEach(cat => {
-        // Header nhóm tiêu chí
         let catRow = document.createElement('tr');
         catRow.style.backgroundColor = 'rgba(26, 86, 166, 0.05)';
         catRow.innerHTML = `<td colspan="5" style="text-align: left; font-weight: bold; color: var(--primary); font-size: 12px; padding: 8px 10px;">${cat.name}</td>`;
@@ -4569,7 +4585,6 @@
           tbody.appendChild(row);
         });
 
-        // Hàng tổng điểm phụ lục lớn
         let subtotalRow = document.createElement('tr');
         subtotalRow.style.fontWeight = 'bold';
         subtotalRow.className = 'row-total';
@@ -4582,7 +4597,6 @@
         tbody.appendChild(subtotalRow);
       });
 
-      // Hàng Tổng Điểm Toàn Bộ
       let grandTotalRow = document.createElement('tr');
       grandTotalRow.style.fontWeight = 'bold';
       grandTotalRow.style.fontSize = '12px';
@@ -4651,9 +4665,11 @@
 
       let percentage = grandTotal;
 
-      let wordHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Bao Cao KPI</title>
+      // ĐỒNG BỘ TRIỆT ĐỂ TIMES NEW ROMAN CHO TOÀN BỘ FILE WORD KPI
+      let wordHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Báo Cáo KPI</title>
             <style>
-                body { font-family: 'Times New Roman', serif; font-size: 11.5pt; line-height: 1.4; color: black; }
+                * { font-family: 'Times New Roman', serif !important; }
+                body { font-family: 'Times New Roman', serif !important; font-size: 11.5pt; line-height: 1.4; color: black; }
                 .title { text-align: center; font-size: 15pt; font-weight: bold; text-transform: uppercase; margin-bottom: 2px;}
                 .subtitle { text-align: center; font-size: 13pt; font-weight: bold; text-transform: uppercase; color: #1a56a6; margin-bottom: 15px;}
                 .info-table { width: 100%; border: none; margin-bottom: 12px; }
@@ -4768,8 +4784,19 @@
     }
     initWinterEffects();
 
+    // ĐÃ ĐỒNG BỘ TRIỆT ĐỂ TIMES NEW ROMAN CHO FILE XUẤT TUẦN / THÁNG
     function exportHTMLToDoc(elementId, filename) {
-      var preHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Export HTML To Doc</title><style>body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: black; } table { border-collapse: collapse; width: 100%; margin-top: 10pt; margin-bottom: 15pt; border: 1px solid black;} th, td { border: 1px solid black; padding: 6pt; text-align: left; vertical-align: middle; } th { font-weight: bold; text-align: center; } h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt;} p, ul { margin-top: 5pt; margin-bottom: 5pt; } ul li { margin-bottom: 4pt; }</style></head><body>`;
+      var preHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Export HTML To Doc</title>
+      <style>
+        * { font-family: 'Times New Roman', serif !important; }
+        body { font-family: 'Times New Roman', serif !important; font-size: 13pt; line-height: 1.5; color: black; } 
+        table { border-collapse: collapse; width: 100%; margin-top: 10pt; margin-bottom: 15pt; border: 1px solid black; font-family: 'Times New Roman', serif !important;} 
+        th, td { border: 1px solid black; padding: 6pt; text-align: left; vertical-align: middle; font-family: 'Times New Roman', serif !important; } 
+        th { font-weight: bold; text-align: center; background-color: #f2f2f2; } 
+        h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5pt; margin-top: 15pt; font-family: 'Times New Roman', serif !important;} 
+        p, ul, li { margin-top: 5pt; margin-bottom: 5pt; font-family: 'Times New Roman', serif !important; } 
+        ul li { margin-bottom: 4pt; }
+      </style></head><body>`;
       var postHtml = "</body></html>";
       var html = preHtml + document.getElementById(elementId).innerHTML + postHtml;
       var converted = htmlDocx.asBlob(html, {
@@ -4789,7 +4816,6 @@
     window.renderWeeklyReport = renderWeeklyReport;
     window.renderMonthlyReport = renderMonthlyReport;
 
-    // Export functions to global scope
     window.editRecord = editRecord;
     window.deleteRecord = deleteRecord;
     window.renderTerminal = renderTerminal;
