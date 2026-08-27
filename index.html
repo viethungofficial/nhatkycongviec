@@ -1904,6 +1904,21 @@
       background: linear-gradient(135deg, #ef4444, #b91c1c);
     }
 
+    /* Thẻ công cụ Chuyển đổi CCCD / QHNS mới */
+    .tool-card.glow-idconvert:hover {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.45);
+    }
+
+    .tool-card.glow-idconvert .tool-card-icon-wrapper {
+      background: rgba(139, 92, 246, 0.1);
+      color: #8b5cf6;
+    }
+
+    .tool-card.glow-idconvert .tool-card-btn {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+
     @media (max-width: 1200px) {
       .split-row {
         flex-direction: column;
@@ -2548,6 +2563,16 @@
                 <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
               </a>
 
+              <!-- Chuyển đổi CCCD/QHNS (Thẻ công cụ mới) -->
+              <a href="https://viethungofficial.github.io/chuyendoicccd-mqhns/" target="_blank" class="tool-card glow-idconvert">
+                <div class="tool-card-icon-wrapper">
+                  <i class="fas fa-id-card"></i>
+                </div>
+                <div class="tool-card-title">Chuyển đổi CCCD / QHNS</div>
+                <div class="tool-card-desc">Công cụ hỗ trợ chuyển đổi mã định danh CCCD và Mã quan hệ ngân sách nhanh chóng, chuẩn xác.</div>
+                <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
+              </a>
+
               <!-- Tài nguyên -->
               <a href="https://transfer.it/t/bGeeGr5nHbLB" target="_blank" class="tool-card glow-resources">
                 <div class="tool-card-icon-wrapper">
@@ -2624,6 +2649,19 @@
       { id: "c12", category: "bc", name: "Tuân thủ quy trình, nội quy của công ty", target: "100%", maxScore: 5, method: "Vi phạm = trừ điểm" }
     ];
 
+    /* --- STREAMING_CHUNK:Defining string sanitation and phone number formatting helpers... --- */
+    // Hàm xóa khoảng trắng thừa ở đầu và cuối chuỗi
+    function cleanInputString(str) {
+      if (!str) return "";
+      return str.toString().trim();
+    }
+
+    // Hàm làm sạch và chuẩn hóa số điện thoại (Xóa khoảng trắng, dấu chấm, dấu gạch ngang...)
+    function cleanPhoneNumber(phoneStr) {
+      if (!phoneStr) return "";
+      return phoneStr.toString().replace(/[^0-9]/g, '').trim();
+    }
+
     function getKpiDefaultScore(id, mVal) {
       if (id === 'c1') {
         let actualLogs = getMonthSupportCount(mVal);
@@ -2692,6 +2730,32 @@
       document.getElementById('btnConfirmNo').onclick = function() {
         modal.style.display = 'none';
       };
+    }
+
+    /* --- STREAMING_CHUNK:Configuring automatic input sanitization listeners... --- */
+    function attachInputSanitizers() {
+      // Tự động dọn dẹp ô Số Điện Thoại khi rời khỏi ô hoặc khi Paste
+      ['frm-sdt', 'frm-sales-sdt'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('blur', function() {
+            this.value = cleanPhoneNumber(this.value);
+          });
+          el.addEventListener('paste', function() {
+            setTimeout(() => { this.value = cleanPhoneNumber(this.value); }, 10);
+          });
+        }
+      });
+
+      // Tự động xóa khoảng trắng thừa ở các ô nhập liệu khác
+      ['frm-mst', 'frm-company', 'frm-issue', 'frm-sales-mst', 'frm-sales-company'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('blur', function() {
+            this.value = cleanInputString(this.value);
+          });
+        }
+      });
     }
 
     function setupAutocomplete() {
@@ -2888,6 +2952,7 @@
       loader.style.visibility = 'visible';
     }
 
+    /* --- STREAMING_CHUNK:Setting up DOM initialization and app startup listeners... --- */
     document.addEventListener("DOMContentLoaded", () => {
       initSourceSecurity();
 
@@ -2897,6 +2962,7 @@
 
       initMonthSelectors();
       setupAutocomplete();
+      attachInputSanitizers();
       document.getElementById('terminalSearch').addEventListener('input', debounce(renderTerminal, 300));
       document.getElementById('terminalSalesSearch').addEventListener('input', debounce(renderSalesTerminal, 300));
     });
@@ -2938,8 +3004,8 @@
     }
 
     async function verifyLogin() {
-      const email = document.getElementById('email').value.trim();
-      const pass = document.getElementById('password').value.trim();
+      const email = cleanInputString(document.getElementById('email').value);
+      const pass = cleanInputString(document.getElementById('password').value);
       const errorText = document.getElementById('loginError');
       const btn = document.getElementById('btnLoginBtn');
 
@@ -3103,6 +3169,7 @@
       }
     }
 
+    /* --- STREAMING_CHUNK:Handling excel data import and parsing... --- */
     window.importExcelData = function(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -3147,12 +3214,12 @@
             const filterDash = (val) => (val && val.toString().trim() === "—") ? "" : (val ? val.toString().trim() : "");
 
             const record = {
-              mst: filterDash(row[1]),
-              sdt: filterDash(row[2]),
-              company: filterDash(row[3]),
+              mst: cleanInputString(filterDash(row[1])),
+              sdt: cleanPhoneNumber(filterDash(row[2])),
+              company: cleanInputString(filterDash(row[3])),
               type: filterDash(row[4]) || "HĐ",
               tech: filterDash(row[5]) || "Hưng",
-              issue: filterDash(row[6]),
+              issue: cleanInputString(filterDash(row[6])),
               is_sales: false
             };
 
@@ -3270,10 +3337,12 @@
       }
     }
 
+    /* --- STREAMING_CHUNK:Processing form submissions with clean data formatting... --- */
     window.submitForm = function() {
-      const mst = document.getElementById('frm-mst').value.trim();
-      let company = document.getElementById('frm-company').value.trim();
-      const issue = document.getElementById('frm-issue').value.trim();
+      const mst = cleanInputString(document.getElementById('frm-mst').value);
+      let company = cleanInputString(document.getElementById('frm-company').value);
+      const sdt = cleanPhoneNumber(document.getElementById('frm-sdt').value);
+      const issue = cleanInputString(document.getElementById('frm-issue').value);
 
       if (!mst && !company && !issue) return showToast("Vui lòng điền thông tin để lưu!", true);
 
@@ -3284,9 +3353,9 @@
       const record = {
         mst: mst || "",
         company: company || "",
-        sdt: document.getElementById('frm-sdt').value.trim() || "",
+        sdt: sdt || "",
         type: document.getElementById('frm-type').value,
-        tech: document.getElementById('frm-tech').value.trim() || 'Hưng',
+        tech: cleanInputString(document.getElementById('frm-tech').value) || 'Hưng',
         issue: issue || "",
         is_sales: false
       };
@@ -3319,7 +3388,7 @@
       document.getElementById('frm-date').value = dateStr;
       document.getElementById('frm-mst').value = data.mst;
       document.getElementById('frm-company').value = data.company;
-      document.getElementById('frm-sdt').value = data.sdt;
+      document.getElementById('frm-sdt').value = cleanPhoneNumber(data.sdt);
       document.getElementById('frm-type').value = data.type;
       document.getElementById('frm-issue').value = data.issue;
 
@@ -3357,9 +3426,9 @@
     }
 
     window.submitSalesForm = function() {
-      const mst = document.getElementById('frm-sales-mst').value.trim();
-      const company = document.getElementById('frm-sales-company').value.trim();
-      const sdt = document.getElementById('frm-sales-sdt').value.trim();
+      const mst = cleanInputString(document.getElementById('frm-sales-mst').value);
+      const company = cleanInputString(document.getElementById('frm-sales-company').value);
+      const sdt = cleanPhoneNumber(document.getElementById('frm-sales-sdt').value);
       const loai_mua = document.getElementById('frm-sales-loai').value;
       const dich_vu = document.getElementById('frm-sales-dichvu').value;
 
@@ -3401,7 +3470,7 @@
       document.getElementById('frm-sales-date').value = dateStr;
       document.getElementById('frm-sales-mst').value = data.mst;
       document.getElementById('frm-sales-company').value = data.company;
-      document.getElementById('frm-sales-sdt').value = data.sdt;
+      document.getElementById('frm-sales-sdt').value = cleanPhoneNumber(data.sdt);
       document.getElementById('frm-sales-loai').value = data.loai_mua;
       document.getElementById('frm-sales-dichvu').value = data.dich_vu;
 
@@ -3438,6 +3507,7 @@
       });
     }
 
+    /* --- STREAMING_CHUNK:Rendering data tables and terminal logs... --- */
     function renderTerminal() {
       const tbody = document.getElementById('terminalBody');
       const searchInput = document.getElementById('terminalSearch');
@@ -3496,7 +3566,7 @@
 
       supportData.forEach((item) => {
         const d_mst = item.mst ? item.mst : "<span style='color:#475569'>—</span>";
-        const d_sdt = item.sdt ? item.sdt : "<span style='color:#475569'>—</span>";
+        const d_sdt = item.sdt ? cleanPhoneNumber(item.sdt) : "<span style='color:#475569'>—</span>";
         const d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
         const d_issue = item.issue ? "> " + item.issue : "<span style='color:#475569'>—</span>";
 
@@ -3580,7 +3650,7 @@
           salesItems.forEach(item => {
             let displayDate = firstRow ? formatVN(dateStr) : "";
             let d_mst = item.mst ? item.mst : "<span style='color:#475569'>—</span>";
-            let d_sdt = item.sdt ? item.sdt : "<span style='color:#475569'>—</span>";
+            let d_sdt = item.sdt ? cleanPhoneNumber(item.sdt) : "<span style='color:#475569'>—</span>";
             let d_company = item.company ? item.company : "<span style='color:#475569'>—</span>";
 
             const dateParts = item.date.split('-');
@@ -3663,7 +3733,7 @@
       if (data.length === 0) return showToast("Bảng trống!", true);
       let allText = [];
       data.forEach((item) => {
-        allText.push(`${formatEmptyField(item.mst)}\t${formatEmptyField(item.sdt)}\t${formatEmptyField(item.company)}\t${formatEmptyField(item.type)}\t${formatEmptyField(item.tech)}\t${formatEmptyField(item.issue)}`);
+        allText.push(`${formatEmptyField(item.mst)}\t${formatEmptyField(cleanPhoneNumber(item.sdt))}\t${formatEmptyField(item.company)}\t${formatEmptyField(item.type)}\t${formatEmptyField(item.tech)}\t${formatEmptyField(item.issue)}`);
       });
 
       const el = document.createElement('textarea');
@@ -3698,7 +3768,7 @@
       const formattedDataForSheets = dataToSave.map(item => ({
         mst: formatEmptyField(item.mst),
         company: formatEmptyField(item.company),
-        sdt: formatEmptyField(item.sdt),
+        sdt: formatEmptyField(cleanPhoneNumber(item.sdt)),
         type: formatEmptyField(item.type || item.loai_mua),
         tech: formatEmptyField(item.tech || item.dich_vu),
         issue: formatEmptyField(item.issue || "YÊU CẦU MUA/GIA HẠN")
@@ -3861,7 +3931,7 @@
               dataToExport.push({
                 "Ngày": formatVN(d),
                 "MST": formatEmptyField(item.mst),
-                "SĐT": formatEmptyField(item.sdt),
+                "SĐT": formatEmptyField(cleanPhoneNumber(item.sdt)),
                 "Tên công ty": formatEmptyField(item.company),
                 "Loại hỗ trợ": formatEmptyField(item.type),
                 "Tên KT": formatEmptyField(item.tech),
@@ -3911,6 +3981,7 @@
       XLSX.writeFile(wb, `visnam_data_Thang${month}.xlsx`);
     }
 
+    /* --- STREAMING_CHUNK:Rendering formatted monthly report document (updated Section 1 and removed Section 4)... --- */
     window.renderMonthlyReport = function() {
       const mVal = document.getElementById('filterMonthSelect').value;
       if (!mVal) return;
@@ -3947,6 +4018,7 @@
         }
       });
 
+      // Soạn lại Mục 1 chỉn chu, đúng công việc thực tế và bỏ Mục 4 khó khăn đề xuất
       let html = `
         <div style="font-family: 'Times New Roman', serif; font-size: 11.5pt; line-height: 1.4; color: black; text-align: justify;">
           <div style="text-align: center; font-size: 16pt; font-weight: bold; margin-bottom: 12pt; color: #1a56a6; text-transform: uppercase;">BÁO CÁO CÔNG VIỆC KỸ THUẬT THÁNG ${String(month).padStart(2,'0')}/${year}</div>
@@ -3958,12 +4030,13 @@
 
           <div style="margin-bottom: 10pt;">
             <h3 style="font-size: 12.5pt; font-weight: bold; margin-bottom: 4pt; margin-top: 10pt; color: #0f172a;">1. Nội dung công việc triển khai thực tế:</h3>
-            <p style="margin-top: 3pt; margin-bottom: 3pt;">Trong tháng vừa qua, tôi đã tiếp nhận và trực tiếp xử lý hỗ trợ kỹ thuật trực tuyến (qua UltraViewer/Điện thoại) cho khách hàng:</p>
+            <p style="margin-top: 3pt; margin-bottom: 3pt;">Trong tháng vừa qua, tôi đã tiếp nhận, chủ động phối hợp và xử lý dứt điểm các yêu cầu hỗ trợ kỹ thuật trực tuyến (qua UltraViewer, Zalo OA, Tổng đài) cho Quý khách hàng & Doanh nghiệp:</p>
             <ul style="margin-top: 3pt; margin-bottom: 4pt; padding-left: 18px;">
-              <li style="margin-bottom: 3pt;"><b>Hóa đơn điện tử (HĐ):</b> Xử lý lỗi ký số hóa đơn, cấu hình mẫu hóa đơn, hướng dẫn lập hóa đơn điều chỉnh/thay thế.</li>
-              <li style="margin-bottom: 3pt;"><b>Chữ ký số (CKS):</b> Cài đặt Driver USB Token, cấu hình Java/extension trình duyệt, fix lỗi không nhận Chữ ký số khi ký tờ khai Thuế, Hải quan, BHXH.</li>
-              <li style="margin-bottom: 3pt;"><b>Bảo hiểm xã hội (BHXH):</b> Cài đặt phần mềm kê khai, xử lý lỗi dữ liệu hồ sơ, cập nhật thông tin Chữ ký số mới lên hệ thống BHXH.</li>
-              <li style="margin-bottom: 3pt;"><b>Phối hợp kinh doanh:</b> Chủ động ghi nhận thông tin và chuyển giao nhu cầu gia hạn / mua mới dịch vụ của khách hàng cho bộ phận Sales/CSKH.</li>
+              <li style="margin-bottom: 3pt;"><b>Hóa đơn điện tử (HĐ):</b> Hỗ trợ xử lý sự cố ký số hóa đơn, điều chỉnh/thay thế/hủy hóa đơn sai sót, cấu hình mẫu hóa đơn, khắc phục lỗi kết nối Tổng cục Thuế và hướng dẫn sử dụng phần mềm.</li>
+              <li style="margin-bottom: 3pt;"><b>Chữ ký số (CKS):</b> Cài đặt Driver USB Token, cập nhật chứng thư số mới, cấu hình môi trường Java/Extension trình duyệt, mở khóa Token và xử lý lỗi ký tờ khai Thuế, Hải quan, BHXH.</li>
+              <li style="margin-bottom: 3pt;"><b>Bảo hiểm xã hội (BHXH):</b> Cài đặt và cấu hình phần mềm kê khai BHXH, hỗ trợ gửi hồ sơ thu/chi/chế độ, khắc phục lỗi ký nộp hồ sơ và cập nhật thông tin Chữ ký số lên hệ thống BHXH.</li>
+              <li style="margin-bottom: 3pt;"><b>Chứng từ khấu trừ thuế (TNCN):</b> Hỗ trợ đăng ký sử dụng, phát hành và xử lý các vấn đề kỹ thuật liên quan đến chứng từ khấu trừ thuế TNCN điện tử.</li>
+              <li style="margin-bottom: 3pt;"><b>Phối hợp CSKH & Sales:</b> Chủ động ghi nhận, phân loại thông tin và kịp thời chuyển giao các cơ hội gia hạn / mua mới sản phẩm cho bộ phận Kinh doanh để tối ưu doanh thu cho Công ty.</li>
             </ul>
           </div>
 
@@ -4008,14 +4081,6 @@
               </tbody>
             </table>
           </div>
-
-          <div style="margin-bottom: 6pt;">
-            <h3 style="font-size: 12.5pt; font-weight: bold; margin-bottom: 4pt; margin-top: 10pt; color: #0f172a;">4. Khó khăn & Đề xuất:</h3>
-            <ul style="margin-top: 3pt; margin-bottom: 3pt; padding-left: 18px;">
-              <li style="margin-bottom: 4pt;"><b>Khó khăn:</b> Hiện tại máy tính làm việc cá nhân bị chậm, thường xuyên giật lag và treo ứng dụng khi phải bật cùng lúc nhiều phần mềm UltraViewer, các tab trình duyệt và công cụ ghi chép nội bộ. Việc này làm kéo dài thời gian chờ của khách hàng và trực tiếp ảnh hưởng đến tốc độ xử lý ca hỗ trợ.</li>
-              <li style="margin-bottom: 4pt;"><b>Đề xuất phương án:</b> Kính đề nghị Công ty xem xét nâng cấp cấu hình máy tính (nâng RAM và màn hình máy tính) để giúp thao tác kỹ thuật mượt mà hơn, tối ưu năng suất làm việc và nâng cao chất lượng phục vụ khách hàng.</li>
-            </ul>
-          </div>
         </div>
       `;
       document.getElementById('preview-thang').innerHTML = html;
@@ -4033,6 +4098,7 @@
       return count;
     }
 
+    /* --- STREAMING_CHUNK:Calculating KPI scores and updating rankings... --- */
     window.autofillC1Score = function(actualLogs) {
       let input = document.getElementById('kpi-input-c1');
       if (!input) return;
@@ -4215,6 +4281,7 @@
       recalculateAllKpiTotals();
     }
 
+    /* --- STREAMING_CHUNK:Configuring export utilities and background animations... --- */
     window.saveKpiData = async function() {
       const mVal = document.getElementById('kpiMonthSelect').value;
       if (!mVal) return;
