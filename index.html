@@ -51,6 +51,7 @@
     html {
       scroll-behavior: smooth;
       font-size: 14px;
+      scrollbar-gutter: stable;
     }
 
     body {
@@ -59,6 +60,10 @@
       overflow-x: hidden;
       overflow-y: scroll;
       transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.modal-open {
+      overflow: hidden;
     }
 
     ::-webkit-scrollbar {
@@ -378,7 +383,7 @@
       background: var(--card-bg);
       padding: 20px;
       border-radius: 12px;
-      width: 300px;
+      width: 320px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       border: 1px solid var(--border-color);
@@ -387,9 +392,10 @@
 
     .confirm-box p {
       margin-bottom: 20px;
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--text-main);
       font-weight: 500;
+      line-height: 1.4;
     }
 
     .confirm-btns {
@@ -399,7 +405,7 @@
     }
 
     .confirm-btns button {
-      padding: 8px 20px;
+      padding: 8px 18px;
       border-radius: 6px;
       border: none;
       cursor: pointer;
@@ -735,7 +741,6 @@
     }
 
     .tab-content-wrapper { min-height: 500px; }
-
     .main-tab-content { display: none; animation: fadeIn 0.3s ease; }
     .main-tab-content.active { display: block; }
     .sub-tab-content { display: none; animation: fadeIn 0.3s ease; }
@@ -1280,14 +1285,6 @@
 
     :root[data-theme="dark"] .icon-glow-card span { color: #94a3b8; }
 
-    .icon-glow-card.glow-hd:hover { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); transform: translateY(-3px); }
-    .icon-glow-card.glow-cks:hover { border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.6); transform: translateY(-3px); }
-    .icon-glow-card.glow-bhxh:hover { border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.6); transform: translateY(-3px); }
-    .icon-glow-card.glow-sales-cks:hover { border-color: #38bdf8; box-shadow: 0 0 15px rgba(56, 189, 248, 0.6); transform: translateY(-3px); }
-    .icon-glow-card.glow-sales-hd:hover { border-color: #f472b6; box-shadow: 0 0 15px rgba(244, 114, 182, 0.6); transform: translateY(-3px); }
-    .icon-glow-card.glow-sales-bhxh:hover { border-color: #34d399; box-shadow: 0 0 15px rgba(52, 211, 153, 0.6); transform: translateY(-3px); }
-    .icon-glow-card.glow-sales-ct:hover { border-color: #a78bfa; box-shadow: 0 0 15px rgba(167, 139, 250, 0.6); transform: translateY(-3px); }
-
     .report-wrapper {
       background: var(--card-bg);
       border-radius: var(--border-radius);
@@ -1506,9 +1503,9 @@
       color: #fff;
       text-align: center;
       border-radius: 6px;
-      padding: 8px 12px;
+      padding: 8px 14px;
       position: fixed;
-      z-index: 2000;
+      z-index: 20000;
       left: 50%;
       bottom: 25px;
       transform: translate(-50%, 20px);
@@ -1519,8 +1516,8 @@
       justify-content: center;
       gap: 6px;
       font-weight: bold;
-      font-size: 11px;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      font-size: 11.5px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
     }
 
     #toast.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
@@ -1542,30 +1539,34 @@
 
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 15px;
-      margin-top: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
     }
 
     .tool-card {
       background: var(--card-bg);
       border: 1.5px solid var(--border-color);
       border-radius: var(--border-radius);
-      padding: 20px 16px;
+      padding: 18px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       text-decoration: none !important;
       color: var(--text-main);
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
       position: relative;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
       cursor: pointer;
       overflow: hidden;
     }
 
-    .tool-card:hover { transform: translateY(-4px); }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--card-glow-color, var(--primary));
+      box-shadow: 0 8px 25px var(--card-glow-shadow, rgba(26, 86, 166, 0.25));
+    }
 
     .tool-card-icon-wrapper {
       width: 54px;
@@ -1576,10 +1577,15 @@
       justify-content: center;
       margin-bottom: 12px;
       font-size: 22px;
-      transition: all 0.35s ease;
+      transition: transform 0.3s ease;
+      background: var(--card-glow-bg, rgba(26, 86, 166, 0.1));
+      color: var(--card-glow-color, var(--primary));
     }
 
-    .tool-card:hover .tool-card-icon-wrapper { transform: scale(1.12) rotate(6deg); }
+    .tool-card:hover .tool-card-icon-wrapper {
+      transform: scale(1.1) rotate(4deg);
+    }
+
     .tool-card-title {
       font-size: 13px;
       font-weight: 800;
@@ -1597,61 +1603,371 @@
       flex-grow: 1;
     }
 
-    .tool-card-btn {
-      font-size: 10.5px;
+    .tool-card-actions {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tool-card-btn-preview {
+      font-size: 11px;
       font-weight: bold;
-      padding: 5px 16px;
+      padding: 6px 14px;
       border-radius: 20px;
       color: white !important;
+      background: var(--card-glow-btn, linear-gradient(135deg, #1a56a6, #0e356e));
+      border: none;
+      cursor: pointer;
       transition: 0.25s;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      flex: 1;
+      justify-content: center;
     }
 
-    .tool-card:hover .tool-card-btn { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); }
-    .tool-card.glow-bhxh:hover { border-color: #0ea5e9; box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); }
-    .tool-card.glow-bhxh .tool-card-icon-wrapper { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
-    .tool-card.glow-bhxh .tool-card-btn { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+    .tool-card-btn-preview:hover {
+      transform: scale(1.03);
+      filter: brightness(1.1);
+    }
 
-    .tool-card.glow-night:hover { border-color: #6366f1; box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
-    .tool-card.glow-night .tool-card-icon-wrapper { background: rgba(99, 102, 241, 0.1); color: #6366f1; }
-    .tool-card.glow-night .tool-card-btn { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+    .tool-card-btn-ext {
+      font-size: 11px;
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 20px;
+      color: var(--text-main);
+      background-color: var(--input-bg);
+      border: 1.5px solid var(--border-color);
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
 
-    .tool-card.glow-zalo:hover { border-color: #0068ff; box-shadow: 0 0 20px rgba(0, 104, 255, 0.4); }
-    .tool-card.glow-zalo .tool-card-icon-wrapper { background: rgba(0, 104, 255, 0.1); color: #0068ff; }
-    .tool-card.glow-zalo .tool-card-btn { background: linear-gradient(135deg, #0068ff, #0050c8); }
+    .tool-card-btn-ext:hover {
+      background-color: var(--border-color);
+      transform: scale(1.08);
+      color: var(--primary);
+    }
 
-    .tool-card.glow-customs:hover { border-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.45); }
-    .tool-card.glow-customs .tool-card-icon-wrapper { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-    .tool-card.glow-customs .tool-card-btn { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+    .tool-manage-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-    .tool-card.glow-idconvert:hover { border-color: #8b5cf6; box-shadow: 0 0 20px rgba(139, 92, 246, 0.45); }
-    .tool-card.glow-idconvert .tool-card-icon-wrapper { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
-    .tool-card.glow-idconvert .tool-card-btn { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+    .btn-tool-action {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+    }
 
-    .tool-card.glow-resources:hover { border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-    .tool-card.glow-resources .tool-card-icon-wrapper { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-    .tool-card.glow-resources .tool-card-btn { background: linear-gradient(135deg, #10b981, #059669); }
+    .btn-tool-manage {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    }
 
-    @media (max-width: 1200px) {
-      .split-row { flex-direction: column; align-items: stretch; }
-      .form-panel, .terminal-wrapper-outer, .stats-wrapper-outer { width: 100%; flex: none; }
-      .terminal-wrapper-outer { height: 400px; }
-      .stats-wrapper-outer { height: 420px; }
-      .report-split-layout { flex-direction: column; }
-      .filter-col { width: 100%; flex: none; }
-      .header-content { flex-wrap: wrap; gap: 8px; justify-content: center; }
-      .header-titles { order: -1; width: 100%; }
-      .controls-card { flex-direction: column; align-items: flex-start; }
-      .controls-left-group { width: 100%; flex-direction: column; align-items: flex-start; }
-      .global-search-container { width: 100%; max-width: none; margin: 5px 0; }
-      .tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
-      .tab-btn { flex: 1; white-space: nowrap; padding: 6px; }
-      .report-preview { zoom: 0.8; width: 100%; min-width: 600px; }
-      .user-greeting { display: none; }
-      .terminal-search-box { width: 100%; max-width: none; }
+    .btn-tool-manage:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .preview-modal-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 12000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .preview-modal-wrapper.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .preview-modal-content {
+      width: 96vw;
+      height: 92vh;
+      max-width: 1650px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      position: relative;
+    }
+
+    .preview-header {
+      background: var(--input-bg);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid var(--border-color);
+      gap: 10px;
+      flex-shrink: 0;
+      height: 48px;
+    }
+
+    .preview-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .preview-header-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-header-url {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--card-bg);
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 340px;
+    }
+
+    .preview-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-btn {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+
+    .preview-btn:hover {
+      background: var(--border-color);
+      transform: translateY(-1px);
+    }
+
+    .preview-btn-primary {
+      background: linear-gradient(135deg, #1a56a6, #2563eb);
+      color: white !important;
+      border: none;
+    }
+
+    .preview-btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .preview-btn-close {
+      background: #fee2e2;
+      color: #ef4444;
+      border-color: #fca5a5;
+    }
+
+    .preview-btn-close:hover {
+      background: #ef4444;
+      color: white;
+    }
+
+    .preview-body {
+      flex: 1;
+      position: relative;
+      background: #ffffff;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      flex: 1;
+    }
+
+    .manage-modal-wrapper {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 13000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .manage-modal-content {
+      width: 100%;
+      max-width: 860px;
+      max-height: 88vh;
+      background: var(--card-bg);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .manage-header {
+      padding: 12px 16px;
+      background: var(--input-bg);
+      border-bottom: 1.5px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .manage-header h3 {
+      font-size: 13.5px;
+      color: var(--primary);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .manage-body {
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tool-form-box {
+      background: var(--input-bg);
+      border: 1.5px dashed var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      flex-shrink: 0;
+    }
+
+    .tool-table-scroll-container {
+      max-height: 280px;
+      overflow-y: auto;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .tool-list-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+    }
+
+    .tool-list-table th {
+      text-align: left;
+      padding: 6px 8px;
+      background: var(--input-bg);
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .tool-list-table td {
+      padding: 8px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+      background-color: var(--card-bg);
+      transition: background 0.15s ease;
+    }
+
+    .drag-row {
+      cursor: grab;
+      user-select: none;
+    }
+
+    .drag-row:active {
+      cursor: grabbing;
+    }
+
+    .drag-row.is-dragging {
+      opacity: 0.35;
+      background-color: rgba(26, 86, 166, 0.15);
+    }
+
+    .drag-row.drag-over-top td {
+      border-top: 2.5px solid var(--secondary) !important;
+    }
+
+    .drag-row.drag-over-bottom td {
+      border-bottom: 2.5px solid var(--secondary) !important;
+    }
+
+    .drag-handle {
+      color: var(--text-muted);
+      cursor: grab;
+      padding: 4px;
+      display: inline-block;
+    }
+
+    .drag-handle:hover {
+      color: var(--primary);
     }
 
     #winter-wrapper {
@@ -1683,6 +1999,26 @@
 
     @keyframes fall { 0% { top: -10%; } 100% { top: 110%; } }
     @keyframes shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(25px); } }
+
+    @media (max-width: 1200px) {
+      .split-row { flex-direction: column; align-items: stretch; }
+      .form-panel, .terminal-wrapper-outer, .stats-wrapper-outer { width: 100%; flex: none; }
+      .terminal-wrapper-outer { height: 400px; }
+      .stats-wrapper-outer { height: 420px; }
+      .report-split-layout { flex-direction: column; }
+      .filter-col { width: 100%; flex: none; }
+      .header-content { flex-wrap: wrap; gap: 8px; justify-content: center; }
+      .header-titles { order: -1; width: 100%; }
+      .controls-card { flex-direction: column; align-items: flex-start; }
+      .controls-left-group { width: 100%; flex-direction: column; align-items: flex-start; }
+      .global-search-container { width: 100%; max-width: none; margin: 5px 0; }
+      .tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+      .tab-btn { flex: 1; white-space: nowrap; padding: 6px; }
+      .report-preview { zoom: 0.8; width: 100%; min-width: 600px; }
+      .user-greeting { display: none; }
+      .terminal-search-box { width: 100%; max-width: none; }
+      .preview-modal-content { width: 98vw; height: 96vh; }
+    }
   </style>
 </head>
 
@@ -1789,7 +2125,6 @@
 
       <div class="tab-content-wrapper">
 
-        <!-- TAB NHẬP LIỆU -->
         <div id="tab-nhaplieu" class="main-tab-content active">
 
           <div class="split-row">
@@ -1838,7 +2173,6 @@
                   </div>
                 </div>
 
-                <!-- Ô Tình trạng nằm ở dưới và dài ra để nhập nhiều -->
                 <div class="form-group">
                   <label>Tình trạng</label>
                   <input type="text" id="frm-status" class="frm-input" placeholder="Nhập tình trạng chi tiết" autocomplete="off">
@@ -1854,6 +2188,7 @@
               </form>
             </div>
 
+            <!-- Terminal Hỗ Trợ Kỹ Thuật -->
             <div class="terminal-wrapper-outer">
               <div class="terminal-panel">
                 <div class="terminal-header">
@@ -1886,6 +2221,7 @@
               </div>
             </div>
 
+            <!-- Thống kê tỷ lệ hỗ trợ -->
             <div class="stats-wrapper-outer">
               <div class="dash-card">
                 <div class="dash-card-header">
@@ -1980,6 +2316,7 @@
               </form>
             </div>
 
+            <!-- Terminal Bảng Yêu Cầu Mua / Gia Hạn -->
             <div class="terminal-wrapper-outer">
               <div class="terminal-panel">
                 <div class="terminal-header">
@@ -2017,6 +2354,7 @@
               </div>
             </div>
 
+            <!-- Thống kê Tiếp Nhận Mua Hàng -->
             <div class="stats-wrapper-outer">
               <div class="dash-card">
                 <div class="dash-card-header sales-header">
@@ -2063,7 +2401,6 @@
           </div>
         </div>
 
-        <!-- TAB BÁO CÁO & THỐNG KÊ -->
         <div id="tab-baocao" class="main-tab-content">
           <div class="sub-tabs">
             <button class="sub-tab-btn active" onclick="switchSubTab('thongke')"><i class="fas fa-chart-line"></i> Tổng quan Thống kê</button>
@@ -2181,75 +2518,151 @@
           </div>
         </div>
 
-        <!-- TAB CÔNG CỤ -->
         <div id="tab-congcu" class="main-tab-content">
-          <div class="report-wrapper" style="padding: 20px;">
-            <div class="stats-title" style="font-size: 14px; border-bottom: 2px solid var(--border-color); padding-bottom: 6px; margin-bottom: 16px;">
-              <i class="fas fa-toolbox"></i> TIỆN ÍCH & TÀI NGUYÊN NỘI BỘ VISNAM
-              <span style="font-size: 10.5px; font-weight: normal; margin-left: auto; background-color: var(--input-bg); padding: 2px 10px; border-radius: 12px; border: 1px solid var(--border-color);">Hệ thống lưu trữ & liên kết nhanh</span>
+          <div class="report-wrapper" style="padding: 18px;">
+            <div class="tool-manage-bar">
+              <div class="stats-title" style="font-size: 14px; border: none; margin: 0; padding: 0;">
+                <i class="fas fa-toolbox"></i> TIỆN ÍCH & TÀI NGUYÊN NỘI BỘ VISNAM
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="btn-tool-action btn-tool-manage" onclick="openManageToolsModal()">
+                  <i class="fas fa-sliders-h"></i> Quản lý tiện ích
+                </button>
+              </div>
             </div>
 
-            <div class="tools-grid">
-              <!-- Tra cứu BHXH -->
-              <a href="https://viethungofficial.github.io/tra-cuu-co-quan-bhxh/" target="_blank" class="tool-card glow-bhxh">
-                <div class="tool-card-icon-wrapper">
-                  <i class="fas fa-search-location"></i>
-                </div>
-                <div class="tool-card-title">Tra cứu cơ quan BHXH</div>
-                <div class="tool-card-desc">Công cụ hỗ trợ tìm kiếm địa chỉ, thông tin liên hệ và mã cơ quan Bảo hiểm xã hội toàn quốc.</div>
-                <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
-              </a>
+            <!-- Dynamic Tools Grid Container -->
+            <div class="tools-grid" id="toolsGrid"></div>
+          </div>
+        </div>
 
-              <!-- Lịch trực đêm -->
-              <a href="https://lich-truc-liart.vercel.app/" target="_blank" class="tool-card glow-night">
-                <div class="tool-card-icon-wrapper">
-                  <i class="fas fa-moon"></i>
-                </div>
-                <div class="tool-card-title">Lịch trực đêm</div>
-                <div class="tool-card-desc">Bảng phân công và quản lý ca trực tối/đêm của đội ngũ kỹ thuật Visnam.</div>
-                <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
-              </a>
+      </div>
+    </div>
+  </div>
 
-              <!-- Zalo OA Chat -->
-              <a href="https://oa.zalo.me/chat" target="_blank" class="tool-card glow-zalo">
-                <div class="tool-card-icon-wrapper">
-                  <i class="fab fa-rocketchat"></i>
-                </div>
-                <div class="tool-card-title">Zalo OA Chat</div>
-                <div class="tool-card-desc">Cổng kết nối quản lý các cuộc trò chuyện và CSKH trên kênh Zalo Official Account.</div>
-                <div class="tool-card-btn">MỞ CHAT <i class="fas fa-external-link-alt"></i></div>
-              </a>
+  <div id="toolPreviewModal" class="preview-modal-wrapper">
+    <div class="preview-modal-content">
+      <div class="preview-header">
+        <div class="preview-header-left">
+          <div class="preview-header-title" id="previewModalTitle">
+            <i class="fas fa-external-link-alt"></i> <span>Tiện ích</span>
+          </div>
+          <span class="preview-header-url" id="previewModalUrl" title="Đường dẫn trang web">https://...</span>
+        </div>
+        <div class="preview-header-actions">
+          <button class="preview-btn" onclick="reloadPreviewIframe()" title="Tải lại khung xem">
+            <i class="fas fa-sync-alt"></i> Tải lại
+          </button>
+          <a href="#" target="_blank" id="previewOpenNewTabBtn" class="preview-btn preview-btn-primary" title="Mở trang trong tab mới">
+            <i class="fas fa-external-link-alt"></i> Mở tab mới
+          </a>
+          <button class="preview-btn preview-btn-close" onclick="closeToolPreview()" title="Đóng cửa sổ (Esc)">
+            <i class="fas fa-times"></i> Đóng
+          </button>
+        </div>
+      </div>
 
-              <!-- Hải Quan -->
-              <a href="https://viethungofficial.github.io/guimaildangkyhaiquan/" target="_blank" class="tool-card glow-customs">
-                <div class="tool-card-icon-wrapper">
-                  <i class="fas fa-anchor"></i>
-                </div>
-                <div class="tool-card-title">Hải Quan Visnam</div>
-                <div class="tool-card-desc">Hệ thống hỗ trợ soạn thảo, tự động hóa và gửi email đăng ký thông tin doanh nghiệp nhanh gọn với Cơ quan Hải Quan.</div>
-                <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
-              </a>
+      <div class="preview-body">
+        <iframe id="toolIframe" class="preview-iframe" src="" allow="clipboard-read; clipboard-write; fullscreen" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
 
-              <!-- Chuyển đổi CCCD/QHNS -->
-              <a href="https://viethungofficial.github.io/chuyendoicccd-mqhns/" target="_blank" class="tool-card glow-idconvert">
-                <div class="tool-card-icon-wrapper">
-                  <i class="fas fa-id-card"></i>
-                </div>
-                <div class="tool-card-title">Chuyển đổi CCCD / QHNS</div>
-                <div class="tool-card-desc">Công cụ hỗ trợ chuyển đổi mã định danh CCCD và Mã quan hệ ngân sách nhanh chóng, chuẩn xác.</div>
-                <div class="tool-card-btn">TRUY CẬP <i class="fas fa-external-link-alt"></i></div>
-              </a>
+  <div id="manageToolsModal" class="manage-modal-wrapper">
+    <div class="manage-modal-content">
+      <div class="manage-header">
+        <h3><i class="fas fa-tools"></i> QUẢN LÝ DANH SÁCH TIỆN ÍCH</h3>
+        <button class="preview-btn preview-btn-close" onclick="closeManageToolsModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="manage-body">
+        
+        <!-- Form thêm / sửa tiện ích -->
+        <div class="tool-form-box">
+          <div style="font-size: 12.5px; font-weight: bold; color: var(--primary); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <span id="toolFormTitle"><i class="fas fa-plus-circle"></i> Thêm tiện ích mới</span>
+            <span id="toolFormAutoBadge" style="font-size: 10px; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 10px;">Tự động nhận diện màu & icon</span>
+          </div>
 
-              <!-- Tài nguyên -->
-              <a href="https://transfer.it/t/bGeeGr5nHbLB" target="_blank" class="tool-card glow-resources">
-                <div class="tool-card-icon-wrapper">
-                  <img src="https://www.google.com/s2/favicons?domain=transfer.it&sz=64" alt="Transfer" style="width: 30px; height: 30px; border-radius: 6px;" onerror="this.onerror=null; this.src='https://img.icons8.com/color/48/download.png';">
-                </div>
-                <div class="tool-card-title">Kho tài nguyên file</div>
-                <div class="tool-card-desc">Hệ thống lưu trữ, chia sẻ nhanh các file cài đặt phần mềm, văn bản và tài liệu nội bộ.</div>
-                <div class="tool-card-btn">TẢI FILE <i class="fas fa-download"></i></div>
-              </a>
+          <form id="toolEditForm" onsubmit="event.preventDefault(); saveToolForm();">
+            <input type="hidden" id="tool-edit-id" value="">
+            <div class="form-row">
+              <div class="form-group" style="flex: 1.2;">
+                <label>Tên tiện ích <span style="color: red;">*</span></label>
+                <input type="text" id="tool-input-name" class="frm-input" placeholder="Ví dụ: Tra cứu Thuế, Zalo OA..." required autocomplete="off">
+              </div>
+              <div class="form-group" style="flex: 1.8;">
+                <label>Đường dẫn website (URL) <span style="color: red;">*</span></label>
+                <input type="url" id="tool-input-url" class="frm-input" placeholder="https://..." required autocomplete="off">
+              </div>
             </div>
+
+            <div class="form-group">
+              <label>Mô tả ngắn gọn chức năng</label>
+              <input type="text" id="tool-input-desc" class="frm-input" placeholder="Mô tả công dụng và hướng dẫn nhanh..." autocomplete="off">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="flex: 1;">
+                <label>Icon FontAwesome (Để trống để tự động)</label>
+                <input type="text" id="tool-input-icon" class="frm-input" placeholder="Ví dụ: fas fa-globe, fas fa-shield-alt">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label>Màu viền phát sáng (Để trống để tự động)</label>
+                <select id="tool-input-color" class="frm-input custom-select">
+                  <option value="auto">-- Tự động sinh màu ngẫu nhiên thời thượng --</option>
+                  <option value="#0ea5e9">Xanh Dương Bầu Trời (Sky Blue)</option>
+                  <option value="#6366f1">Tím Indigo (Night Indigo)</option>
+                  <option value="#0068ff">Xanh Zalo (Zalo Blue)</option>
+                  <option value="#ef4444">Đỏ Hải Quan (Ruby Red)</option>
+                  <option value="#8b5cf6">Tím Thạch Anh (Purple)</option>
+                  <option value="#10b981">Xanh Lục Bảo (Emerald)</option>
+                  <option value="#f59e0b">Vàng Cam Hổ Phách (Amber)</option>
+                  <option value="#db2777">Hồng Cánh Sen (Rose)</option>
+                  <option value="#14b8a6">Xanh Ngọc Mòng Két (Teal)</option>
+                  <option value="#f97316">Cam Lửa (Orange Fire)</option>
+                  <option value="#ec4899">Hồng Magenta (Pink Neon)</option>
+                  <option value="#a855f7">Tím Violet (Vibrant Violet)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+              <button type="submit" class="btn-tool-action btn-submit" style="width: auto; padding: 7px 18px; background: linear-gradient(135deg, #10b981, #059669);">
+                <i class="fas fa-check"></i> Lưu tiện ích
+              </button>
+              <button type="button" class="btn-tool-action btn-tool-manage" onclick="resetToolForm()" style="display: none;" id="btnCancelToolEdit">
+                Hủy chỉnh sửa
+              </button>
+              <button type="button" class="btn-tool-action btn-tool-manage" onclick="resetDefaultToolsPrompt()" style="margin-left: auto; color: #ef4444;" title="Khôi phục danh sách tiện ích ban đầu">
+                <i class="fas fa-undo"></i> Khôi phục mặc định
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Bảng danh sách tiện ích hiện tại có thanh cuộn bên trong và hỗ trợ Kéo & Thả -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 12px; font-weight: bold; color: var(--text-muted);">
+              DANH SÁCH TIỆN ÍCH ĐANG HOẠT ĐỘNG (<span id="toolCountBadge">0</span>)
+            </div>
+            <span style="font-size: 10.5px; color: var(--secondary); font-weight: 600;">
+              <i class="fas fa-info-circle"></i> Kéo biểu tượng <b>⋮⋮</b> để sắp xếp vị trí hiển thị
+            </span>
+          </div>
+          <div class="tool-table-scroll-container">
+            <table class="tool-list-table">
+              <thead>
+                <tr>
+                  <th style="width: 35px; text-align: center;">Sắp xếp</th>
+                  <th style="width: 40px; text-align: center;">Icon</th>
+                  <th>Tên tiện ích</th>
+                  <th>URL</th>
+                  <th style="width: 120px; text-align: right;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="manageToolsTableBody"></tbody>
+            </table>
           </div>
         </div>
 
@@ -2293,12 +2706,66 @@
 
     let allData = {};
     let allKpiData = {}; 
+    let allTools = [];
     let currentSelectedDate = '';
     let autoSaveTimer = null;
     let exportMonthFilename = "";
     let isSalesAllDates = false;
+    let draggedToolIndex = null;
     const ACTIVITY_KEY = 'VISNAM_LAST_ACTIVITY';
     const TIMEOUT_LIMIT = 60 * 60 * 1000;
+
+    const DEFAULT_TOOLS = [
+      {
+        id: "tool_bhxh",
+        title: "Tra cứu cơ quan BHXH",
+        url: "https://viethungofficial.github.io/tra-cuu-co-quan-bhxh/",
+        desc: "Công cụ hỗ trợ tìm kiếm địa chỉ, thông tin liên hệ và mã cơ quan Bảo hiểm xã hội toàn quốc.",
+        icon: "fas fa-search-location",
+        color: "#0ea5e9"
+      },
+      {
+        id: "tool_night",
+        title: "Lịch trực đêm",
+        url: "https://lich-truc-liart.vercel.app/",
+        desc: "Bảng phân công và quản lý ca trực tối/đêm của đội ngũ kỹ thuật Visnam.",
+        icon: "fas fa-moon",
+        color: "#6366f1"
+      },
+      {
+        id: "tool_zalo",
+        title: "Zalo OA Chat",
+        url: "https://oa.zalo.me/chat",
+        desc: "Cổng kết nối quản lý các cuộc trò chuyện và CSKH trên kênh Zalo Official Account.",
+        icon: "fab fa-rocketchat",
+        color: "#0068ff"
+      },
+      {
+        id: "tool_customs",
+        title: "Hải Quan Visnam",
+        url: "https://viethungofficial.github.io/guimaildangkyhaiquan/",
+        desc: "Hệ thống hỗ trợ soạn thảo, tự động hóa và gửi email đăng ký thông tin doanh nghiệp nhanh gọn với Cơ quan Hải Quan.",
+        icon: "fas fa-anchor",
+        color: "#ef4444"
+      },
+      {
+        id: "tool_idconvert",
+        title: "Chuyển đổi CCCD / QHNS",
+        url: "https://viethungofficial.github.io/chuyendoicccd-mqhns/",
+        desc: "Công cụ hỗ trợ chuyển đổi mã định danh CCCD và Mã quan hệ ngân sách nhanh chóng, chuẩn xác.",
+        icon: "fas fa-id-card",
+        color: "#8b5cf6"
+      },
+      {
+        id: "tool_resources",
+        title: "Kho tài nguyên file",
+        url: "https://transfer.it/t/bGeeGr5nHbLB",
+        desc: "Hệ thống lưu trữ, chia sẻ nhanh các file cài đặt phần mềm, văn bản và tài liệu nội bộ.",
+        icon: "fas fa-folder-open",
+        color: "#10b981",
+        favicon: "https://www.google.com/s2/favicons?domain=transfer.it&sz=64"
+      }
+    ];
 
     const kpiCriteria = [
       { id: "c1", category: "hs", name: "Số lượng các yêu cầu được xử lý", target: "450 team/Tháng", maxScore: 10, method: "Đủ = 10đ. Thiếu trừ theo % số lượng" },
@@ -2325,14 +2792,12 @@
       return phoneStr.toString().replace(/[^0-9]/g, '').trim();
     }
 
-    // Trả về chuỗi rỗng nếu không điền (tuyệt đối không thêm dấu "-" hay "—")
     function formatEmptyField(val) {
       if (val === null || val === undefined) return "";
       let strVal = val.toString().trim();
       return (strVal === "—" || strVal === "-") ? "" : strVal;
     }
 
-    // Chuẩn hóa một dòng để copy vào clipboard (bắt đầu từ cột MST trở đi, phân tách bằng TAB)
     function getRecordClipboardText(item) {
       return [
         formatEmptyField(item.mst),
@@ -2402,6 +2867,392 @@
         modal.style.display = 'none';
       };
     }
+
+    const EXTENDED_PALETTE_COLORS = [
+      '#0ea5e9', '#6366f1', '#0068ff', '#ef4444', 
+      '#8b5cf6', '#10b981', '#f59e0b', '#db2777', 
+      '#14b8a6', '#f97316', '#ec4899', '#a855f7',
+      '#3b82f6', '#06b6d4', '#84cc16', '#eab308'
+    ];
+
+    function autoGenerateToolStyle(url, title) {
+      const u = (url || '').toLowerCase();
+      const t = (title || '').toLowerCase();
+
+      if (u.includes('bhxh') || t.includes('bhxh') || t.includes('bảo hiểm')) {
+        return { icon: 'fas fa-shield-alt', color: '#0ea5e9' };
+      }
+      if (u.includes('lich') || t.includes('lịch') || t.includes('trực')) {
+        return { icon: 'fas fa-moon', color: '#6366f1' };
+      }
+      if (u.includes('zalo') || t.includes('zalo') || t.includes('chat')) {
+        return { icon: 'fab fa-rocketchat', color: '#0068ff' };
+      }
+      if (u.includes('haiquan') || t.includes('hải quan') || t.includes('customs')) {
+        return { icon: 'fas fa-anchor', color: '#ef4444' };
+      }
+      if (u.includes('cccd') || t.includes('cccd') || t.includes('ngân sách') || t.includes('qhns')) {
+        return { icon: 'fas fa-id-card', color: '#8b5cf6' };
+      }
+      if (u.includes('transfer') || u.includes('drive') || t.includes('tài nguyên') || t.includes('file') || t.includes('kho')) {
+        return { icon: 'fas fa-folder-open', color: '#10b981' };
+      }
+      if (u.includes('thue') || t.includes('thuế') || t.includes('hóa đơn') || t.includes('invoice')) {
+        return { icon: 'fas fa-file-invoice-dollar', color: '#f59e0b' };
+      }
+      if (u.includes('mail') || t.includes('mail')) {
+        return { icon: 'fas fa-envelope-open-text', color: '#db2777' };
+      }
+
+      let hash = 0;
+      const combined = (title + url);
+      for (let i = 0; i < combined.length; i++) {
+        hash = combined.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const colorIndex = Math.abs(hash) % EXTENDED_PALETTE_COLORS.length;
+      const genericIcons = [
+        'fas fa-globe', 'fas fa-laptop-code', 'fas fa-rocket', 'fas fa-compass', 
+        'fas fa-link', 'fas fa-star', 'fas fa-cube', 'fas fa-tools', 'fas fa-server', 
+        'fas fa-network-wired', 'fas fa-database', 'fas fa-terminal'
+      ];
+      const iconIndex = Math.abs(hash) % genericIcons.length;
+
+      return {
+        icon: genericIcons[iconIndex],
+        color: EXTENDED_PALETTE_COLORS[colorIndex]
+      };
+    }
+
+    function renderToolsGrid() {
+      const container = document.getElementById('toolsGrid');
+      if (!container) return;
+
+      if (!allTools || allTools.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="fas fa-folder-open" style="font-size: 32px; margin-bottom: 10px; opacity: 0.5;"></i>
+            <p>Chưa có tiện ích nào. Bấm <b>"Quản lý tiện ích"</b> để bổ sung.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      allTools.forEach(tool => {
+        let style = autoGenerateToolStyle(tool.url, tool.title);
+        let finalColor = (tool.color && tool.color !== 'auto') ? tool.color : style.color;
+        let finalIcon = tool.icon ? tool.icon : style.icon;
+
+        let iconHtml = `<i class="${finalIcon}"></i>`;
+        if (tool.favicon) {
+          iconHtml = `<img src="${tool.favicon}" alt="${tool.title}" style="width: 28px; height: 28px; border-radius: 6px;" onerror="this.onerror=null; this.src='https://img.icons8.com/color/48/domain.png';">`;
+        }
+
+        html += `
+          <div class="tool-card" 
+               style="--card-glow-color: ${finalColor}; 
+                      --card-glow-shadow: ${finalColor}40; 
+                      --card-glow-bg: ${finalColor}15; 
+                      --card-glow-btn: linear-gradient(135deg, ${finalColor}, ${finalColor}cc);"
+               onclick="openToolPreview('${tool.id}')">
+            
+            <div class="tool-card-icon-wrapper">
+              ${iconHtml}
+            </div>
+            
+            <div class="tool-card-title">${tool.title}</div>
+            <div class="tool-card-desc">${tool.desc || 'Tiện ích hỗ trợ tác nghiệp kỹ thuật nhanh chóng và chính xác.'}</div>
+            
+            <div class="tool-card-actions" onclick="event.stopPropagation();">
+              <button class="tool-card-btn-preview" onclick="openToolPreview('${tool.id}')">
+                <i class="fas fa-eye"></i> XEM NHANH
+              </button>
+              <a href="${tool.url}" target="_blank" class="tool-card-btn-ext" title="Mở trang trong tab mới">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    window.openToolPreview = function(toolId) {
+      const tool = allTools.find(t => t.id === toolId);
+      if (!tool) return;
+
+      const modal = document.getElementById('toolPreviewModal');
+      const iframe = document.getElementById('toolIframe');
+      const titleEl = document.getElementById('previewModalTitle');
+      const urlEl = document.getElementById('previewModalUrl');
+      const newTabBtn = document.getElementById('previewOpenNewTabBtn');
+
+      titleEl.innerHTML = `<i class="${tool.icon || 'fas fa-external-link-alt'}"></i> <span>${tool.title}</span>`;
+      urlEl.innerText = tool.url;
+      newTabBtn.href = tool.url;
+
+      iframe.src = tool.url;
+      modal.classList.add('show');
+      document.body.classList.add('modal-open');
+    };
+
+    window.closeToolPreview = function() {
+      const modal = document.getElementById('toolPreviewModal');
+      const iframe = document.getElementById('toolIframe');
+      iframe.src = '';
+      modal.classList.remove('show');
+      document.body.classList.remove('modal-open');
+    };
+
+    window.reloadPreviewIframe = function() {
+      const iframe = document.getElementById('toolIframe');
+      if (iframe.src) {
+        iframe.src = iframe.src;
+        showToast("Đang làm mới khung xem...", false);
+      }
+    };
+
+    window.openManageToolsModal = function() {
+      resetToolForm();
+      renderManageToolsTable();
+      document.getElementById('manageToolsModal').style.display = 'flex';
+      document.body.classList.add('modal-open');
+    };
+
+    window.closeManageToolsModal = function() {
+      document.getElementById('manageToolsModal').style.display = 'none';
+      document.body.classList.remove('modal-open');
+    };
+
+    function renderManageToolsTable() {
+      const tbody = document.getElementById('manageToolsTableBody');
+      const badge = document.getElementById('toolCountBadge');
+      if (badge) badge.innerText = allTools.length;
+      if (!tbody) return;
+
+      if (allTools.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 15px;">Chưa có tiện ích nào.</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      allTools.forEach((tool, index) => {
+        let style = autoGenerateToolStyle(tool.url, tool.title);
+        let finalColor = (tool.color && tool.color !== 'auto') ? tool.color : style.color;
+        let finalIcon = tool.icon ? tool.icon : style.icon;
+
+        html += `
+          <tr class="drag-row" draggable="true" data-index="${index}" id="tool-row-${tool.id}">
+            <td style="text-align: center; width: 35px;">
+              <span class="drag-handle" title="Kéo để đổi vị trí"><i class="fas fa-grip-vertical"></i></span>
+            </td>
+            <td style="text-align: center; color: ${finalColor}; font-size: 15px; width: 40px;">
+              <i class="${finalIcon}"></i>
+            </td>
+            <td>
+              <b style="color: var(--text-main);">${tool.title}</b>
+              <div style="font-size: 10.5px; color: var(--text-muted);">${tool.desc || ''}</div>
+            </td>
+            <td>
+              <a href="${tool.url}" target="_blank" style="color: var(--primary); text-decoration: none; font-size: 11px;" title="${tool.url}">
+                ${tool.url.length > 35 ? tool.url.substring(0, 35) + '...' : tool.url}
+              </a>
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button class="action-btn-sm edit-btn" onclick="editTool('${tool.id}')" title="Chỉnh sửa"><i class="fas fa-edit"></i></button>
+              <button class="action-btn-sm del-btn" onclick="deleteTool('${tool.id}')" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+      attachToolDragAndDropEvents();
+    }
+
+    function attachToolDragAndDropEvents() {
+      const rows = document.querySelectorAll('.tool-list-table tbody tr.drag-row');
+      rows.forEach(row => {
+        row.addEventListener('dragstart', function(e) {
+          draggedToolIndex = parseInt(this.getAttribute('data-index'), 10);
+          this.classList.add('is-dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', draggedToolIndex);
+        });
+
+        row.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          const targetIndex = parseInt(this.getAttribute('data-index'), 10);
+          if (draggedToolIndex === null || draggedToolIndex === targetIndex) return;
+
+          const rect = this.getBoundingClientRect();
+          const midY = rect.top + rect.height / 2;
+          if (e.clientY < midY) {
+            this.classList.add('drag-over-top');
+            this.classList.remove('drag-over-bottom');
+          } else {
+            this.classList.add('drag-over-bottom');
+            this.classList.remove('drag-over-top');
+          }
+        });
+
+        row.addEventListener('dragleave', function() {
+          this.classList.remove('drag-over-top', 'drag-over-bottom');
+        });
+
+        row.addEventListener('drop', function(e) {
+          e.preventDefault();
+          this.classList.remove('drag-over-top', 'drag-over-bottom');
+          const targetIndex = parseInt(this.getAttribute('data-index'), 10);
+
+          if (draggedToolIndex === null || draggedToolIndex === targetIndex) return;
+
+          const rect = this.getBoundingClientRect();
+          const midY = rect.top + rect.height / 2;
+          let insertIndex = targetIndex;
+          if (e.clientY >= midY && targetIndex > draggedToolIndex) {
+            insertIndex = targetIndex;
+          } else if (e.clientY < midY && targetIndex < draggedToolIndex) {
+            insertIndex = targetIndex;
+          }
+
+          const movedItem = allTools.splice(draggedToolIndex, 1)[0];
+          allTools.splice(insertIndex, 0, movedItem);
+
+          saveToolsToCloud();
+          renderToolsGrid();
+          renderManageToolsTable();
+          showToast("Đã cập nhật thứ tự tiện ích!", false);
+        });
+
+        row.addEventListener('dragend', function() {
+          this.classList.remove('is-dragging', 'drag-over-top', 'drag-over-bottom');
+          draggedToolIndex = null;
+          document.querySelectorAll('.tool-list-table tbody tr').forEach(r => {
+            r.classList.remove('drag-over-top', 'drag-over-bottom', 'is-dragging');
+          });
+        });
+      });
+    }
+
+    window.editTool = function(toolId) {
+      const tool = allTools.find(t => t.id === toolId);
+      if (!tool) return;
+
+      document.getElementById('tool-edit-id').value = tool.id;
+      document.getElementById('tool-input-name').value = tool.title || '';
+      document.getElementById('tool-input-url').value = tool.url || '';
+      document.getElementById('tool-input-desc').value = tool.desc || '';
+      document.getElementById('tool-input-icon').value = tool.icon || '';
+      document.getElementById('tool-input-color').value = tool.color || 'auto';
+
+      document.getElementById('toolFormTitle').innerHTML = `<i class="fas fa-edit"></i> Cập nhật: ${tool.title}`;
+      document.getElementById('btnCancelToolEdit').style.display = 'inline-flex';
+      document.getElementById('tool-input-name').focus();
+    };
+
+    window.resetToolForm = function() {
+      document.getElementById('tool-edit-id').value = '';
+      document.getElementById('tool-input-name').value = '';
+      document.getElementById('tool-input-url').value = '';
+      document.getElementById('tool-input-desc').value = '';
+      document.getElementById('tool-input-icon').value = '';
+      document.getElementById('tool-input-color').value = 'auto';
+
+      document.getElementById('toolFormTitle').innerHTML = `<i class="fas fa-plus-circle"></i> Thêm tiện ích mới`;
+      document.getElementById('btnCancelToolEdit').style.display = 'none';
+    };
+
+    window.saveToolForm = function() {
+      const id = document.getElementById('tool-edit-id').value;
+      const title = cleanInputString(document.getElementById('tool-input-name').value);
+      let url = cleanInputString(document.getElementById('tool-input-url').value);
+      const desc = cleanInputString(document.getElementById('tool-input-desc').value);
+      let icon = cleanInputString(document.getElementById('tool-input-icon').value);
+      let color = document.getElementById('tool-input-color').value;
+
+      if (!title || !url) {
+        return showToast("Vui lòng điền đủ Tên và URL tiện ích!", true);
+      }
+
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+
+      if (!icon || !color || color === 'auto') {
+        const auto = autoGenerateToolStyle(url, title);
+        if (!icon) icon = auto.icon;
+        if (!color || color === 'auto') color = auto.color;
+      }
+
+      if (id) {
+        const idx = allTools.findIndex(t => t.id === id);
+        if (idx > -1) {
+          allTools[idx] = { ...allTools[idx], title, url, desc, icon, color };
+          showToast("Đã cập nhật tiện ích thành công!", false);
+        }
+      } else {
+        const newTool = {
+          id: 'tool_' + Date.now(),
+          title,
+          url,
+          desc,
+          icon,
+          color
+        };
+        allTools.push(newTool);
+        showToast("Đã thêm tiện ích mới vào hệ thống!", false);
+      }
+
+      saveToolsToCloud();
+      renderToolsGrid();
+      renderManageToolsTable();
+      resetToolForm();
+    };
+
+    window.deleteTool = function(toolId) {
+      showConfirm("Bạn có chắc chắn muốn xóa tiện ích này?", () => {
+        allTools = allTools.filter(t => t.id !== toolId);
+        saveToolsToCloud();
+        renderToolsGrid();
+        renderManageToolsTable();
+        showToast("Đã xóa tiện ích!", false);
+      });
+    };
+
+    window.resetDefaultToolsPrompt = function() {
+      showConfirm("Khôi phục danh sách về các tiện ích mặc định ban đầu?", () => {
+        allTools = JSON.parse(JSON.stringify(DEFAULT_TOOLS));
+        saveToolsToCloud();
+        renderToolsGrid();
+        renderManageToolsTable();
+        resetToolForm();
+        showToast("Đã khôi phục danh sách tiện ích mặc định!", false);
+      });
+    };
+
+    async function saveToolsToCloud() {
+      localStorage.setItem('visnam_tools', JSON.stringify(allTools));
+      try {
+        await set(ref(database, 'visnam_tools'), allTools);
+      } catch (err) {
+        console.warn("Lỗi đồng bộ tiện ích lên cloud, đã lưu cục bộ.", err);
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        const previewModal = document.getElementById('toolPreviewModal');
+        if (previewModal && previewModal.classList.contains('show')) {
+          closeToolPreview();
+        }
+        const manageModal = document.getElementById('manageToolsModal');
+        if (manageModal && manageModal.style.display === 'flex') {
+          closeManageToolsModal();
+        }
+      }
+    });
 
     function attachInputSanitizers() {
       ['frm-sdt', 'frm-sales-sdt'].forEach(id => {
@@ -2657,7 +3508,18 @@
         const kpiSnapshot = await get(ref(database, 'visnam_data_kpi'));
         allKpiData = kpiSnapshot.val() || {};
 
+        const toolsSnapshot = await get(ref(database, 'visnam_tools'));
+        const toolsVal = toolsSnapshot.val();
+        if (toolsVal && Array.isArray(toolsVal) && toolsVal.length > 0) {
+          allTools = toolsVal;
+        } else {
+          const cachedTools = localStorage.getItem('visnam_tools');
+          allTools = cachedTools ? JSON.parse(cachedTools) : JSON.parse(JSON.stringify(DEFAULT_TOOLS));
+          set(ref(database, 'visnam_tools'), allTools);
+        }
+
         initApp();
+        renderToolsGrid();
         updateAllReports();
         updateGlobalStats();
 
@@ -2736,7 +3598,7 @@
       localStorage.setItem('visnam_theme', newTheme);
       const icon = document.querySelector('#btn-theme i');
       icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-    }
+    };
 
     function initMonthSelectors() {
       const select2 = document.getElementById('filterMonthSelect');
@@ -2792,7 +3654,8 @@
       document.getElementById('tab-' + tabId).classList.add('active');
       event.currentTarget.classList.add('active');
       if (tabId === 'baocao') updateAllReports();
-    }
+      if (tabId === 'congcu') renderToolsGrid();
+    };
 
     window.switchSubTab = function(subId) {
       document.querySelectorAll('.sub-tab-content').forEach(c => c.classList.remove('active'));
@@ -2805,7 +3668,7 @@
       } else {
         updateAllReports();
       }
-    }
+    };
 
     window.importExcelData = function(event) {
       const file = event.target.files[0];
@@ -2850,7 +3713,6 @@
             const dateIso = `${parts[2]}-${parts[1]}-${parts[0]}`;
             const filterDash = (val) => (val && val.toString().trim() === "—") ? "" : (val ? val.toString().trim() : "");
 
-            // Cột 1: MST, Cột 2: SĐT, Cột 3: Tên Cty, Cột 4: Loại, Cột 5: Tên KT, Cột 6: Vấn đề, Cột 7: Tình trạng
             const record = {
               mst: cleanInputString(filterDash(row[1])),
               sdt: cleanPhoneNumber(filterDash(row[2])),
@@ -2886,7 +3748,7 @@
         event.target.value = "";
       };
       reader.readAsArrayBuffer(file);
-    }
+    };
 
     function loadDataForDate(dateStr) {
       if (!allData[dateStr]) allData[dateStr] = [];
@@ -2901,9 +3763,11 @@
 
     async function fetchCompanyName(mstInput) {
       let foundName = "";
-      let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
-      let data = await res.json();
-      if (data.code === "00" && data.data && data.data.name) foundName = data.data.name;
+      try {
+        let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
+        let data = await res.json();
+        if (data.code === "00" && data.data && data.data.name) foundName = data.data.name;
+      } catch (e) {}
 
       if (!foundName) {
         try {
@@ -2948,7 +3812,7 @@
         btn.innerHTML = originalIcon;
         btn.disabled = false;
       }
-    }
+    };
 
     window.searchMSTFormSales = async function() {
       let mstInput = document.getElementById('frm-sales-mst').value.replace(/[^0-9-]/g, '');
@@ -2973,7 +3837,7 @@
         btn.innerHTML = originalIcon;
         btn.disabled = false;
       }
-    }
+    };
 
     window.submitForm = function() {
       const mst = cleanInputString(document.getElementById('frm-mst').value);
@@ -3018,7 +3882,7 @@
       cancelEdit();
       updateGlobalStats();
       document.getElementById('frm-mst').focus();
-    }
+    };
 
     window.editRecord = function(dateStr, idx) {
       let data = allData[dateStr][idx];
@@ -3037,7 +3901,7 @@
       document.getElementById('formModeBadge').innerText = 'Chỉnh sửa';
       document.getElementById('formModeBadge').style.background = '#fef08a';
       document.getElementById('formModeBadge').style.color = '#b45309';
-    }
+    };
 
     window.cancelEdit = function() {
       document.getElementById('frm-idx').value = -1;
@@ -3053,7 +3917,7 @@
       document.getElementById('formModeBadge').innerText = 'Thêm mới';
       document.getElementById('formModeBadge').style.background = '#ebf4ff';
       document.getElementById('formModeBadge').style.color = '#1a56a6';
-    }
+    };
 
     window.deleteRecord = function(dateStr, idx) {
       showConfirm("Xóa dòng hỗ trợ này khỏi hệ thống?", () => {
@@ -3064,9 +3928,8 @@
         if (document.getElementById('frm-date').value === dateStr && parseInt(document.getElementById('frm-idx').value) === idx) cancelEdit();
         showToast("Đã xóa dữ liệu!", false);
       });
-    }
+    };
 
-    // Sao chép 1 dòng hỗ trợ từ cột MST trở đi để dán thẳng vào Google Sheets/Excel
     window.copySingleRecord = function(dateStr, idx) {
       let item = allData[dateStr] && allData[dateStr][idx];
       if (!item) return;
@@ -3140,7 +4003,7 @@
       cancelSalesEdit();
       updateGlobalStats();
       document.getElementById('frm-sales-mst').focus();
-    }
+    };
 
     window.editSalesRecord = function(dateStr, idx) {
       let data = allData[dateStr][idx];
@@ -3158,7 +4021,7 @@
       document.getElementById('formSalesModeBadge').innerText = 'Chỉnh sửa';
       document.getElementById('formSalesModeBadge').style.background = '#fef08a';
       document.getElementById('formSalesModeBadge').style.color = '#b45309';
-    }
+    };
 
     window.cancelSalesEdit = function() {
       document.getElementById('frm-sales-idx').value = -1;
@@ -3172,7 +4035,7 @@
       document.getElementById('formSalesModeBadge').innerText = 'Thêm mới';
       document.getElementById('formSalesModeBadge').style.background = '#fdf2f8';
       document.getElementById('formSalesModeBadge').style.color = '#db2777';
-    }
+    };
 
     window.deleteSalesRecord = function(dateStr, idx) {
       showConfirm("Xóa yêu cầu mua/gia hạn này khỏi hệ thống?", () => {
@@ -3183,7 +4046,7 @@
         if (document.getElementById('frm-sales-date').value === dateStr && parseInt(document.getElementById('frm-sales-idx').value) === idx) cancelSalesEdit();
         showToast("Đã xóa thành công!", false);
       });
-    }
+    };
 
     function renderTerminal() {
       const tbody = document.getElementById('terminalBody');
@@ -3245,7 +4108,6 @@
       let stt = 1;
 
       supportData.forEach((item) => {
-        // Nếu không có dữ liệu thì để trống tuyệt đối, không điền "-" hay "—"
         const d_mst = formatEmptyField(item.mst);
         const d_sdt = formatEmptyField(cleanPhoneNumber(item.sdt));
         const d_company = formatEmptyField(item.company);
@@ -3367,7 +4229,7 @@
           if (container) container.scrollTop = container.scrollHeight;
         }
       }
-    }
+    };
 
     window.onSalesDateChange = function() {
       const allBtn = document.getElementById('btnSalesAllDates');
@@ -3425,7 +4287,7 @@
       document.execCommand('copy');
       document.body.removeChild(el);
       showToast(`Đã copy ${data.length} dòng dữ liệu (từ MST)!`, false);
-    }
+    };
 
     function updateStatusIndicator(msg, typeClass) {
       const ind = document.getElementById('saveStatusIndicator');
@@ -3663,7 +4525,7 @@
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "visnam_data");
       XLSX.writeFile(wb, `visnam_data_Thang${month}.xlsx`);
-    }
+    };
 
     window.renderMonthlyReport = function() {
       const mVal = document.getElementById('filterMonthSelect').value;
@@ -3766,7 +4628,7 @@
         </div>
       `;
       document.getElementById('preview-thang').innerHTML = html;
-    }
+    };
 
     function getMonthSupportCount(monthKey) {
       let count = 0;
@@ -3792,7 +4654,7 @@
       input.value = score;
       validateAndRecalcKpi('c1', 10);
       showToast(`Gợi ý điểm: ${score}đ dựa trên thực tế ${actualLogs} ca hỗ trợ.`, false);
-    }
+    };
 
     window.validateAndRecalcKpi = function(id, maxVal) {
       let input = document.getElementById(`kpi-input-${id}`);
@@ -3815,7 +4677,7 @@
       allKpiData[mVal][id] = val;
 
       recalculateAllKpiTotals();
-    }
+    };
 
     function recalculateAllKpiTotals() {
       const mVal = document.getElementById('kpiMonthSelect').value;
@@ -3878,7 +4740,7 @@
 
     window.changeKpiMonth = function() {
       renderKpiBoard();
-    }
+    };
 
     function renderKpiBoard() {
       const mVal = document.getElementById('kpiMonthSelect').value;
@@ -3984,7 +4846,7 @@
         updateStatusIndicator("Lỗi lưu KPI", "saving");
         showToast("Lỗi khi lưu bảng KPI lên Đám mây!", true);
       }
-    }
+    };
 
     window.downloadKpiReport = function() {
       const mVal = document.getElementById('kpiMonthSelect').value;
@@ -4109,7 +4971,7 @@
       const converted = htmlDocx.asBlob(wordHtml, { orientation: 'portrait' });
       saveAs(converted, `BẢNG KPI NHÂN VIÊN THÁNG ${month} - Phan Viết Hưng.docx`);
       showToast("Đã xuất và tải file KPI Word thành công!", false);
-    }
+    };
 
     function initWinterEffects() {
       const wrapper = document.getElementById('winter-wrapper');
@@ -4149,10 +5011,10 @@
 
     window.downloadMonthlyReport = function() {
       exportHTMLToDoc('preview-thang', exportMonthFilename);
-    }
+    };
+
     window.exportDataToExcel = exportDataToExcel;
     window.renderMonthlyReport = renderMonthlyReport;
-
     window.editRecord = editRecord;
     window.deleteRecord = deleteRecord;
     window.renderTerminal = renderTerminal;
