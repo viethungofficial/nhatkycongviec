@@ -2142,7 +2142,7 @@
                   <div class="form-group" style="flex: 1.2;">
                     <label>Mã số thuế</label>
                     <div class="input-with-btn">
-                      <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập MST..." autocomplete="off">
+                      <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập MST (Enter để tra)..." autocomplete="off">
                       <button type="button" class="btn-lookup" onclick="searchMSTForm()" id="btnSearchMST" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
                     </div>
                   </div>
@@ -2276,7 +2276,7 @@
                   <div class="form-group" style="flex: 1.2;">
                     <label>Mã số thuế</label>
                     <div class="input-with-btn">
-                      <input type="text" id="frm-sales-mst" class="frm-input" placeholder="Nhập MST..." autocomplete="off">
+                      <input type="text" id="frm-sales-mst" class="frm-input" placeholder="Nhập MST (Enter để tra)..." autocomplete="off">
                       <button type="button" class="btn-lookup" onclick="searchMSTFormSales()" id="btnSearchMSTSales" style="background:#db2777;" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
                     </div>
                   </div>
@@ -2689,6 +2689,59 @@
       set
     } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
+    function cleanInputString(str) {
+      if (!str) return "";
+      return str.toString().trim();
+    }
+
+    function cleanPhoneNumber(phoneStr) {
+      if (!phoneStr) return "";
+      return phoneStr.toString().replace(/[^0-9]/g, '').trim();
+    }
+
+    function formatEmptyField(val) {
+      if (val === null || val === undefined) return "";
+      let strVal = val.toString().trim();
+      return (strVal === "—" || strVal === "-") ? "" : strVal;
+    }
+
+    function getRecordClipboardText(item) {
+      return [
+        formatEmptyField(item.mst),
+        formatEmptyField(cleanPhoneNumber(item.sdt)),
+        formatEmptyField(item.company),
+        formatEmptyField(item.type),
+        formatEmptyField(item.tech || 'Hưng'),
+        formatEmptyField(item.issue),
+        formatEmptyField(item.status)
+      ].join('\t');
+    }
+
+    function getMonthSupportCount(monthKey) {
+      let count = 0;
+      Object.keys(allData).forEach(dateStr => {
+        if (dateStr.startsWith(monthKey)) {
+          allData[dateStr].forEach(item => {
+            if (item.is_sales !== true) count++;
+          });
+        }
+      });
+      return count;
+    }
+
+    function getKpiDefaultScore(id, mVal) {
+      if (id === 'c1') {
+        let actualLogs = getMonthSupportCount(mVal);
+        return actualLogs >= 450 ? 10 : Math.max(0, Math.round(actualLogs / 450 * 10));
+      }
+      const defaults = {
+        c2: 10, c3: 10, c4: 10,
+        c5: 10, c6: 10, c7: 10, c8: 0,
+        c9: 5, c10: 5, c11: 5, c12: 5
+      };
+      return defaults[id] !== undefined ? defaults[id] : 0;
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyDHFTbNY8ycl4NsfIqgu7v5lGEVwsO0LB4",
       authDomain: "phanviethung-hotrokythuat.firebaseapp.com",
@@ -2781,47 +2834,6 @@
       { id: "c11", category: "bc", name: "Tinh thần học hỏi, cập nhật kiến thức mới phục vụ công việc", target: "Chủ động", maxScore: 5, method: "Xem xét trong quá trình làm việc" },
       { id: "c12", category: "bc", name: "Tuân thủ quy trình, nội quy của công ty", target: "100%", maxScore: 5, method: "Vi phạm = trừ điểm" }
     ];
-
-    function cleanInputString(str) {
-      if (!str) return "";
-      return str.toString().trim();
-    }
-
-    function cleanPhoneNumber(phoneStr) {
-      if (!phoneStr) return "";
-      return phoneStr.toString().replace(/[^0-9]/g, '').trim();
-    }
-
-    function formatEmptyField(val) {
-      if (val === null || val === undefined) return "";
-      let strVal = val.toString().trim();
-      return (strVal === "—" || strVal === "-") ? "" : strVal;
-    }
-
-    function getRecordClipboardText(item) {
-      return [
-        formatEmptyField(item.mst),
-        formatEmptyField(cleanPhoneNumber(item.sdt)),
-        formatEmptyField(item.company),
-        formatEmptyField(item.type),
-        formatEmptyField(item.tech || 'Hưng'),
-        formatEmptyField(item.issue),
-        formatEmptyField(item.status)
-      ].join('\t');
-    }
-
-    function getKpiDefaultScore(id, mVal) {
-      if (id === 'c1') {
-        let actualLogs = getMonthSupportCount(mVal);
-        return actualLogs >= 450 ? 10 : Math.max(0, Math.round(actualLogs / 450 * 10));
-      }
-      const defaults = {
-        c2: 10, c3: 10, c4: 10,
-        c5: 10, c6: 10, c7: 10, c8: 0,
-        c9: 5, c10: 5, c11: 5, c12: 5
-      };
-      return defaults[id] !== undefined ? defaults[id] : 0;
-    }
 
     function initSourceSecurity() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -3254,6 +3266,40 @@
       }
     });
 
+    function setupMstBehaviors() {
+      const mstSup = document.getElementById('frm-mst');
+      const compSup = document.getElementById('frm-company');
+      if (mstSup) {
+        mstSup.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            searchMSTForm();
+          }
+        });
+        mstSup.addEventListener('input', function() {
+          if (this.value.trim() === '') {
+            if (compSup) compSup.value = '';
+          }
+        });
+      }
+
+      const mstSales = document.getElementById('frm-sales-mst');
+      const compSales = document.getElementById('frm-sales-company');
+      if (mstSales) {
+        mstSales.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            searchMSTFormSales();
+          }
+        });
+        mstSales.addEventListener('input', function() {
+          if (this.value.trim() === '') {
+            if (compSales) compSales.value = '';
+          }
+        });
+      }
+    }
+
     function attachInputSanitizers() {
       ['frm-sdt', 'frm-sales-sdt'].forEach(id => {
         const el = document.getElementById(id);
@@ -3481,6 +3527,7 @@
       initMonthSelectors();
       setupAutocomplete();
       attachInputSanitizers();
+      setupMstBehaviors();
       document.getElementById('terminalSearch').addEventListener('input', debounce(renderTerminal, 300));
       document.getElementById('terminalSalesSearch').addEventListener('input', debounce(renderSalesTerminal, 300));
     });
@@ -4630,18 +4677,6 @@
       document.getElementById('preview-thang').innerHTML = html;
     };
 
-    function getMonthSupportCount(monthKey) {
-      let count = 0;
-      Object.keys(allData).forEach(dateStr => {
-        if (dateStr.startsWith(monthKey)) {
-          allData[dateStr].forEach(item => {
-            if (item.is_sales !== true) count++;
-          });
-        }
-      });
-      return count;
-    }
-
     window.autofillC1Score = function(actualLogs) {
       let input = document.getElementById('kpi-input-c1');
       if (!input) return;
@@ -4777,7 +4812,7 @@
           let helpText = "";
           if (item.id === "c1") {
             let actualLogs = getMonthSupportCount(mVal);
-            helpText = `<br/><span style="font-size: 10px; color: var(--secondary); font-weight: bold; cursor: pointer; text-decoration: underline;" onclick="autofillC1Score(${actualLogs})" title="Click để tự điền điểm dựa trên logs">Thực tế: ${actualLogs} ca (Điền nhanh)</span>`;
+            helpText = `<br/><span style="font-size: 10px; color: var(--secondary); font-weight: bold; cursor: pointer; text-decoration: underline;" onclick="autofillC1Score(${actualLogs})" title="Click để tự điền điểm dựa på logs">Thực tế: ${actualLogs} ca (Điền nhanh)</span>`;
           }
 
           row.innerHTML = `
