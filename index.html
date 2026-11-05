@@ -2142,7 +2142,7 @@
                   <div class="form-group" style="flex: 1.2;">
                     <label>Mã số thuế</label>
                     <div class="input-with-btn">
-                      <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập MST" autocomplete="off">
+                      <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập mã số thuế" autocomplete="off">
                       <button type="button" class="btn-lookup" onclick="searchMSTForm()" id="btnSearchMST" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
                     </div>
                   </div>
@@ -2276,7 +2276,7 @@
                   <div class="form-group" style="flex: 1.2;">
                     <label>Mã số thuế</label>
                     <div class="input-with-btn">
-                      <input type="text" id="frm-sales-mst" class="frm-input" placeholder="Nhập MST" autocomplete="off">
+                      <input type="text" id="frm-sales-mst" class="frm-input" placeholder="MST 10 số / chi nhánh 10-3 / định danh 12 số" autocomplete="off">
                       <button type="button" class="btn-lookup" onclick="searchMSTFormSales()" id="btnSearchMSTSales" style="background:#db2777;" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
                     </div>
                   </div>
@@ -3817,12 +3817,23 @@
     const MST_API_TIMEOUT = 6000;
 
     function normalizeMst(value) {
-      // VietQR nhận MST dạng số liền; bỏ khoảng trắng, dấu chấm, gạch nối và ký tự nhập nhầm.
-      return String(value || '').replace(/\D/g, '');
+      // Chỉ loại bỏ khoảng trắng thừa. Tuyệt đối không tự thêm/bỏ dấu '-' hoặc
+      // chuyển mã 13 số thành MST chi nhánh: dấu '-' do người dùng nhập quyết định loại mã.
+      return String(value || '').trim().replace(/\s+/g, '');
+    }
+
+    function getMstType(value) {
+      const code = normalizeMst(value);
+      if (/^\d{10}$/.test(code)) return 'tax';
+      if (/^\d{10}-\d{3}$/.test(code)) return 'branch';
+      if (/^\d{12}$/.test(code)) return 'identity';
+      return 'invalid';
     }
 
     function isValidMst(value) {
-      return /^\d{10}(\d{3})?$/.test(value);
+      // 10 số: MST; 10 số-3 số: MST chi nhánh (bắt buộc có dấu '-');
+      // 12 số: mã định danh. Không tự chuyển 13 số liền thành MST chi nhánh.
+      return getMstType(value) !== 'invalid';
     }
 
     function cleanCompanyName(value) {
@@ -3884,7 +3895,7 @@
     async function fetchCompanyName(mstInput) {
       const mst = normalizeMst(mstInput);
       if (!isValidMst(mst)) {
-        throw new Error('MST không hợp lệ. Vui lòng nhập đúng 10 hoặc 13 chữ số.');
+        throw new Error('Mã không hợp lệ. Nhập MST 10 số, MST chi nhánh dạng 10 số-3 số (ví dụ: 0312345678-001) hoặc mã định danh 12 số.');
       }
 
       const cached = mstLookupCache.get(mst);
@@ -3925,7 +3936,7 @@
       mstEl.value = mstInput;
       if (!mstInput) return showToast('Vui lòng nhập mã số thuế trước khi tra cứu!', true);
       if (!isValidMst(mstInput)) {
-        return showToast('MST chưa đúng định dạng. Cần đúng 10 hoặc 13 chữ số.', true);
+        return showToast('Mã chưa đúng định dạng. Nhập MST 10 số, MST chi nhánh có dấu gạch nối (10 số-3 số, ví dụ 0312345678-001) hoặc mã định danh 12 số.', true);
       }
 
       const originalContent = btn.innerHTML;
