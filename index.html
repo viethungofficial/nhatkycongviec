@@ -2142,7 +2142,7 @@
                   <div class="form-group" style="flex: 1.2;">
                     <label>Mã số thuế</label>
                     <div class="input-with-btn">
-                      <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập mã số thuế" autocomplete="off">
+                      <input type="text" id="frm-mst" class="frm-input" placeholder="Nhập MST" autocomplete="off">
                       <button type="button" class="btn-lookup" onclick="searchMSTForm()" id="btnSearchMST" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
                     </div>
                   </div>
@@ -2276,7 +2276,7 @@
                   <div class="form-group" style="flex: 1.2;">
                     <label>Mã số thuế</label>
                     <div class="input-with-btn">
-                      <input type="text" id="frm-sales-mst" class="frm-input" placeholder="MST 10 số / chi nhánh 10-3 / định danh 12 số" autocomplete="off">
+                      <input type="text" id="frm-sales-mst" class="frm-input" placeholder="Nhập MST" autocomplete="off">
                       <button type="button" class="btn-lookup" onclick="searchMSTFormSales()" id="btnSearchMSTSales" style="background:#db2777;" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
                     </div>
                   </div>
@@ -3808,175 +3808,82 @@
       updateStatusIndicator("Hệ thống sẵn sàng", "");
     }
 
-    // ==================== TRA CỨU MST VIETQR ONLY ====================
-    // Chỉ sử dụng API chính thức VietQR; không gọi proxy hoặc nguồn tra cứu bên thứ ba.
-    const mstLookupCache = new Map();
-    const mstLookupPending = new Map();
-    const MST_CACHE_TTL = 24 * 60 * 60 * 1000;
-    const MST_NEGATIVE_CACHE_TTL = 30 * 1000;
-    const MST_API_TIMEOUT = 6000;
-
-    function normalizeMst(value) {
-      // Chỉ loại bỏ khoảng trắng thừa. Tuyệt đối không tự thêm/bỏ dấu '-' hoặc
-      // chuyển mã 13 số thành MST chi nhánh: dấu '-' do người dùng nhập quyết định loại mã.
-      return String(value || '').trim().replace(/\s+/g, '');
-    }
-
-    function getMstType(value) {
-      const code = normalizeMst(value);
-      if (/^\d{10}$/.test(code)) return 'tax';
-      if (/^\d{10}-\d{3}$/.test(code)) return 'branch';
-      if (/^\d{12}$/.test(code)) return 'identity';
-      return 'invalid';
-    }
-
-    function isValidMst(value) {
-      // 10 số: MST; 10 số-3 số: MST chi nhánh (bắt buộc có dấu '-');
-      // 12 số: mã định danh. Không tự chuyển 13 số liền thành MST chi nhánh.
-      return getMstType(value) !== 'invalid';
-    }
-
-    function cleanCompanyName(value) {
-      return String(value || '').replace(/\s+/g, ' ').trim();
-    }
-
-    async function lookupMstVietQR(mst) {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), MST_API_TIMEOUT);
-      try {
-        const response = await fetch(`https://api.vietqr.io/v2/business/${encodeURIComponent(mst)}`, {
-          method: 'GET',
-          mode: 'cors',
-          cache: 'no-store',
-          credentials: 'omit',
-          signal: controller.signal,
-          headers: { 'Accept': 'application/json' }
-        });
-
-        if (!response.ok) {
-          throw new Error(response.status === 429
-            ? 'VietQR đang giới hạn lượt tra cứu. Vui lòng đợi một chút rồi thử lại.'
-            : `VietQR phản hồi lỗi HTTP ${response.status}.`);
-        }
-
-        let result;
-        try {
-          result = await response.json();
-        } catch (_) {
-          throw new Error('Dữ liệu trả về từ VietQR không đúng định dạng.');
-        }
-
-        if (result && result.code === '00' && result.data) {
-          const name = cleanCompanyName(result.data.name);
-          if (name) return name;
-        }
-
-        // Phân biệt không có dữ liệu với lỗi từ dịch vụ.
-        const message = String(result?.desc || result?.message || '').trim();
-        if (result?.code && result.code !== '00') {
-          const notFound = /not found|không tìm thấy|no data|invalid/i.test(message);
-          if (notFound) return '';
-          throw new Error(message || `VietQR trả mã phản hồi ${result.code}.`);
-        }
-        return '';
-      } catch (error) {
-        if (error.name === 'AbortError') {
-          throw new Error('VietQR phản hồi quá thời gian. Vui lòng thử lại sau.');
-        }
-        if (error instanceof TypeError) {
-          throw new Error('Không kết nối được VietQR. Kiểm tra Internet hoặc cấu hình mạng rồi thử lại.');
-        }
-        throw error;
-      } finally {
-        clearTimeout(timeout);
-      }
-    }
-
     async function fetchCompanyName(mstInput) {
-      const mst = normalizeMst(mstInput);
-      if (!isValidMst(mst)) {
-        throw new Error('Mã không hợp lệ. Nhập MST 10 số, MST chi nhánh dạng 10 số-3 số (ví dụ: 0312345678-001) hoặc mã định danh 12 số.');
-      }
+      let foundName = "";
+      try {
+        let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
+        let data = await res.json();
+        if (data.code === "00" && data.data && data.data.name) foundName = data.data.name;
+      } catch (e) {}
 
-      const cached = mstLookupCache.get(mst);
-      if (cached && Date.now() - cached.time < (cached.name ? MST_CACHE_TTL : MST_NEGATIVE_CACHE_TTL)) {
-        if (cached.error) throw new Error(cached.error);
-        return cached.name;
-      }
-
-      // Nếu cùng MST đang được tra cứu ở form khác, dùng chung request đang chạy.
-      if (mstLookupPending.has(mst)) return mstLookupPending.get(mst);
-
-      const request = (async () => {
+      if (!foundName) {
         try {
-          const name = await lookupMstVietQR(mst);
-          mstLookupCache.set(mst, { name, time: Date.now() });
-          return name;
-        } catch (error) {
-          // Không cache lỗi mạng/timeout để người dùng có thể thử lại ngay.
-          throw error;
-        }
-      })();
-
-      mstLookupPending.set(mst, request);
-      try {
-        return await request;
-      } finally {
-        mstLookupPending.delete(mst);
+          let proxyUrl1 = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
+          let res1 = await fetch(proxyUrl1);
+          let data1 = await res1.json();
+          if (data1.contents) {
+            let match = data1.contents.match(/<title>(.*?)<\/title>/);
+            if (match && match[1] && match[1].includes('Mã số thuế')) {
+              let parts = match[1].split('-');
+              if (parts.length > 1) {
+                parts.shift();
+                foundName = parts.join('-').trim();
+              }
+            }
+          }
+        } catch (err) {}
       }
-    }
-
-    async function runMstLookup({ mstId, companyId, buttonId }) {
-      const mstEl = document.getElementById(mstId);
-      const companyEl = document.getElementById(companyId);
-      const btn = document.getElementById(buttonId);
-      if (!mstEl || !companyEl || !btn) return;
-
-      const mstInput = normalizeMst(mstEl.value);
-      mstEl.value = mstInput;
-      if (!mstInput) return showToast('Vui lòng nhập mã số thuế trước khi tra cứu!', true);
-      if (!isValidMst(mstInput)) {
-        return showToast('Mã chưa đúng định dạng. Nhập MST 10 số, MST chi nhánh có dấu gạch nối (10 số-3 số, ví dụ 0312345678-001) hoặc mã định danh 12 số.', true);
-      }
-
-      const originalContent = btn.innerHTML;
-      const originalDisabled = btn.disabled;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-      btn.disabled = true;
-      btn.setAttribute('aria-label', 'Đang tra cứu MST bằng VietQR');
-      btn.title = 'Đang tra cứu trực tiếp từ VietQR...';
-      const requestedMst = mstInput;
-
-      try {
-        const foundName = await fetchCompanyName(requestedMst);
-        // Không ghi kết quả vào form nếu người dùng đã thay MST trong lúc chờ API.
-        if (normalizeMst(mstEl.value) !== requestedMst) return;
-
-        if (foundName) {
-          companyEl.value = foundName;
-          companyEl.dispatchEvent(new Event('input', { bubbles: true }));
-          showToast('Tra cứu VietQR thành công!', false);
-        } else {
-          showToast('VietQR chưa có dữ liệu cho MST này. Vui lòng kiểm tra MST hoặc nhập tên đơn vị thủ công.', true);
-        }
-      } catch (error) {
-        if (normalizeMst(mstEl.value) === requestedMst) {
-          showToast(error.message || 'Không thể tra cứu MST từ VietQR. Vui lòng thử lại.', true);
-        }
-      } finally {
-        btn.innerHTML = originalContent;
-        btn.disabled = originalDisabled;
-        btn.removeAttribute('aria-label');
-        btn.title = 'Tra cứu tên công ty từ VietQR';
-      }
+      return foundName;
     }
 
     window.searchMSTForm = async function() {
-      return runMstLookup({ mstId: 'frm-mst', companyId: 'frm-company', buttonId: 'btnSearchMST' });
+      let mstInput = document.getElementById('frm-mst').value.replace(/[^0-9-]/g, '');
+      document.getElementById('frm-mst').value = mstInput;
+      if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!", true);
+      const btn = document.getElementById('btnSearchMST');
+      const originalIcon = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      btn.disabled = true;
+
+      try {
+        let foundName = await fetchCompanyName(mstInput);
+        if (foundName) {
+          document.getElementById('frm-company').value = foundName;
+          showToast("Tra cứu thành công!", false);
+        } else {
+          showToast("Không tìm thấy Tên Cty!", true);
+        }
+      } catch (error) {
+        showToast("Lỗi kết nối mạng!", true);
+      } finally {
+        btn.innerHTML = originalIcon;
+        btn.disabled = false;
+      }
     };
 
     window.searchMSTFormSales = async function() {
-      return runMstLookup({ mstId: 'frm-sales-mst', companyId: 'frm-sales-company', buttonId: 'btnSearchMSTSales' });
+      let mstInput = document.getElementById('frm-sales-mst').value.replace(/[^0-9-]/g, '');
+      document.getElementById('frm-sales-mst').value = mstInput;
+      if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!", true);
+      const btn = document.getElementById('btnSearchMSTSales');
+      const originalIcon = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      btn.disabled = true;
+
+      try {
+        let foundName = await fetchCompanyName(mstInput);
+        if (foundName) {
+          document.getElementById('frm-sales-company').value = foundName;
+          showToast("Tra cứu thành công!", false);
+        } else {
+          showToast("Không tìm thấy Tên Cty!", true);
+        }
+      } catch (error) {
+        showToast("Lỗi kết nối mạng!", true);
+      } finally {
+        btn.innerHTML = originalIcon;
+        btn.disabled = false;
+      }
     };
 
     window.submitForm = function() {
