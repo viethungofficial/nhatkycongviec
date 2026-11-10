@@ -3809,30 +3809,65 @@
     }
 
     async function fetchCompanyName(mstInput) {
-      let foundName = "";
-      try {
-        let res = await fetch(`https://api.vietqr.io/v2/business/${mstInput}`);
-        let data = await res.json();
-        if (data.code === "00" && data.data && data.data.name) foundName = data.data.name;
-      } catch (e) {}
+      mstInput = cleanInputString(mstInput);
+      if (!mstInput) return "";
 
+      // 1. CƠ CHẾ TIMEOUT: Ép request tự hủy nếu quá thời gian để tránh treo trình duyệt
+      const fetchWithTimeout = async (url, timeoutMs) => {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          const response = await fetch(url, { signal: controller.signal });
+          clearTimeout(id);
+          return response;
+        } catch (error) {
+          clearTimeout(id);
+          throw error;
+        }
+      };
+
+      let foundName = "";
+
+      // NGUỒN 1: API VietQR (Realtime, Dữ liệu chuẩn quốc gia) - Giới hạn chờ 2.5 giây
+      try {
+        let res = await fetchWithTimeout(`https://api.vietqr.io/v2/business/${mstInput}`, 1500);
+        if (res.ok) {
+          let data = await res.json();
+          if (data.code === "00" && data.data && data.data.name) {
+            // Trả về ngay lập tức nếu tìm thấy, không chạy xuống Nguồn 2
+            return data.data.name; 
+          }
+        }
+      } catch (e) {
+        console.warn("VietQR API timeout or unavailable.");
+      }
+
+      // NGUỒN 2: Crawl masothue.com (Dự phòng) - Giới hạn chờ 4 giây
       if (!foundName) {
         try {
-          let proxyUrl1 = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
-          let res1 = await fetch(proxyUrl1);
-          let data1 = await res1.json();
-          if (data1.contents) {
-            let match = data1.contents.match(/<title>(.*?)<\/title>/);
+          let targetUrl = encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
+          
+          // TỐI ƯU 2: Dùng endpoint /raw thay vì /get để lấy thẳng text HTML, bỏ qua parse JSON nặng nề
+          let proxyUrl = 'https://api.allorigins.win/raw?url=' + targetUrl;
+          
+          let res1 = await fetchWithTimeout(proxyUrl, 2000);
+          if (res1.ok) {
+            let htmlText = await res1.text(); // Lấy dạng text thô rất nhẹ
+            let match = htmlText.match(/<title>(.*?)<\/title>/);
+            
             if (match && match[1] && match[1].includes('Mã số thuế')) {
               let parts = match[1].split('-');
               if (parts.length > 1) {
-                parts.shift();
+                parts.shift(); // Bỏ phần MST ở đầu
                 foundName = parts.join('-').trim();
               }
             }
           }
-        } catch (err) {}
+        } catch (err) {
+          console.warn("Proxy fallback timeout or error.");
+        }
       }
+
       return foundName;
     }
 
