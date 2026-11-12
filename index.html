@@ -2501,7 +2501,7 @@
 
                 <div class="form-group address-dkkd-group">
                   <label for="frm-address">Địa chỉ ĐKKD</label>
-                  <textarea id="frm-address" class="frm-textarea" rows="3" placeholder="Tự động lấy khi tra cứu MST hoặc nhập tay..." autocomplete="off"></textarea>
+                  <textarea id="frm-address" class="frm-textarea" rows="3" placeholder="Tra cứu MST để xem địa chỉ đăng ký kinh doanh..." autocomplete="off" readonly title="Chỉ hiển thị thông tin tra cứu; không lưu vào nhật ký hoặc xuất dữ liệu"></textarea>
                 </div>
 
                 <div class="form-row">
@@ -2935,7 +2935,6 @@
         formatEmptyField(item.mst),
         formatEmptyField(cleanPhoneNumber(item.sdt)),
         formatEmptyField(item.company),
-        formatEmptyField(item.address),
         formatEmptyField(item.type),
         formatEmptyField(item.tech || 'Hưng'),
         formatEmptyField(item.issue),
@@ -3505,10 +3504,10 @@
           }
         });
         mstSup.addEventListener('input', function() {
+          const addrSup = document.getElementById('frm-address');
+          if (addrSup) addrSup.value = '';
           if (this.value.trim() === '') {
             if (compSup) compSup.value = '';
-            const addrSup = document.getElementById('frm-address');
-            if (addrSup) addrSup.value = '';
           }
         });
       }
@@ -4043,7 +4042,6 @@
               mst: cleanInputString(filterDash(row[1])),
               sdt: cleanPhoneNumber(filterDash(row[2])),
               company: cleanInputString(filterDash(row[3])),
-              address: hasAddressColumn ? cleanInputString(filterDash(row[4])) : '',
               type: hasAddressColumn ? (filterDash(row[5]) || "HĐ") : (filterDash(row[4]) || "HĐ"),
               tech: hasAddressColumn ? (filterDash(row[6]) || "Hưng") : (filterDash(row[5]) || "Hưng"),
               issue: cleanInputString(hasAddressColumn ? filterDash(row[7]) : filterDash(row[6])),
@@ -4146,6 +4144,7 @@
 
       try {
         const info = await fetchCompanyInfo(mstInput);
+        if (document.getElementById('frm-mst').value.replace(/[^0-9-]/g, '') !== mstInput) return;
         if (info.name || info.address) {
           document.getElementById('frm-company').value = info.name || '';
           const addrEl = document.getElementById('frm-address');
@@ -4194,12 +4193,11 @@
     window.submitForm = function() {
       const mst = cleanInputString(document.getElementById('frm-mst').value);
       let company = cleanInputString(document.getElementById('frm-company').value);
-      const address = cleanInputString(document.getElementById('frm-address').value);
       const sdt = cleanPhoneNumber(document.getElementById('frm-sdt').value);
       const status = cleanInputString(document.getElementById('frm-status').value);
       const issue = cleanInputString(document.getElementById('frm-issue').value);
 
-      if (!mst && !company && !address && !issue && !status) return showToast("Vui lòng điền thông tin để lưu!", true);
+      if (!mst && !company && !issue && !status) return showToast("Vui lòng điền thông tin để lưu!", true);
 
       if (company && !company.endsWith("🍉") && !company.endsWith("🍉 ")) {
         company = company + " 🍉";
@@ -4208,7 +4206,6 @@
       const record = {
         mst: mst || "",
         company: company || "",
-        address: address || "",
         sdt: sdt || "",
         type: document.getElementById('frm-type').value,
         tech: cleanInputString(document.getElementById('frm-tech').value) || 'Hưng',
@@ -4245,7 +4242,7 @@
       document.getElementById('frm-date').value = dateStr;
       document.getElementById('frm-mst').value = data.mst || '';
       document.getElementById('frm-company').value = data.company || '';
-      document.getElementById('frm-address').value = data.address || '';
+      document.getElementById('frm-address').value = ''; // Chỉ xem khi bấm tra cứu MST
       document.getElementById('frm-sdt').value = cleanPhoneNumber(data.sdt);
       document.getElementById('frm-type').value = data.type || 'HĐ';
       document.getElementById('frm-issue').value = data.issue || '';
@@ -4467,7 +4464,6 @@
         const d_mst = formatEmptyField(item.mst);
         const d_sdt = formatEmptyField(cleanPhoneNumber(item.sdt));
         const d_company = formatEmptyField(item.company);
-        const d_address = formatEmptyField(item.address);
         const d_issue = item.issue ? ("> " + item.issue) : "";
         const d_status = formatEmptyField(item.status);
 
@@ -4478,7 +4474,7 @@
           <td class="t-stt">[${stt++}]</td>
           <td class="t-mst">${d_mst}</td>
           <td class="t-sdt">${d_sdt}</td>
-          <td class="t-ten">${d_company}${d_address ? `<div style="font-size:10px; font-weight:600; color: var(--text-muted); margin-top:2px; line-height:1.35;">📍 ${d_address}</div>` : ''}</td>
+          <td class="t-ten">${d_company}</td>
           <td class="t-loai">${item.type || ''}</td>
           <td class="t-vd">${d_issue}</td>
           <td class="t-status">${d_status}</td>
@@ -4670,7 +4666,6 @@
       const formattedDataForSheets = dataToSave.map(item => ({
         mst: formatEmptyField(item.mst),
         company: formatEmptyField(item.company),
-        address: formatEmptyField(item.address),
         sdt: formatEmptyField(cleanPhoneNumber(item.sdt)),
         type: formatEmptyField(item.type || item.loai_mua),
         tech: formatEmptyField(item.tech || item.dich_vu || 'Hưng'),
@@ -4837,7 +4832,6 @@
                 "MST": formatEmptyField(item.mst),
                 "SĐT": formatEmptyField(cleanPhoneNumber(item.sdt)),
                 "Tên công ty": formatEmptyField(item.company),
-                "Địa chỉ ĐKKD": formatEmptyField(item.address),
                 "Loại hỗ trợ": formatEmptyField(item.type),
                 "Tên KT": formatEmptyField(item.tech),
                 "Vấn đề hỗ trợ": formatEmptyField(item.issue),
@@ -4881,7 +4875,7 @@
           ws[i].s.fill = { fgColor: { rgb: "1A56A6" } };
         }
       }
-      ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 12 }, { wch: 36 }, { wch: 42 }, { wch: 12 }, { wch: 12 }, { wch: 30 }, { wch: 18 }];
+      ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 12 }, { wch: 40 }, { wch: 12 }, { wch: 12 }, { wch: 30 }, { wch: 18 }];
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "visnam_data");
       XLSX.writeFile(wb, `visnam_data_Thang${month}.xlsx`);
