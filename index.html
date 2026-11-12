@@ -862,6 +862,156 @@
       box-shadow: 0 4px 10px rgba(243, 156, 18, 0.25);
     }
 
+
+    .frm-textarea {
+      width: 100%;
+      min-height: 54px;
+      resize: vertical;
+      padding: 7px 8px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 8px;
+      font-size: 11.5px;
+      background-color: var(--input-bg);
+      color: var(--text-main);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      outline: none;
+      line-height: 1.45;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    :root[data-theme="dark"] .frm-textarea {
+      border-color: #64748b;
+      background-color: #1e293b;
+    }
+
+    .frm-textarea:focus {
+      border-color: var(--secondary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(243, 156, 18, 0.25);
+    }
+
+    .equal-height-row {
+      align-items: stretch;
+    }
+
+    .equal-height-row .form-panel,
+    .equal-height-row .terminal-wrapper-outer,
+    .equal-height-row .stats-wrapper-outer {
+      height: 395px;
+      min-height: 395px;
+    }
+
+    .equal-height-row .form-panel {
+      overflow: hidden;
+    }
+
+    .equal-height-row .terminal-wrapper-outer,
+    .equal-height-row .stats-wrapper-outer {
+      min-width: 0;
+    }
+
+    .support-pie-section {
+      padding: 8px 10px 4px;
+      border-top: 1px dashed var(--border-color);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.015));
+      flex-shrink: 0;
+    }
+
+    .support-pie-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--title-color-bright);
+    }
+
+    .support-pie-head span:last-child {
+      color: var(--text-muted);
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+    }
+
+    .support-pie-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 165px;
+    }
+
+    .support-pie-canvas-wrap {
+      flex: 0 0 56%;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #supportPie3DCanvas {
+      width: 100%;
+      max-width: 205px;
+      height: auto;
+      filter: drop-shadow(0 12px 10px rgba(15, 23, 42, 0.18));
+    }
+
+    .support-pie-legend {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .support-pie-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 6px 8px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .support-pie-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex: 0 0 10px;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.45), 0 0 10px currentColor;
+    }
+
+    .support-pie-label {
+      flex: 1;
+      min-width: 0;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .support-pie-metric {
+      text-align: right;
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .support-pie-empty {
+      color: var(--text-muted);
+      font-size: 11px;
+      text-align: center;
+      width: 100%;
+      font-style: italic;
+    }
+
     .custom-select {
       appearance: none;
       -webkit-appearance: none;
@@ -2005,6 +2155,10 @@
       .form-panel, .terminal-wrapper-outer, .stats-wrapper-outer { width: 100%; flex: none; }
       .terminal-wrapper-outer { height: 400px; }
       .stats-wrapper-outer { height: 420px; }
+      .equal-height-row .form-panel, .equal-height-row .terminal-wrapper-outer, .equal-height-row .stats-wrapper-outer { height: auto; min-height: unset; }
+      .support-pie-body { flex-direction: column; }
+      .support-pie-canvas-wrap { width: 100%; }
+      #supportPie3DCanvas { max-width: 240px; }
       .report-split-layout { flex-direction: column; }
       .filter-col { width: 100%; flex: none; }
       .header-content { flex-wrap: wrap; gap: 8px; justify-content: center; }
@@ -2018,6 +2172,195 @@
       .user-greeting { display: none; }
       .terminal-search-box { width: 100%; max-width: none; }
       .preview-modal-content { width: 98vw; height: 96vh; }
+    }
+
+    /* ===== V2.2 | CHỈ BỔ SUNG KÍCH THƯỚC ĐỊA CHỈ VÀ BIỂU ĐỒ ===== */
+    /* Các trường MST, SĐT, loại hỗ trợ, vấn đề và tình trạng: giữ kích thước, bố cục gốc. */
+    .equal-height-row .company-name-group {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      flex: 0 0 auto;
+    }
+    .equal-height-row #frm-company {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .equal-height-row .address-dkkd-group {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      flex: 0 0 auto;
+    }
+    .equal-height-row #frm-address {
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      height: 60px;
+      min-height: 60px;
+      max-height: 60px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      line-height: 1.45;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overflow-wrap: anywhere;
+      resize: none;
+      scrollbar-width: thin;
+    }
+    /* Chỉ hiển thị biểu đồ, không tiêu đề phụ, không số liệu hoặc nhãn bên cạnh. */
+    .support-ratio-card .support-ratio-table {
+      flex: 0 0 auto;
+      min-height: 0;
+      max-height: 156px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .support-ratio-card .support-pie-section {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      padding: 4px 4px 0;
+      overflow: hidden;
+    }
+    .support-ratio-card .support-pie-body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      gap: 0;
+    }
+    .support-ratio-card .support-pie-canvas-wrap {
+      flex: 1 1 auto;
+      width: 100%;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .support-ratio-card #supportPie3DCanvas {
+      display: block;
+      width: 100%;
+      max-width: 230px;
+      height: auto;
+      max-height: 150px;
+      filter: drop-shadow(0 5px 5px rgba(15, 23, 42, 0.12));
+    }
+    /* Ba cột gốc có cùng chiều cao, không làm phình khung theo nội dung. */
+    .equal-height-row .form-panel,
+    .equal-height-row .terminal-wrapper-outer,
+    .equal-height-row .stats-wrapper-outer {
+      height: 395px;
+      min-height: 395px;
+    }
+    @media (max-width: 1200px) {
+      .equal-height-row .form-panel { height: auto; min-height: 0; overflow: visible; }
+      .equal-height-row .terminal-wrapper-outer { height: 400px; min-height: 400px; }
+      .equal-height-row .stats-wrapper-outer { height: 395px; min-height: 395px; }
+      .support-ratio-card .support-pie-body { flex-direction: row; }
+      .support-ratio-card .support-pie-canvas-wrap { width: 100%; }
+      .support-ratio-card #supportPie3DCanvas { max-width: 250px; }
+    }
+
+    /* ===== V2.3: Tiện ích nằm dưới 3 khung, tối ưu mật độ mà không đổi cỡ chữ nhập liệu. ===== */
+    .integrated-tools-panel {
+      width: 100%;
+      min-width: 0;
+      margin-top: 0;
+      margin-bottom: 12px;
+      padding: 11px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      background: var(--card-bg);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.025);
+    }
+
+    .integrated-tools-panel .tool-manage-bar {
+      padding: 0 0 9px;
+      margin: 0 0 10px;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .integrated-tools-heading {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--title-color-bright);
+      font-size: 12.5px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .integrated-tools-heading i { font-size: 13px; }
+
+    .integrated-tools-panel #toolsGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: 10px;
+      margin-top: 0;
+      align-items: stretch;
+    }
+
+    .integrated-tools-panel .tool-card {
+      min-width: 0;
+      padding: 11px 10px;
+      border-radius: 9px;
+      gap: 0;
+    }
+
+    .integrated-tools-panel .tool-card-icon-wrapper {
+      width: 40px;
+      height: 40px;
+      min-height: 40px;
+      font-size: 19px;
+      margin-bottom: 7px;
+    }
+
+    .integrated-tools-panel .tool-card-title {
+      width: 100%;
+      margin-bottom: 5px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .integrated-tools-panel .tool-card-desc {
+      width: 100%;
+      line-height: 1.4;
+      min-height: 30px;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    .integrated-tools-panel .tool-card-actions {
+      margin-top: auto;
+    }
+
+    .integrated-tools-panel .tool-card-btn-preview,
+    .integrated-tools-panel .tool-card-btn-ext {
+      border-radius: 7px;
+      min-height: 29px;
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+
+    @media (max-width: 640px) {
+      .integrated-tools-panel { padding: 10px; }
+      .integrated-tools-heading { font-size: 12px; }
+      .integrated-tools-panel .tool-manage-bar { align-items: flex-start; }
+      .integrated-tools-panel #toolsGrid { grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
     }
   </style>
 </head>
@@ -2119,7 +2462,6 @@
         <div class="tabs">
           <button class="tab-btn active" onclick="switchMainTab('nhaplieu')"><i class="fas fa-edit"></i>Form Nhập Liệu</button>
           <button class="tab-btn" onclick="switchMainTab('baocao')"><i class="fas fa-chart-pie"></i>Báo cáo & Thống kê</button>
-          <button class="tab-btn" onclick="switchMainTab('congcu')"><i class="fas fa-toolbox"></i>Công cụ hỗ trợ</button>
         </div>
       </div>
 
@@ -2127,7 +2469,7 @@
 
         <div id="tab-nhaplieu" class="main-tab-content active">
 
-          <div class="split-row">
+          <div class="split-row equal-height-row">
             <!-- Form Thông tin Hỗ Trợ -->
             <div class="form-panel">
               <div class="form-header">
@@ -2152,9 +2494,14 @@
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label>Tên công ty</label>
+                <div class="form-group company-name-group">
+                  <label for="frm-company">Tên công ty</label>
                   <input type="text" id="frm-company" class="frm-input" placeholder="Tự động hoặc nhập tay..." autocomplete="off">
+                </div>
+
+                <div class="form-group address-dkkd-group">
+                  <label for="frm-address">Địa chỉ ĐKKD</label>
+                  <textarea id="frm-address" class="frm-textarea" rows="3" placeholder="Tự động lấy khi tra cứu MST hoặc nhập tay..." autocomplete="off"></textarea>
                 </div>
 
                 <div class="form-row">
@@ -2223,12 +2570,12 @@
 
             <!-- Thống kê tỷ lệ hỗ trợ -->
             <div class="stats-wrapper-outer">
-              <div class="dash-card">
+              <div class="dash-card support-ratio-card">
                 <div class="dash-card-header">
                   <div><i class="fas fa-chart-line"></i>TỶ LỆ HỖ TRỢ KỸ THUẬT</div>
                   <div class="dash-totalbadge" title="Tổng số yêu cầu">Tổng: <span id="gs-total-badge">0</span></div>
                 </div>
-                <div class="dash-table-wrapper" style="max-height: 200px;">
+                <div class="dash-table-wrapper support-ratio-table">
                   <table class="dash-table">
                     <thead>
                       <tr>
@@ -2240,7 +2587,14 @@
                     <tbody id="gs-ratio-body"></tbody>
                   </table>
                 </div>
-                <div class="pie-chart-container" id="gs-support-icons-container" style="justify-content: space-around; padding: 10px 8px;">
+                <div class="support-pie-section">
+                  <div class="support-pie-body">
+                    <div class="support-pie-canvas-wrap">
+                      <canvas id="supportPie3DCanvas" width="300" height="180" role="img" aria-label="Biểu đồ hình tròn tỷ lệ lượt hỗ trợ: Hóa đơn, Chữ ký số và BHXH"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="pie-chart-container" id="gs-support-icons-container">
                   <div class="icon-glow-card glow-hd" title="Hóa đơn điện tử">
                     <i class="fas fa-file-invoice-dollar" style="color: #3b82f6;"></i>
                     <span>HÓA ĐƠN</span>
@@ -2262,143 +2616,19 @@
 
           </div>
 
-          <div class="split-row">
-            <!-- Form Đăng ký/Gia hạn bán hàng -->
-            <div class="form-panel">
-              <div class="form-header">
-                <span><i class="fas fa-shopping-cart"></i> THÔNG TIN MUA / GIA HẠN</span>
-                <span id="formSalesModeBadge" style="font-size: 9.5px; background: #fdf2f8; color: #db2777; padding: 2px 6px; border-radius: 10px; font-weight: normal;">Thêm mới</span>
+          <!-- Tiện ích hỗ trợ được tích hợp ngay dưới ba bảng nhập liệu / dữ liệu / thống kê. -->
+          <section id="toolsSection" class="report-wrapper integrated-tools-panel" aria-label="Công cụ hỗ trợ">
+            <div class="tool-manage-bar">
+              <div class="integrated-tools-heading">
+                <i class="fas fa-toolbox"></i>
+                <span>CÔNG CỤ HỖ TRỢ & TÀI NGUYÊN NỘI BỘ</span>
               </div>
-              <form id="inputSalesForm" style="display: flex; flex-direction: column;" onsubmit="event.preventDefault();">
-                <input type="hidden" id="frm-sales-idx" value="-1">
-                <input type="hidden" id="frm-sales-date" value="">
-                <div class="form-row">
-                  <div class="form-group" style="flex: 1.2;">
-                    <label>Mã số thuế</label>
-                    <div class="input-with-btn">
-                      <input type="text" id="frm-sales-mst" class="frm-input" placeholder="Nhập MST" autocomplete="off">
-                      <button type="button" class="btn-lookup" onclick="searchMSTFormSales()" id="btnSearchMSTSales" style="background:#db2777;" title="Tra cứu Tên công ty"><i class="fas fa-search"></i></button>
-                    </div>
-                  </div>
-                  <div class="form-group" style="flex: 1;">
-                    <label>Số điện thoại</label>
-                    <input type="text" id="frm-sales-sdt" class="frm-input" placeholder="Nhập SĐT..." autocomplete="off">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Tên công ty</label>
-                  <input type="text" id="frm-sales-company" class="frm-input" placeholder="Tự động hoặc nhập tay..." autocomplete="off">
-                </div>
-                <div class="form-row">
-                  <div class="form-group" style="flex: 1;">
-                    <label>Loại yêu cầu</label>
-                    <select id="frm-sales-loai" class="frm-input custom-select">
-                      <option value="Gia hạn">Gia hạn</option>
-                      <option value="Mua mới">Mua mới</option>
-                    </select>
-                  </div>
-                  <div class="form-group" style="flex: 1;">
-                    <label>Dịch vụ</label>
-                    <select id="frm-sales-dichvu" class="frm-input custom-select">
-                      <option value="CKS">Chữ ký số (CKS)</option>
-                      <option value="HĐ">Hóa đơn (HĐ)</option>
-                      <option value="BHXH">Bảo hiểm (BHXH)</option>
-                      <option value="Chứng từ">Chứng từ khấu trừ</option>
-                    </select>
-                  </div>
-                </div>
-                <div style="display: flex; gap: 6px; margin-top: 6px;">
-                  <button type="button" class="btn-submit" id="btnSubmitSalesForm" onclick="submitSalesForm()" style="background: linear-gradient(-45deg, #db2777, #be185d);">
-                    <i class="fas fa-cart-plus"></i> LƯU YÊU CẦU
-                  </button>
-                  <button type="button" class="btn-submit" id="btnCancelSalesEdit" onclick="cancelSalesEdit()" style="display: none; background: #64748b; flex: 0.45;">HỦY</button>
-                </div>
-              </form>
+              <button class="btn-tool-action btn-tool-manage" type="button" onclick="openManageToolsModal()">
+                <i class="fas fa-sliders-h"></i> Quản lý tiện ích
+              </button>
             </div>
-
-            <!-- Terminal Bảng Yêu Cầu Mua / Gia Hạn -->
-            <div class="terminal-wrapper-outer">
-              <div class="terminal-panel">
-                <div class="terminal-header">
-                  <div class="terminal-title"><i class="fas fa-list-alt" style="color: #db2777;"></i> BẢNG YÊU CẦU MUA / GIA HẠN</div>
-                  <div style="display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
-                    <div class="sales-date-picker-container">
-                      <label for="salesDateFilter"><i class="fas fa-calendar-alt" style="color: #db2777;"></i> Lịch:</label>
-                      <input type="date" id="salesDateFilter" onchange="onSalesDateChange()">
-                      <button type="button" id="btnSalesAllDates" class="btn-sales-all-dates" onclick="toggleSalesAllDates()" title="Xem tất cả lịch sử">Tất cả</button>
-                    </div>
-
-                    <div class="terminal-search-box">
-                      <i class="fas fa-search"></i>
-                      <input type="text" id="terminalSalesSearch" placeholder="Tìm MST, Tên, SĐT...">
-                    </div>
-                  </div>
-                </div>
-                <div class="terminal-content" id="terminalSalesContent">
-                  <table class="term-table">
-                    <thead>
-                      <tr>
-                        <th class="t-stt">STT</th>
-                        <th style="width: 80px; color: #fbbf24;">Ngày</th>
-                        <th class="t-mst">MST</th>
-                        <th class="t-sdt">SĐT</th>
-                        <th class="t-ten" style="width: 100%;">Tên Công Ty</th>
-                        <th style="color: #38bdf8; white-space: nowrap; padding-right: 12px;">Loại</th>
-                        <th style="color: #f472b6; white-space: nowrap; padding-right: 12px;">Dịch vụ</th>
-                        <th class="t-action">#</th>
-                      </tr>
-                    </thead>
-                    <tbody id="terminalSalesBody"></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- Thống kê Tiếp Nhận Mua Hàng -->
-            <div class="stats-wrapper-outer">
-              <div class="dash-card">
-                <div class="dash-card-header sales-header">
-                  <div><i class="fas fa-shopping-cart"></i>TIẾP NHẬN YÊU CẦU MUA HÀNG</div>
-                  <div class="dash-totalbadge" style="background:#be185d;" title="Tổng số yêu cầu">Tổng: <span id="gs-sales-total-badge">0</span></div>
-                </div>
-                <div class="dash-table-wrapper" style="overflow: hidden; max-height: 200px;">
-                  <table class="dash-table">
-                    <thead>
-                      <tr>
-                        <th>Dịch vụ</th>
-                        <th style="width: 50%;">Tỷ Lệ (%)</th>
-                        <th style="text-align: center;">SL</th>
-                      </tr>
-                    </thead>
-                    <tbody id="gs-sales-service-body"></tbody>
-                  </table>
-                </div>
-                <div class="pie-chart-container" id="gs-sales-icons-container" style="justify-content: space-around; padding: 10px 8px;">
-                  <div class="icon-glow-card glow-sales-cks" title="Chữ ký số (CKS)">
-                    <i class="fas fa-key" style="color: #38bdf8;"></i>
-                    <span>CKS</span>
-                    <b id="count-sales-cks" style="font-size: 11px; margin-top: 2px;">0</b>
-                  </div>
-                  <div class="icon-glow-card glow-sales-hd" title="Hóa đơn">
-                    <i class="fas fa-file-invoice-dollar" style="color: #f472b6;"></i>
-                    <span>HÓA ĐƠN</span>
-                    <b id="count-sales-hd" style="font-size: 11px; margin-top: 2px;">0</b>
-                  </div>
-                  <div class="icon-glow-card glow-sales-bhxh" title="Bảo hiểm xã hội">
-                    <i class="fas fa-shield-alt" style="color: #34d399;"></i>
-                    <span>BHXH</span>
-                    <b id="count-sales-bhxh" style="font-size: 11px; margin-top: 2px;">0</b>
-                  </div>
-                  <div class="icon-glow-card glow-sales-ct" title="Chứng từ khấu trừ">
-                    <i class="fas fa-file-signature" style="color: #a78bfa;"></i>
-                    <span>TNCN</span>
-                    <b id="count-sales-ct" style="font-size: 11px; margin-top: 2px;">0</b>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
+            <div class="tools-grid" id="toolsGrid"></div>
+          </section>
         </div>
 
         <div id="tab-baocao" class="main-tab-content">
@@ -2518,23 +2748,6 @@
           </div>
         </div>
 
-        <div id="tab-congcu" class="main-tab-content">
-          <div class="report-wrapper" style="padding: 18px;">
-            <div class="tool-manage-bar">
-              <div class="stats-title" style="font-size: 14px; border: none; margin: 0; padding: 0;">
-                <i class="fas fa-toolbox"></i> TIỆN ÍCH & TÀI NGUYÊN NỘI BỘ VISNAM
-              </div>
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <button class="btn-tool-action btn-tool-manage" onclick="openManageToolsModal()">
-                  <i class="fas fa-sliders-h"></i> Quản lý tiện ích
-                </button>
-              </div>
-            </div>
-
-            <!-- Dynamic Tools Grid Container -->
-            <div class="tools-grid" id="toolsGrid"></div>
-          </div>
-        </div>
 
       </div>
     </div>
@@ -2622,6 +2835,18 @@
                   <option value="#f97316">Cam Lửa (Orange Fire)</option>
                   <option value="#ec4899">Hồng Magenta (Pink Neon)</option>
                   <option value="#a855f7">Tím Violet (Vibrant Violet)</option>
+                  <option value="#22c55e">Xanh Lá Hiện Đại (Modern Green)</option>
+                  <option value="#eab308">Vàng Mật Ong (Honey Gold)</option>
+                  <option value="#06b6d4">Lam Ngọc (Cyan Aqua)</option>
+                  <option value="#3b82f6">Xanh Hoàng Gia (Royal Blue)</option>
+                  <option value="#4f46e5">Tím Chàm Đậm (Deep Indigo)</option>
+                  <option value="#84cc16">Xanh Chanh (Lime Fresh)</option>
+                  <option value="#fb7185">Hồng San Hô (Coral Pink)</option>
+                  <option value="#0f766e">Xanh Rêu Biển (Ocean Teal)</option>
+                  <option value="#9333ea">Tím Neon (Electric Purple)</option>
+                  <option value="#f43f5e">Đỏ Hồng Nổi Bật (Crimson Rose)</option>
+                  <option value="#0284c7">Xanh Công Nghệ (Tech Blue)</option>
+                  <option value="#16a34a">Xanh Lá Đậm (Forest Green)</option>
                 </select>
               </div>
             </div>
@@ -2710,11 +2935,12 @@
         formatEmptyField(item.mst),
         formatEmptyField(cleanPhoneNumber(item.sdt)),
         formatEmptyField(item.company),
+        formatEmptyField(item.address),
         formatEmptyField(item.type),
         formatEmptyField(item.tech || 'Hưng'),
         formatEmptyField(item.issue),
         formatEmptyField(item.status)
-      ].join('\t');
+      ].join('	');
     }
 
     function getMonthSupportCount(monthKey) {
@@ -2881,10 +3107,12 @@
     }
 
     const EXTENDED_PALETTE_COLORS = [
-      '#0ea5e9', '#6366f1', '#0068ff', '#ef4444', 
-      '#8b5cf6', '#10b981', '#f59e0b', '#db2777', 
+      '#0ea5e9', '#6366f1', '#0068ff', '#ef4444',
+      '#8b5cf6', '#10b981', '#f59e0b', '#db2777',
       '#14b8a6', '#f97316', '#ec4899', '#a855f7',
-      '#3b82f6', '#06b6d4', '#84cc16', '#eab308'
+      '#3b82f6', '#06b6d4', '#84cc16', '#eab308',
+      '#22c55e', '#fb7185', '#0f766e', '#9333ea',
+      '#f43f5e', '#0284c7', '#16a34a', '#4f46e5'
     ];
 
     function autoGenerateToolStyle(url, title) {
@@ -3279,6 +3507,8 @@
         mstSup.addEventListener('input', function() {
           if (this.value.trim() === '') {
             if (compSup) compSup.value = '';
+            const addrSup = document.getElementById('frm-address');
+            if (addrSup) addrSup.value = '';
           }
         });
       }
@@ -3313,7 +3543,7 @@
         }
       });
 
-      ['frm-mst', 'frm-company', 'frm-status', 'frm-issue', 'frm-sales-mst', 'frm-sales-company'].forEach(id => {
+      ['frm-mst', 'frm-company', 'frm-address', 'frm-status', 'frm-issue', 'frm-sales-mst', 'frm-sales-company'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
           el.addEventListener('blur', function() {
@@ -3411,45 +3641,117 @@
       }
     }
 
+
+    function shadeHexColor(hex, percent) {
+      const clean = (hex || '').replace('#', '');
+      if (clean.length !== 6) return hex;
+      const num = parseInt(clean, 16);
+      let r = (num >> 16) & 255;
+      let g = (num >> 8) & 255;
+      let b = num & 255;
+      r = Math.min(255, Math.max(0, Math.round(r * (100 + percent) / 100)));
+      g = Math.min(255, Math.max(0, Math.round(g * (100 + percent) / 100)));
+      b = Math.min(255, Math.max(0, Math.round(b * (100 + percent) / 100)));
+      return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+    }
+
+    function drawSupportPie3D(slices, totalSupport) {
+      const canvas = document.getElementById('supportPie3DCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.clearRect(0, 0, width, height);
+
+      const cx = width / 2;
+      const cy = 78;
+      const rx = 102;
+      const ry = 61;
+      const depth = 15;
+      const active = slices.filter(slice => slice.value > 0);
+
+      // Biểu đồ rỗng: không giả lập số liệu và không hiện chú giải/thông tin.
+      if (!totalSupport || active.length === 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(cx, cy + 8, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#e2e8f0';
+        ctx.fill();
+        ctx.restore();
+        return;
+      }
+
+      const segmentGap = active.length > 1 ? 0.018 : 0;
+      const usableSweep = Math.PI * 2 - segmentGap * active.length;
+      let angle = -Math.PI * 0.65;
+      const parts = active.map(slice => {
+        const delta = usableSweep * slice.value / totalSupport;
+        const part = { ...slice, start: angle, end: angle + delta };
+        angle += delta + segmentGap;
+        return part;
+      });
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(cx + 3, cy + 26, rx + 8, ry * 0.65, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.13)';
+      ctx.fill();
+      ctx.restore();
+
+      function paintSlice(part, offset, top) {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy + offset);
+        ctx.ellipse(cx, cy + offset, rx, ry, 0, part.start, part.end);
+        ctx.closePath();
+        if (top) {
+          const grad = ctx.createLinearGradient(cx - rx, cy - ry, cx + rx, cy + ry);
+          grad.addColorStop(0, shadeHexColor(part.color, 20));
+          grad.addColorStop(0.6, part.color);
+          grad.addColorStop(1, shadeHexColor(part.color, -7));
+          ctx.fillStyle = grad;
+        } else {
+          ctx.fillStyle = shadeHexColor(part.color, -18);
+        }
+        ctx.fill();
+      }
+
+      for (let z = depth; z > 0; z--) parts.forEach(part => paintSlice(part, z, false));
+      parts.forEach(part => paintSlice(part, 0, true));
+    }
+
     function updateGlobalStats() {
       let supportCounts = { 'HĐ': 0, 'CKS': 0, 'BHXH': 0 };
       let totalSupport = 0;
-
-      let salesServiceCounts = { 'CKS': 0, 'HĐ': 0, 'BHXH': 0, 'Chứng từ': 0 };
-      let salesTypeCounts = { 'Mua mới': 0, 'Gia hạn': 0 };
-      let totalSales = 0;
 
       for (let date in allData) {
         allData[date].forEach(item => {
           if (item.is_sales !== true) {
             totalSupport++;
             if (supportCounts[item.type] !== undefined) supportCounts[item.type]++;
-          } else {
-            totalSales++;
-            let dv = item.dich_vu || 'CKS';
-            if (salesServiceCounts[dv] !== undefined) salesServiceCounts[dv]++;
-            let lm = item.loai_mua || 'Mua mới';
-            if (salesTypeCounts[lm] !== undefined) salesTypeCounts[lm]++;
           }
         });
       }
 
-      document.getElementById('count-glow-hd').innerText = supportCounts['HĐ'] || 0;
-      document.getElementById('count-glow-cks').innerText = supportCounts['CKS'] || 0;
-      document.getElementById('count-glow-bhxh').innerText = supportCounts['BHXH'] || 0;
-
-      document.getElementById('count-sales-cks').innerText = salesServiceCounts['CKS'] || 0;
-      document.getElementById('count-sales-hd').innerText = salesServiceCounts['HĐ'] || 0;
-      document.getElementById('count-sales-bhxh').innerText = salesServiceCounts['BHXH'] || 0;
-      document.getElementById('count-sales-ct').innerText = salesServiceCounts['Chứng từ'] || 0;
+      const hdEl = document.getElementById('count-glow-hd');
+      const cksEl = document.getElementById('count-glow-cks');
+      const bhxhEl = document.getElementById('count-glow-bhxh');
+      if (hdEl) hdEl.innerText = supportCounts['HĐ'] || 0;
+      if (cksEl) cksEl.innerText = supportCounts['CKS'] || 0;
+      if (bhxhEl) bhxhEl.innerText = supportCounts['BHXH'] || 0;
 
       let supportHtml = "";
+      const sTypes = [
+        { id: 'HĐ', name: 'Hóa đơn ĐT (HĐ)', color: '#3b82f6', label: 'Hóa đơn' },
+        { id: 'CKS', name: 'Chữ ký số (CKS)', color: '#f59e0b', label: 'Chữ ký số' },
+        { id: 'BHXH', name: 'Bảo hiểm (BHXH)', color: '#10b981', label: 'BHXH' }
+      ];
+
       if (totalSupport > 0) {
-        let sTypes = [
-          { id: 'HĐ', name: 'Hóa đơn ĐT (HĐ)', color: '#3b82f6' },
-          { id: 'CKS', name: 'Chữ ký số (CKS)', color: '#f59e0b' },
-          { id: 'BHXH', name: 'Bảo hiểm (BHXH)', color: '#10b981' }
-        ];
         sTypes.forEach(t => {
           let count = supportCounts[t.id] || 0;
           let pct = ((count / totalSupport) * 100).toFixed(1);
@@ -3469,38 +3771,13 @@
       } else {
         supportHtml = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có dữ liệu</td></tr>`;
       }
-      document.getElementById('gs-ratio-body').innerHTML = supportHtml;
-      document.getElementById('gs-total-badge').innerText = totalSupport;
 
-      let salesHtml = "";
-      if (totalSales > 0) {
-        let slTypes = [
-          { id: 'CKS', color: '#38bdf8' },
-          { id: 'HĐ', color: '#f472b6' },
-          { id: 'BHXH', color: '#34d399' },
-          { id: 'Chứng từ', color: '#a78bfa' }
-        ];
-        slTypes.forEach(t => {
-          let count = salesServiceCounts[t.id] || 0;
-          let pct = ((count / totalSales) * 100).toFixed(1);
-          salesHtml += `<tr>
-            <td style="font-weight: 600;">${t.id === 'Chứng từ' ? 'TNCN' : t.id}</td>
-            <td>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <div style="flex: 1; background-color: var(--border-color); height: 7px; border-radius: 4px; overflow: hidden;">
-                  <div style="width: ${pct}%; background-color: ${t.color}; height: 100%; border-radius: 4px; box-shadow: 0 0 5px ${t.color};"></div>
-                </div>
-                <span style="font-weight: bold; width: 42px; text-align: right;">${pct}%</span>
-              </div>
-            </td>
-            <td style="text-align: center; font-weight: bold; color: ${t.color};">${count}</td>
-          </tr>`;
-        });
-      } else {
-        salesHtml = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-style: italic;">Chưa có dữ liệu</td></tr>`;
-      }
-      document.getElementById('gs-sales-service-body').innerHTML = salesHtml;
-      document.getElementById('gs-sales-total-badge').innerText = totalSales;
+      const ratioBody = document.getElementById('gs-ratio-body');
+      const totalBadge = document.getElementById('gs-total-badge');
+      if (ratioBody) ratioBody.innerHTML = supportHtml;
+      if (totalBadge) totalBadge.innerText = totalSupport;
+
+      drawSupportPie3D(sTypes.map(t => ({ label: t.label, value: supportCounts[t.id] || 0, color: t.color })), totalSupport);
     }
 
     const loader = document.getElementById('loader');
@@ -3529,7 +3806,8 @@
       attachInputSanitizers();
       setupMstBehaviors();
       document.getElementById('terminalSearch').addEventListener('input', debounce(renderTerminal, 300));
-      document.getElementById('terminalSalesSearch').addEventListener('input', debounce(renderSalesTerminal, 300));
+      const terminalSalesSearchEl = document.getElementById('terminalSalesSearch');
+      if (terminalSalesSearchEl) terminalSalesSearchEl.addEventListener('input', debounce(renderSalesTerminal, 300));
     });
 
     onAuthStateChanged(auth, async (user) => {
@@ -3701,7 +3979,7 @@
       document.getElementById('tab-' + tabId).classList.add('active');
       event.currentTarget.classList.add('active');
       if (tabId === 'baocao') updateAllReports();
-      if (tabId === 'congcu') renderToolsGrid();
+      if (tabId === 'nhaplieu') renderToolsGrid();
     };
 
     window.switchSubTab = function(subId) {
@@ -3760,14 +4038,16 @@
             const dateIso = `${parts[2]}-${parts[1]}-${parts[0]}`;
             const filterDash = (val) => (val && val.toString().trim() === "—") ? "" : (val ? val.toString().trim() : "");
 
+            const hasAddressColumn = rows[0] && rows[0].some(h => String(h).toLowerCase().includes('địa chỉ'));
             const record = {
               mst: cleanInputString(filterDash(row[1])),
               sdt: cleanPhoneNumber(filterDash(row[2])),
               company: cleanInputString(filterDash(row[3])),
-              type: filterDash(row[4]) || "HĐ",
-              tech: filterDash(row[5]) || "Hưng",
-              issue: cleanInputString(filterDash(row[6])),
-              status: cleanInputString(filterDash(row[7])),
+              address: hasAddressColumn ? cleanInputString(filterDash(row[4])) : '',
+              type: hasAddressColumn ? (filterDash(row[5]) || "HĐ") : (filterDash(row[4]) || "HĐ"),
+              tech: hasAddressColumn ? (filterDash(row[6]) || "Hưng") : (filterDash(row[5]) || "Hưng"),
+              issue: cleanInputString(hasAddressColumn ? filterDash(row[7]) : filterDash(row[6])),
+              status: cleanInputString(hasAddressColumn ? filterDash(row[8]) : filterDash(row[7])),
               is_sales: false
             };
 
@@ -3783,7 +4063,7 @@
             showToast(`Up file thành công. Có ${importedCount} dữ liệu được đồng bộ!`, false);
             triggerAutoSave();
             renderTerminal();
-            renderSalesTerminal();
+            if (document.getElementById('terminalSalesBody')) renderSalesTerminal();
             updateAllReports();
             updateGlobalStats();
           } else {
@@ -3802,73 +4082,57 @@
       const salesDateInput = document.getElementById('salesDateFilter');
       if (salesDateInput) salesDateInput.value = dateStr;
       renderTerminal();
-      renderSalesTerminal();
+      if (document.getElementById('terminalSalesBody')) renderSalesTerminal();
       cancelEdit();
-      cancelSalesEdit();
+      if (document.getElementById('frm-sales-idx')) cancelSalesEdit();
       updateStatusIndicator("Hệ thống sẵn sàng", "");
     }
 
-    async function fetchCompanyName(mstInput) {
+    async function fetchCompanyInfo(mstInput) {
       mstInput = cleanInputString(mstInput);
-      if (!mstInput) return "";
+      if (!mstInput) return { name: '', address: '' };
 
-      // 1. CƠ CHẾ TIMEOUT: Ép request tự hủy nếu quá thời gian để tránh treo trình duyệt
-      const fetchWithTimeout = async (url, timeoutMs) => {
+      if (!window.__mstInfoCache) window.__mstInfoCache = new Map();
+      if (window.__mstInfoCache.has(mstInput)) return window.__mstInfoCache.get(mstInput);
+
+      const fetchWithTimeout = async (url, timeoutMs = 2200) => {
         const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), timeoutMs);
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
         try {
-          const response = await fetch(url, { signal: controller.signal });
-          clearTimeout(id);
+          const response = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+          clearTimeout(timeoutId);
           return response;
         } catch (error) {
-          clearTimeout(id);
+          clearTimeout(timeoutId);
           throw error;
         }
       };
 
-      let foundName = "";
+      const candidates = [mstInput];
+      const numericOnly = mstInput.replace(/[^0-9]/g, '');
+      if (numericOnly && !candidates.includes(numericOnly)) candidates.push(numericOnly);
 
-      // NGUỒN 1: API VietQR (Realtime, Dữ liệu chuẩn quốc gia) - Giới hạn chờ 2.5 giây
-      try {
-        let res = await fetchWithTimeout(`https://api.vietqr.io/v2/business/${mstInput}`, 1500);
-        if (res.ok) {
-          let data = await res.json();
-          if (data.code === "00" && data.data && data.data.name) {
-            // Trả về ngay lập tức nếu tìm thấy, không chạy xuống Nguồn 2
-            return data.data.name; 
-          }
-        }
-      } catch (e) {
-        console.warn("VietQR API timeout or unavailable.");
-      }
-
-      // NGUỒN 2: Crawl masothue.com (Dự phòng) - Giới hạn chờ 4 giây
-      if (!foundName) {
+      for (const candidate of candidates) {
         try {
-          let targetUrl = encodeURIComponent('https://masothue.com/Search/?q=' + mstInput);
-          
-          // TỐI ƯU 2: Dùng endpoint /raw thay vì /get để lấy thẳng text HTML, bỏ qua parse JSON nặng nề
-          let proxyUrl = 'https://api.allorigins.win/raw?url=' + targetUrl;
-          
-          let res1 = await fetchWithTimeout(proxyUrl, 2000);
-          if (res1.ok) {
-            let htmlText = await res1.text(); // Lấy dạng text thô rất nhẹ
-            let match = htmlText.match(/<title>(.*?)<\/title>/);
-            
-            if (match && match[1] && match[1].includes('Mã số thuế')) {
-              let parts = match[1].split('-');
-              if (parts.length > 1) {
-                parts.shift(); // Bỏ phần MST ở đầu
-                foundName = parts.join('-').trim();
-              }
-            }
+          const res = await fetchWithTimeout(`https://api.vietqr.io/v2/business/${candidate}`, 2200);
+          if (!res.ok) continue;
+          const data = await res.json();
+          const info = {
+            name: cleanInputString(data?.data?.name || ''),
+            address: cleanInputString(data?.data?.address || '')
+          };
+          if (info.name || info.address) {
+            window.__mstInfoCache.set(mstInput, info);
+            return info;
           }
-        } catch (err) {
-          console.warn("Proxy fallback timeout or error.");
+        } catch (error) {
+          console.warn('VietQR tra cứu MST lỗi hoặc timeout:', error?.message || error);
         }
       }
 
-      return foundName;
+      const fallback = { name: '', address: '' };
+      window.__mstInfoCache.set(mstInput, fallback);
+      return fallback;
     }
 
     window.searchMSTForm = async function() {
@@ -3881,15 +4145,17 @@
       btn.disabled = true;
 
       try {
-        let foundName = await fetchCompanyName(mstInput);
-        if (foundName) {
-          document.getElementById('frm-company').value = foundName;
-          showToast("Tra cứu thành công!", false);
+        const info = await fetchCompanyInfo(mstInput);
+        if (info.name || info.address) {
+          document.getElementById('frm-company').value = info.name || '';
+          const addrEl = document.getElementById('frm-address');
+          if (addrEl) addrEl.value = info.address || '';
+          showToast("Tra cứu MST thành công!", false);
         } else {
-          showToast("Không tìm thấy Tên Cty!", true);
+          showToast("Không tìm thấy thông tin doanh nghiệp!", true);
         }
       } catch (error) {
-        showToast("Lỗi kết nối mạng!", true);
+        showToast("Lỗi kết nối mạng khi tra cứu MST!", true);
       } finally {
         btn.innerHTML = originalIcon;
         btn.disabled = false;
@@ -3897,18 +4163,22 @@
     };
 
     window.searchMSTFormSales = async function() {
-      let mstInput = document.getElementById('frm-sales-mst').value.replace(/[^0-9-]/g, '');
-      document.getElementById('frm-sales-mst').value = mstInput;
-      if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!", true);
+      const salesMstEl = document.getElementById('frm-sales-mst');
+      const salesCompanyEl = document.getElementById('frm-sales-company');
       const btn = document.getElementById('btnSearchMSTSales');
+      if (!salesMstEl || !salesCompanyEl || !btn) return;
+
+      let mstInput = salesMstEl.value.replace(/[^0-9-]/g, '');
+      salesMstEl.value = mstInput;
+      if (!mstInput) return showToast("Vui lòng nhập MST trước khi tra cứu!", true);
       const originalIcon = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
       btn.disabled = true;
 
       try {
-        let foundName = await fetchCompanyName(mstInput);
-        if (foundName) {
-          document.getElementById('frm-sales-company').value = foundName;
+        const info = await fetchCompanyInfo(mstInput);
+        if (info.name) {
+          salesCompanyEl.value = info.name;
           showToast("Tra cứu thành công!", false);
         } else {
           showToast("Không tìm thấy Tên Cty!", true);
@@ -3924,11 +4194,12 @@
     window.submitForm = function() {
       const mst = cleanInputString(document.getElementById('frm-mst').value);
       let company = cleanInputString(document.getElementById('frm-company').value);
+      const address = cleanInputString(document.getElementById('frm-address').value);
       const sdt = cleanPhoneNumber(document.getElementById('frm-sdt').value);
       const status = cleanInputString(document.getElementById('frm-status').value);
       const issue = cleanInputString(document.getElementById('frm-issue').value);
 
-      if (!mst && !company && !issue && !status) return showToast("Vui lòng điền thông tin để lưu!", true);
+      if (!mst && !company && !address && !issue && !status) return showToast("Vui lòng điền thông tin để lưu!", true);
 
       if (company && !company.endsWith("🍉") && !company.endsWith("🍉 ")) {
         company = company + " 🍉";
@@ -3937,6 +4208,7 @@
       const record = {
         mst: mst || "",
         company: company || "",
+        address: address || "",
         sdt: sdt || "",
         type: document.getElementById('frm-type').value,
         tech: cleanInputString(document.getElementById('frm-tech').value) || 'Hưng',
@@ -3973,6 +4245,7 @@
       document.getElementById('frm-date').value = dateStr;
       document.getElementById('frm-mst').value = data.mst || '';
       document.getElementById('frm-company').value = data.company || '';
+      document.getElementById('frm-address').value = data.address || '';
       document.getElementById('frm-sdt').value = cleanPhoneNumber(data.sdt);
       document.getElementById('frm-type').value = data.type || 'HĐ';
       document.getElementById('frm-issue').value = data.issue || '';
@@ -3990,6 +4263,7 @@
       document.getElementById('frm-date').value = '';
       document.getElementById('frm-mst').value = '';
       document.getElementById('frm-company').value = '';
+      document.getElementById('frm-address').value = '';
       document.getElementById('frm-sdt').value = '';
       document.getElementById('frm-issue').value = '';
       document.getElementById('frm-status').value = '';
@@ -4081,8 +4355,8 @@
         showToast("Đã lưu yêu cầu mua/gia hạn!", false);
         triggerAutoSave();
       }
-      renderSalesTerminal();
-      cancelSalesEdit();
+      if (document.getElementById('terminalSalesBody')) renderSalesTerminal();
+      if (document.getElementById('frm-sales-idx')) cancelSalesEdit();
       updateGlobalStats();
       document.getElementById('frm-sales-mst').focus();
     };
@@ -4122,7 +4396,7 @@
     window.deleteSalesRecord = function(dateStr, idx) {
       showConfirm("Xóa yêu cầu mua/gia hạn này khỏi hệ thống?", () => {
         allData[dateStr].splice(idx, 1);
-        renderSalesTerminal();
+        if (document.getElementById('terminalSalesBody')) renderSalesTerminal();
         updateGlobalStats();
         saveDataToCloudSpecificDate(dateStr);
         if (document.getElementById('frm-sales-date').value === dateStr && parseInt(document.getElementById('frm-sales-idx').value) === idx) cancelSalesEdit();
@@ -4193,6 +4467,7 @@
         const d_mst = formatEmptyField(item.mst);
         const d_sdt = formatEmptyField(cleanPhoneNumber(item.sdt));
         const d_company = formatEmptyField(item.company);
+        const d_address = formatEmptyField(item.address);
         const d_issue = item.issue ? ("> " + item.issue) : "";
         const d_status = formatEmptyField(item.status);
 
@@ -4203,7 +4478,7 @@
           <td class="t-stt">[${stt++}]</td>
           <td class="t-mst">${d_mst}</td>
           <td class="t-sdt">${d_sdt}</td>
-          <td class="t-ten">${d_company}</td>
+          <td class="t-ten">${d_company}${d_address ? `<div style="font-size:10px; font-weight:600; color: var(--text-muted); margin-top:2px; line-height:1.35;">📍 ${d_address}</div>` : ''}</td>
           <td class="t-loai">${item.type || ''}</td>
           <td class="t-vd">${d_issue}</td>
           <td class="t-status">${d_status}</td>
@@ -4225,6 +4500,7 @@
 
     window.renderSalesTerminal = function() {
       let tbody = document.getElementById('terminalSalesBody');
+      if (!tbody) return;
       const searchInput = document.getElementById('terminalSalesSearch');
       const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
 
@@ -4317,7 +4593,7 @@
       const allBtn = document.getElementById('btnSalesAllDates');
       if (allBtn) allBtn.classList.remove('active');
       isSalesAllDates = false;
-      renderSalesTerminal();
+      if (document.getElementById('terminalSalesBody')) renderSalesTerminal();
     };
 
     window.toggleSalesAllDates = function() {
@@ -4328,7 +4604,7 @@
       } else {
         if (allBtn) allBtn.classList.remove('active');
       }
-      renderSalesTerminal();
+      if (document.getElementById('terminalSalesBody')) renderSalesTerminal();
     };
 
     window.onGlobalSearchChange = function() {
@@ -4344,7 +4620,7 @@
         statusLabel.style.display = 'none';
       }
       renderTerminal();
-      renderSalesTerminal();
+      if (document.getElementById('terminalSalesBody')) renderSalesTerminal();
     };
 
     window.resetGlobalSearch = function() {
@@ -4353,7 +4629,7 @@
       document.getElementById('btnResetGlobalSearch').style.display = 'none';
       document.getElementById('globalSearchStatus').style.display = 'none';
       renderTerminal();
-      renderSalesTerminal();
+      if (document.getElementById('terminalSalesBody')) renderSalesTerminal();
     };
 
     window.copyTerminalData = function() {
@@ -4394,6 +4670,7 @@
       const formattedDataForSheets = dataToSave.map(item => ({
         mst: formatEmptyField(item.mst),
         company: formatEmptyField(item.company),
+        address: formatEmptyField(item.address),
         sdt: formatEmptyField(cleanPhoneNumber(item.sdt)),
         type: formatEmptyField(item.type || item.loai_mua),
         tech: formatEmptyField(item.tech || item.dich_vu || 'Hưng'),
@@ -4560,6 +4837,7 @@
                 "MST": formatEmptyField(item.mst),
                 "SĐT": formatEmptyField(cleanPhoneNumber(item.sdt)),
                 "Tên công ty": formatEmptyField(item.company),
+                "Địa chỉ ĐKKD": formatEmptyField(item.address),
                 "Loại hỗ trợ": formatEmptyField(item.type),
                 "Tên KT": formatEmptyField(item.tech),
                 "Vấn đề hỗ trợ": formatEmptyField(item.issue),
@@ -4603,7 +4881,7 @@
           ws[i].s.fill = { fgColor: { rgb: "1A56A6" } };
         }
       }
-      ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 12 }, { wch: 40 }, { wch: 12 }, { wch: 12 }, { wch: 30 }, { wch: 18 }];
+      ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 12 }, { wch: 36 }, { wch: 42 }, { wch: 12 }, { wch: 12 }, { wch: 30 }, { wch: 18 }];
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "visnam_data");
       XLSX.writeFile(wb, `visnam_data_Thang${month}.xlsx`);
@@ -4662,7 +4940,6 @@
               <li style="margin-bottom: 3pt;"><b>Chữ ký số (CKS):</b> Cài đặt Driver USB Token, cập nhật chứng thư số mới, cấu hình môi trường Java/Extension trình duyệt, mở khóa Token và xử lý lỗi ký tờ khai Thuế, Hải quan, BHXH.</li>
               <li style="margin-bottom: 3pt;"><b>Bảo hiểm xã hội (BHXH):</b> Cài đặt và cấu hình phần mềm kê khai BHXH, hỗ trợ gửi hồ sơ chế độ, khắc phục lỗi ký nộp hồ sơ và cập nhật thông tin Chữ ký số lên hệ thống BHXH.</li>
               <li style="margin-bottom: 3pt;"><b>Chứng từ khấu trừ thuế (TNCN):</b> Hỗ trợ đăng ký sử dụng, phát hành và xử lý các vấn đề kỹ thuật liên quan đến chứng từ khấu trừ thuế TNCN điện tử.</li>
-              <li style="margin-bottom: 3pt;"><b>Phối hợp CSKH & Sales:</b> Chủ động ghi nhận và kịp thời chuyển giao các yêu cầu gia hạn / mua mới sản phẩm cho bộ phận Kinh doanh để tối ưu doanh thu cho Công ty.</li>
             </ul>
           </div>
 
@@ -4687,23 +4964,6 @@
                   <td style="border: 1px solid black; padding: 4pt; text-align: center; font-weight: bold;">${tBHXH}</td>
                   <td style="border: 1px solid black; padding: 4pt; text-align: center; font-weight: bold; color: red;">${tTotal}</td>
                 </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div style="margin-bottom: 10pt;">
-            <h3 style="font-size: 12.5pt; font-weight: bold; margin-bottom: 4pt; margin-top: 10pt; color: #0f172a;">3. Tiếp nhận yêu cầu Gia hạn / Mua mới dịch vụ:</h3>
-            <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-top: 6pt; margin-bottom: 8pt; font-size: 10.5pt;">
-              <thead>
-                <tr>
-                  <th style="border: 1px solid black; padding: 4pt; font-weight: bold; text-align: center; background-color: #f1f5f9; width: 70%;">Phân loại nhu cầu khách hàng</th>
-                  <th style="border: 1px solid black; padding: 4pt; font-weight: bold; text-align: center; background-color: #f1f5f9; width: 30%;">Số lượng (Doanh nghiệp)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td style="border: 1px solid black; padding: 4pt 6pt;">Nhu cầu Mua mới dịch vụ (CKS, HĐĐT, BHXH, Chứng từ)</td><td style="border: 1px solid black; padding: 4pt; text-align: center;">${totalMuaMoi}</td></tr>
-                <tr><td style="border: 1px solid black; padding: 4pt 6pt;">Nhu cầu Gia hạn dịch vụ </td><td style="border: 1px solid black; padding: 4pt; text-align: center;">${totalGiaHan}</td></tr>
-                <tr><td style="border: 1px solid black; padding: 4pt 6pt; font-weight: bold; text-align: center; background-color: #f8fafc;">TỔNG YÊU CẦU ĐÃ CHUYỂN CSKH/SALES</td><td style="border: 1px solid black; padding: 4pt; font-weight: bold; text-align: center; color: red;">${totalMuaMoi + totalGiaHan}</td></tr>
               </tbody>
             </table>
           </div>
