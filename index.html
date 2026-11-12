@@ -1268,7 +1268,7 @@
       font-family: 'Consolas', monospace;
       font-size: 11.5px;
       color: #e2e8f0;
-      min-width: 780px;
+      min-width: 690px;
     }
 
     .term-table th {
@@ -1298,11 +1298,9 @@
     .t-stt { color: #fbbf24; width: 35px; font-weight: bold; }
     .t-mst { color: #38bdf8; width: 85px; }
     .t-sdt { color: #cbd5e1; width: 80px; }
-    .t-ten { color: #fff; font-weight: bold; min-width: 130px; }
+    .t-ten { color: #fff; font-weight: bold; min-width: 225px; width: 36%; }
     .t-loai { color: #f472b6; width: 45px; }
     .t-vd { color: #94a3b8; font-style: italic; min-width: 140px; }
-    .t-status { color: #10b981; font-weight: 600; min-width: 100px; }
-    :root[data-theme="dark"] .t-status { color: #34d399; }
     .t-action { width: 75px; min-width: 75px; text-align: right; white-space: nowrap; }
 
     .action-btn-sm {
@@ -2175,7 +2173,7 @@
     }
 
     /* ===== V2.2 | CHỈ BỔ SUNG KÍCH THƯỚC ĐỊA CHỈ VÀ BIỂU ĐỒ ===== */
-    /* Các trường MST, SĐT, loại hỗ trợ, vấn đề và tình trạng: giữ kích thước, bố cục gốc. */
+    /* Các trường MST, SĐT, loại hỗ trợ và vấn đề: giữ kích thước, bố cục gốc. */
     .equal-height-row .company-name-group {
       width: 100%;
       max-width: 100%;
@@ -2267,6 +2265,103 @@
       .support-ratio-card .support-pie-body { flex-direction: row; }
       .support-ratio-card .support-pie-canvas-wrap { width: 100%; }
       .support-ratio-card #supportPie3DCanvas { max-width: 250px; }
+    }
+
+
+
+    /* ===== V2.5 | Ba khung cao bằng nhau, theo chiều cao tự nhiên form hỗ trợ ===== */
+    .equal-height-row {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr) 310px;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .equal-height-row .form-panel {
+      height: auto;
+      min-height: 0;
+      overflow: visible;
+      min-width: 0;
+    }
+    .equal-height-row .terminal-wrapper-outer,
+    .equal-height-row .stats-wrapper-outer {
+      height: auto;
+      min-height: 0;
+      min-width: 0;
+      width: 100%;
+    }
+    .equal-height-row .terminal-panel,
+    .equal-height-row .dash-card {
+      position: absolute;
+      inset: 0;
+      min-height: 0;
+    }
+    .equal-height-row .term-table .t-ten {
+      min-width: 225px;
+      width: 36%;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .support-ratio-card .support-ratio-table {
+      flex: 0 0 auto;
+      min-height: 0;
+      max-height: 112px;
+      overflow-y: auto;
+    }
+    .support-ratio-card .support-pie-section {
+      flex: 1 1 auto;
+      min-height: 0;
+      padding: 1px 4px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .support-ratio-card .support-pie-body,
+    .support-ratio-card .support-pie-canvas-wrap {
+      width: 100%;
+      min-height: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .support-ratio-card #supportPie3DCanvas {
+      width: 100%;
+      max-width: 165px;
+      max-height: 99px;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 4px rgba(15, 23, 42, 0.12));
+    }
+    .support-ratio-card #gs-support-icons-container {
+      min-height: 68px;
+      height: 68px;
+      margin-top: 0;
+      padding: 4px 6px;
+      gap: 5px;
+    }
+    .support-ratio-card .icon-glow-card {
+      min-width: 0;
+      padding: 3px 2px;
+      gap: 2px;
+    }
+    .support-ratio-card .icon-glow-card i { font-size: 16px; }
+    @media (max-width: 1200px) {
+      .equal-height-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-auto-rows: 1fr;
+      }
+      .equal-height-row .form-panel,
+      .equal-height-row .terminal-wrapper-outer,
+      .equal-height-row .stats-wrapper-outer {
+        min-height: 0;
+        height: auto;
+      }
+      .equal-height-row .support-ratio-card #supportPie3DCanvas {
+        max-width: 165px;
+        max-height: 99px;
+      }
     }
 
     /* ===== V2.3: Tiện ích nằm dưới 3 khung, tối ưu mật độ mà không đổi cỡ chữ nhập liệu. ===== */
@@ -2451,7 +2546,7 @@
         <div class="global-search-container">
           <div style="position: relative; flex: 1; display: flex; align-items: center;">
             <i class="fas fa-search" style="position: absolute; left: 10px; color: var(--text-muted); font-size: 12px; pointer-events: none;"></i>
-            <input type="text" id="globalSearchInput" placeholder="Tìm kiếm lịch sử: Mã số thuế, SĐT, Tên công ty, Tình trạng..." oninput="onGlobalSearchChange()">
+            <input type="text" id="globalSearchInput" placeholder="Tìm kiếm lịch sử: Mã số thuế, SĐT, Tên công ty, Vấn đề hỗ trợ..." oninput="onGlobalSearchChange()">
             <button id="btnResetGlobalSearch" onclick="resetGlobalSearch()" style="position: absolute; right: 10px; background: none; border: none; color: var(--text-muted); cursor: pointer; display: none; padding: 4px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-times-circle" style="font-size: 13px;"></i></button>
           </div>
           <div id="globalSearchStatus" style="font-size: 11px; font-weight: 700; color: var(--secondary); white-space: nowrap; display: none; align-items: center; gap: 4px;">
@@ -2501,7 +2596,7 @@
 
                 <div class="form-group address-dkkd-group">
                   <label for="frm-address">Địa chỉ ĐKKD</label>
-                  <textarea id="frm-address" class="frm-textarea" rows="3" placeholder="Tra cứu MST để xem địa chỉ đăng ký kinh doanh..." autocomplete="off" readonly title="Chỉ hiển thị thông tin tra cứu; không lưu vào nhật ký hoặc xuất dữ liệu"></textarea>
+                  <textarea id="frm-address" class="frm-textarea" rows="3" placeholder="Tra cứu MST để xem địa chỉ đăng ký kinh doanh..." autocomplete="off" readonly title="Địa chỉ lưu để xem lại khi chỉnh sửa; không hiển thị trên bảng, khi sao chép hay xuất Excel"></textarea>
                 </div>
 
                 <div class="form-row">
@@ -2518,11 +2613,6 @@
                     <input type="text" id="frm-issue" class="frm-input" placeholder="Ghi chú chi tiết..." autocomplete="off">
                     <div id="issue-suggestions" class="autocomplete-suggestions"></div>
                   </div>
-                </div>
-
-                <div class="form-group">
-                  <label>Tình trạng</label>
-                  <input type="text" id="frm-status" class="frm-input" placeholder="Nhập tình trạng chi tiết" autocomplete="off">
                 </div>
 
                 <input type="hidden" id="frm-tech" value="Hưng">
@@ -2555,10 +2645,9 @@
                         <th class="t-stt">STT</th>
                         <th class="t-mst">MST</th>
                         <th class="t-sdt">SĐT</th>
-                        <th class="t-ten" style="width: 100%;">TÊN CÔNG TY</th>
+                        <th class="t-ten">TÊN CÔNG TY</th>
                         <th class="t-loai" style="white-space: nowrap; padding-right: 10px;">LOẠI</th>
                         <th class="t-vd" style="white-space: nowrap; padding-right: 10px;">VẤN ĐỀ HỖ TRỢ</th>
-                        <th class="t-status" style="white-space: nowrap; padding-right: 10px;">TÌNH TRẠNG</th>
                         <th class="t-action">#</th>
                       </tr>
                     </thead>
@@ -2937,8 +3026,7 @@
         formatEmptyField(item.company),
         formatEmptyField(item.type),
         formatEmptyField(item.tech || 'Hưng'),
-        formatEmptyField(item.issue),
-        formatEmptyField(item.status)
+        formatEmptyField(item.issue)
       ].join('	');
     }
 
@@ -3542,7 +3630,7 @@
         }
       });
 
-      ['frm-mst', 'frm-company', 'frm-address', 'frm-status', 'frm-issue', 'frm-sales-mst', 'frm-sales-company'].forEach(id => {
+      ['frm-mst', 'frm-company', 'frm-address', 'frm-issue', 'frm-sales-mst', 'frm-sales-company'].forEach(id => {
         const el = document.getElementById(id);
         if (el) {
           el.addEventListener('blur', function() {
@@ -4194,29 +4282,31 @@
       const mst = cleanInputString(document.getElementById('frm-mst').value);
       let company = cleanInputString(document.getElementById('frm-company').value);
       const sdt = cleanPhoneNumber(document.getElementById('frm-sdt').value);
-      const status = cleanInputString(document.getElementById('frm-status').value);
       const issue = cleanInputString(document.getElementById('frm-issue').value);
 
-      if (!mst && !company && !issue && !status) return showToast("Vui lòng điền thông tin để lưu!", true);
+      if (!mst && !company && !issue) return showToast("Vui lòng điền thông tin để lưu!", true);
 
       if (company && !company.endsWith("🍉") && !company.endsWith("🍉 ")) {
         company = company + " 🍉";
       }
 
+      const idx = parseInt(document.getElementById('frm-idx').value, 10);
+      const editDate = document.getElementById('frm-date').value;
+      const targetDate = (idx > -1 && editDate) ? editDate : currentSelectedDate;
+      // Giữ các trường lịch sử (như status) khi sửa, không xóa dữ liệu cũ.
+      const previous = (idx > -1 && editDate && allData[targetDate]) ? allData[targetDate][idx] : null;
+      const address = cleanInputString(document.getElementById('frm-address').value);
       const record = {
+        ...(previous || {}),
         mst: mst || "",
         company: company || "",
+        address: address || "", // Chỉ dùng nội bộ để mở lại ở form Chỉnh sửa.
         sdt: sdt || "",
         type: document.getElementById('frm-type').value,
         tech: cleanInputString(document.getElementById('frm-tech').value) || 'Hưng',
         issue: issue || "",
-        status: status || "",
         is_sales: false
       };
-
-      let idx = parseInt(document.getElementById('frm-idx').value);
-      let editDate = document.getElementById('frm-date').value;
-      let targetDate = (idx > -1 && editDate) ? editDate : currentSelectedDate;
 
       if (idx > -1 && editDate) {
         allData[targetDate][idx] = record;
@@ -4242,11 +4332,23 @@
       document.getElementById('frm-date').value = dateStr;
       document.getElementById('frm-mst').value = data.mst || '';
       document.getElementById('frm-company').value = data.company || '';
-      document.getElementById('frm-address').value = ''; // Chỉ xem khi bấm tra cứu MST
+      document.getElementById('frm-address').value = data.address || '';
+      // Bản ghi tạo bằng V2.4 chưa lưu địa chỉ: thử tra cứu lại khi mở sửa.
+      if (!data.address && data.mst) {
+        const requestedMst = String(data.mst).trim();
+        fetchCompanyInfo(requestedMst).then(info => {
+          const sameEditor = document.getElementById('frm-date').value === dateStr &&
+            Number(document.getElementById('frm-idx').value) === idx;
+          const sameMst = document.getElementById('frm-mst').value.trim() === requestedMst;
+          const addressField = document.getElementById('frm-address');
+          if (sameEditor && sameMst && addressField && !addressField.value && info.address) {
+            addressField.value = info.address;
+          }
+        }).catch(() => {});
+      }
       document.getElementById('frm-sdt').value = cleanPhoneNumber(data.sdt);
       document.getElementById('frm-type').value = data.type || 'HĐ';
       document.getElementById('frm-issue').value = data.issue || '';
-      document.getElementById('frm-status').value = data.status || '';
 
       document.getElementById('btnSubmitForm').innerHTML = '<i class="fas fa-check"></i> CẬP NHẬT DÒNG';
       document.getElementById('btnCancelEdit').style.display = 'block';
@@ -4263,7 +4365,6 @@
       document.getElementById('frm-address').value = '';
       document.getElementById('frm-sdt').value = '';
       document.getElementById('frm-issue').value = '';
-      document.getElementById('frm-status').value = '';
 
       document.getElementById('btnSubmitForm').innerHTML = '<i class="fas fa-save"></i> LƯU HỖ TRỢ';
       document.getElementById('btnCancelEdit').style.display = 'none';
@@ -4430,7 +4531,6 @@
           (item.mst || '').toLowerCase().includes(globalSearchTerm) ||
           (item.company || '').toLowerCase().includes(globalSearchTerm) ||
           (item.sdt || '').toLowerCase().includes(globalSearchTerm) ||
-          (item.status || '').toLowerCase().includes(globalSearchTerm) ||
           (item.issue || '').toLowerCase().includes(globalSearchTerm)
         );
       } else {
@@ -4446,14 +4546,13 @@
         supportData = supportData.filter(item =>
           (item.mst || '').toLowerCase().includes(searchTerm) ||
           (item.company || '').toLowerCase().includes(searchTerm) ||
-          (item.status || '').toLowerCase().includes(searchTerm) ||
           (item.issue || '').toLowerCase().includes(searchTerm) ||
           (item.sdt || '').toLowerCase().includes(searchTerm)
         );
       }
 
       if (supportData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8"><div class="empty-terminal">Chưa có dữ liệu hỗ trợ...</div></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty-terminal">Chưa có dữ liệu hỗ trợ...</div></td></tr>`;
         return;
       }
 
@@ -4465,7 +4564,6 @@
         const d_sdt = formatEmptyField(cleanPhoneNumber(item.sdt));
         const d_company = formatEmptyField(item.company);
         const d_issue = item.issue ? ("> " + item.issue) : "";
-        const d_status = formatEmptyField(item.status);
 
         const dateParts = item.date.split('-');
         const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : item.date;
@@ -4477,7 +4575,6 @@
           <td class="t-ten">${d_company}</td>
           <td class="t-loai">${item.type || ''}</td>
           <td class="t-vd">${d_issue}</td>
-          <td class="t-status">${d_status}</td>
           <td class="t-action">
             <button type="button" class="action-btn-sm copy-row-btn" onclick="copySingleRecord('${item.date}', ${item.originalIndex})" title="Copy dòng (từ MST)"><i class="fas fa-copy"></i></button>
             <button type="button" class="action-btn-sm edit-btn" onclick="editRecord('${item.date}', ${item.originalIndex})" title="Sửa"><i class="fas fa-edit"></i></button>
@@ -4834,8 +4931,7 @@
                 "Tên công ty": formatEmptyField(item.company),
                 "Loại hỗ trợ": formatEmptyField(item.type),
                 "Tên KT": formatEmptyField(item.tech),
-                "Vấn đề hỗ trợ": formatEmptyField(item.issue),
-                "Tình trạng": formatEmptyField(item.status)
+                "Vấn đề hỗ trợ": formatEmptyField(item.issue)
               });
             }
           });
@@ -4875,7 +4971,7 @@
           ws[i].s.fill = { fgColor: { rgb: "1A56A6" } };
         }
       }
-      ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 12 }, { wch: 40 }, { wch: 12 }, { wch: 12 }, { wch: 30 }, { wch: 18 }];
+      ws['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 12 }, { wch: 48 }, { wch: 12 }, { wch: 12 }, { wch: 30 }];
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "visnam_data");
       XLSX.writeFile(wb, `visnam_data_Thang${month}.xlsx`);
