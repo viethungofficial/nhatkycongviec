@@ -15,7 +15,8 @@
     :root {
       --primary: #1a56a6;
       --secondary: #f39c12;
-      --bg-color: #e2e8f0;
+      --bg-color: #faf7ef;
+      --bg-dot: rgba(0, 0, 0, 0.20);
       --card-bg: #f8fafc;
       --text-main: #1e293b;
       --text-muted: #475569;
@@ -31,6 +32,7 @@
 
     :root[data-theme="dark"] {
       --bg-color: #0f172a;
+      --bg-dot: rgba(255, 255, 255, 0.12);
       --card-bg: #1e293b;
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
@@ -56,6 +58,8 @@
 
     body {
       background-color: var(--bg-color);
+      background-image: radial-gradient(circle, var(--bg-dot) 0.8px, transparent 1px);
+      background-size: 16px 16px;
       color: var(--text-main);
       overflow-x: hidden;
       overflow-y: scroll;
@@ -262,7 +266,9 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: var(--bg-color);
+      background-color: var(--bg-color);
+      background-image: radial-gradient(circle, var(--bg-dot) 0.8px, transparent 1px);
+      background-size: 16px 16px;
       display: none;
       justify-content: center;
       align-items: center;
@@ -2118,35 +2124,8 @@
       color: var(--primary);
     }
 
-    #winter-wrapper {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
 
     #mainApp, #loginScreen, header { position: relative; z-index: 1; }
-
-    .snowflake {
-      position: absolute;
-      top: -10px;
-      opacity: 0.8;
-      user-select: none;
-      animation-name: fall, shake;
-      animation-iteration-count: infinite;
-      animation-timing-function: linear, ease-in-out;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    }
-
-    html[data-theme="light"] .snowflake { color: #94a3b8; }
-    html[data-theme="dark"] .snowflake { color: #ffffff; }
-
-    @keyframes fall { 0% { top: -10%; } 100% { top: 110%; } }
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(25px); } }
 
     @media (max-width: 1200px) {
       .split-row { flex-direction: column; align-items: stretch; }
@@ -2461,7 +2440,6 @@
 </head>
 
 <body>
-  <div id="winter-wrapper"></div>
 
   <div id="loader" class="pro-loader-wrapper">
     <div class="loader-light-effect"></div>
@@ -5393,23 +5371,6 @@
       showToast("Đã xuất và tải file KPI Word thành công!", false);
     };
 
-    function initWinterEffects() {
-      const wrapper = document.getElementById('winter-wrapper');
-      if (!wrapper) return;
-      const numFlakes = 150;
-      for (let i = 0; i < numFlakes; i++) {
-        let flake = document.createElement('div');
-        flake.className = 'snowflake';
-        flake.innerHTML = '❄';
-        flake.style.left = (Math.random() * 100) + 'vw';
-        flake.style.animationDuration = (Math.random() * 8 + 8) + 's, ' + (Math.random() * 4 + 4) + 's';
-        flake.style.animationDelay = (Math.random() * 3) + 's, ' + (Math.random() * 3) + 's';
-        flake.style.fontSize = (Math.random() * 12 + 10) + 'px';
-        flake.style.opacity = Math.random() * 0.8 + 0.2;
-        wrapper.appendChild(flake);
-      }
-    }
-    initWinterEffects();
 
     function exportHTMLToDoc(elementId, filename) {
       var preHtml = `<!DOCTYPE html><html><head><meta charset='utf-8'><title>Export HTML To Doc</title>
